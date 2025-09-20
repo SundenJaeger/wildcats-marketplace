@@ -1,0 +1,3 @@
+[submodule "wildcats-marketplace-backend"]
+	path = wildcats-marketplace-backend
+	url = https://github.com/SundenJaeger/wildcats-marketplace-backend.git
