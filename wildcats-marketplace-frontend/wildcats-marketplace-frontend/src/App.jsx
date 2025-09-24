@@ -2,7 +2,7 @@ import { useState } from 'react'
 import assets from './assets/assets'
 import './App.css'
 import Navbar from './components/Navbar'
-import Form from './components/form'
+import Form from './components/Form'
 import Footer from './components/Footer'
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
 
   return (
     <div
-      className="App relative w-full z-10 bg-white"
+      className="App relative w-screen z-10 bg-cover bg-white bg-no-repeat bg-center min-h-screen flex flex-col justify-between"
       style={{
         backgroundImage: `url(${assets.wildcats_marketplace_bg_image})`
       }}
