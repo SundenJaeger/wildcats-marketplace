@@ -7,7 +7,7 @@ const Navbar = () => {
       <div>
         <div className='flex items-center gap-2 p-2 justify-center'>
             <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
-            <h2 className='text-lg font-bold text-white'>Wildcat's Marketplace</h2>
+            <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
         </div>
       </div>
     </div>
