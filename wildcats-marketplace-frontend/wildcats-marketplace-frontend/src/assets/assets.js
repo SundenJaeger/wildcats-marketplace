@@ -6,6 +6,8 @@ import lock_icon from './lock_icon.png'
 import email_icon from './email_icon.png'
 import pw_visible_icon from './pw_visible_icon.png'
 import pw_hidden_icon from './pw_hidden_icon.png'
+import filter_icon from './filter_icon.png'
+import homepage_welcome_banner from './homepage_welcome_banner.webp'
 
 const assets = {
   wildcats_logo,
@@ -15,7 +17,9 @@ const assets = {
   lock_icon,
   email_icon,
   pw_visible_icon,
-  pw_hidden_icon
+  pw_hidden_icon,
+  filter_icon,
+  homepage_welcome_banner
 };
 
 export default assets;

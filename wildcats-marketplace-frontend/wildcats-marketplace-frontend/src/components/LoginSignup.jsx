@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
 import assets from '../assets/assets'
+import { useNavigate } from 'react-router-dom'
 
 const LoginSignup = () => {
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     fullName:'',
@@ -80,7 +82,7 @@ const LoginSignup = () => {
     setIsSignupMode(!isSignupMode);
   };
 
-  // Validate the whole Form
+  // Validate whole Form
   const validateForm = () => {
     const fieldsToValidate = isSignupMode
       ? ['fullName', 'userName', 'email', 'password', 'confirmPassword']
@@ -104,11 +106,13 @@ const LoginSignup = () => {
     setTouched(prev => ({ ...prev, ...newTouched }));
     setErrors(newErrors);
 
-      if (!isValid) {
+    if (!isValid) {
       console.log('❌ Form has errors, stopping submission');
       alert('Please fix the errors before submitting');
-      return;
+      return false;
     }
+    
+    return true;
   };
 
   const handleSubmit = async (e) => {
@@ -120,7 +124,8 @@ const LoginSignup = () => {
     console.log('🚀 Validating form before submission...');
     
     // Validate all fields
-    validateForm()
+    const isValid = validateForm();
+    if (!isValid) return;
 
     console.log('✅ Form is valid, proceeding with submission');
 
@@ -133,16 +138,13 @@ const LoginSignup = () => {
       
       alert(`${isSignupMode ? 'Registration' : 'Login'} successful!`);
       
-      // Reset form after successful submission
-      setFormData({
-        fullName: '',
-        userName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
+      navigate('/home', {
+        state: {
+          isNewUser: isSignupMode,
+          username: formData.userName
+        }
       });
-      setErrors({});
-      setTouched({});
+
       
     } catch (error) {
       alert('Submission failed. Please try again.');
@@ -154,7 +156,8 @@ const LoginSignup = () => {
   return (
     <div className='min-w-full h-full bg-[#FFF7D4] rounded-md'>
       <div className={`flex flex-col items-center justify-center p-3 ${isSignupMode ? 'gap-1' : 'gap-3'}`}>
-        {/* Dynamic title based on mode */}
+
+        {/* Form Title */}
         <h2 className={`text-4xl font-extrabold font-serif text-black my-5 ${isSignupMode ? "" : "mb-15"}`}>
           {isSignupMode ? 'SIGN UP' : 'LOGIN'}
         </h2>
@@ -184,6 +187,7 @@ const LoginSignup = () => {
                     `}
                 />
               </div>
+              {/* Error message */}
               {errors.fullName && touched.fullName && (
                 <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
               )}
@@ -214,6 +218,7 @@ const LoginSignup = () => {
                     `}
               />
             </div>
+            {/* Error message */}
             {errors.userName && touched.userName && (
                 <p className="text-red-500 text-xs mt-1">{errors.userName}</p>
               )}
@@ -244,6 +249,7 @@ const LoginSignup = () => {
                     `}
                 />
               </div>
+              {/* Error message */}
               {errors.email && touched.email && (
                 <p className="text-red-500 text-xs mt-1">{errors.email}</p>
               )}
@@ -281,6 +287,7 @@ const LoginSignup = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
               />
             </div>
+            {/* Error message */}
             {errors.password && touched.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>
               )}
@@ -319,6 +326,7 @@ const LoginSignup = () => {
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
                 />
               </div>
+              {/* Error message */}
               {errors.confirmPassword && touched.confirmPassword && (
                 <p className={`text-red-500 text-xs mt-1 `}>{errors.confirmPassword}</p>
               )}
