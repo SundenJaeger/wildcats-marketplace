@@ -1,4 +1,3 @@
-// components/PhotoCard.jsx
 import React from "react";
 
 const PhotoCard = ({ image, name, price }) => {
