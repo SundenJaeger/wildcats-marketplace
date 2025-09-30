@@ -41,7 +41,6 @@ const Navbar = () => {
                 type="text"
               />
 
-              {/* Fake placeholder */}
               <span className="absolute left-2 text-gray-400 text-xs opacity-0 peer-focus:opacity-100 transition-opacity duration-150">
                 Search here...
               </span>
