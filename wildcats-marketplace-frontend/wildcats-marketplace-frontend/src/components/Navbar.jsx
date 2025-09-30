@@ -22,24 +22,37 @@ const Navbar = () => {
       {/* Navbar for Homepage */}
       {isHomepage && (
         <div className='flex items-center gap-2 p-2 px-40 justify-between'>
-          <div className='flex'>
+          <div className='flex items-center gap-1'>
             <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
                 <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
           </div>
 
           <div className='flex flex-col'>
-            <div className='flex items-end'>
-              <img className='w-4 h-4' src={assets.white_settings_icon}></img>
-              <img className='w-4 h-4' src={assets.white_notification_icon}></img>
-              <img className='w-4 h-4' src={assets.white_profile_icon}></img>
-              <p>username</p>
+            <div className='flex items-center justify-end mb-1'>
+              <img className='w-4 h-4 mx-1' src={assets.white_settings_icon}></img>
+              <img className='w-4 h-4 mx-1' src={assets.white_notification_icon}></img>
+              <img className='w-4 h-4 mx-1' src={assets.white_profile_icon}></img>
+              <p className='text-xs pb-0.5'>username</p>
             </div>
 
-            <div className='flex bg-white p-1 rounded-md h-5'>
-              <input className='flex justify-en'>
-              </input>
-              <img className='w-4 h-4' src={assets.red_search_icon}></img>
+            <div className="relative flex items-center justify-end duration-150 focus-within:scale-[1.025] bg-white p-1 rounded-md h-5 w-50.6">
+              <input
+                className="peer outline-0 w-full caret-transparent bg-transparent"
+                type="text"
+              />
+
+              {/* Fake placeholder */}
+              <span className="absolute left-2 text-gray-400 text-xs opacity-0 peer-focus:opacity-100 transition-opacity duration-150">
+                Search here...
+              </span>
+
+              <img
+                className="duration-150 w-3.5 h-3.5"
+                src={assets.red_search_icon}
+                alt="Search Icon"
+              />
             </div>
+
           </div>
 
         </div>

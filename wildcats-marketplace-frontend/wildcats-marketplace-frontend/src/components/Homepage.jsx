@@ -8,7 +8,7 @@ const Homepage = () => {
     const [isMarketplaceView, setIsMarketplaceView] = React.useState(true);
 
     return (
-    <div className="flex flex-col justify-top h-screen w-1/2">
+    <div className="flex flex-col justify-top h-screen w-2/3">
 
         <div className='flex justify-between space-x-4'>
             <button 
@@ -31,7 +31,7 @@ const Homepage = () => {
             <div>
                 <img src={assets.homepage_welcome_banner} 
                     alt="Wildcats" 
-                    className="w-200 h-full object-contain rounded-lg" 
+                    className="w-full h-full object-contain rounded-lg" 
                 />
             </div>
 
