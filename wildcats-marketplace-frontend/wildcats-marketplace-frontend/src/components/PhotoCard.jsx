@@ -1,6 +1,9 @@
-import React from "react";
+const PhotoCard = ({ image, name, price, onClick }) => {
+  const handleButtonClick = (e) => {
+    e.stopPropagation(); // Prevent the click from bubbling to parent div
+    onClick(); // Trigger the onClick function
+  };
 
-const PhotoCard = ({ image, name, price }) => {
   return (
     <div
       className="bg-[#FFF9E0] w-full h-65 rounded-md shadow-md relative 
@@ -19,6 +22,7 @@ const PhotoCard = ({ image, name, price }) => {
 
       {/* Button */}
       <button
+        onClick={handleButtonClick}
         className="absolute bottom-3 right-2 bg-[#a50000] text-white text-xs px-4 py-1.5 rounded-md hover:bg-[#c50000] focus:outline-none"
       >
         See Details
@@ -27,4 +31,4 @@ const PhotoCard = ({ image, name, price }) => {
   );
 };
 
-export default PhotoCard;
+export default PhotoCard; // FIXED: Was "ProductPost"

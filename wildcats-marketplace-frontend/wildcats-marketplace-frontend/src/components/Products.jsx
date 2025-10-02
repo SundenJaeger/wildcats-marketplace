@@ -2,8 +2,7 @@ import React from 'react'
 import assets from "../assets/assets";
 import PhotoCard from "./PhotoCard";
 
-const Products = ({isMarketplaceView}) => {
-
+const Products = ({onProductClick}) => {  // Remove isMarketplaceView since it's not used
   const productList = [
     { id: 1, name: "Product 1", price: "$10.00", image: assets.blank_image_icon },
     { id: 2, name: "Product 2", price: "$20.00", image: assets.blank_image_icon },
@@ -19,9 +18,9 @@ const Products = ({isMarketplaceView}) => {
           image={product.image}
           name={product.name}
           price={product.price}
+          onClick={() => onProductClick(product)}
         />
       ))}
-      
     </div>
   );
 };
