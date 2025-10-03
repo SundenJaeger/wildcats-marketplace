@@ -11,7 +11,7 @@ const Homepage = () => {
     const [selectedProduct, setSelectedProduct] = React.useState(null)
 
     return (
-    <div className="flex flex-col justify-top h-screen w-2/3">
+    <div className="flex flex-col justify-top h-screen flex-1 max-w-[750px] min-w-[300px] mx-2">
 
         {/* Fix the conditional rendering (you had the ternary backwards) */}
         {!selectedProduct ? (

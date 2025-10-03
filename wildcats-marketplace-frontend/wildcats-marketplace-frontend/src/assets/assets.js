@@ -14,6 +14,11 @@ import white_profile_icon from './white_profile_icon.png'
 import white_settings_icon from './white_settings_icon.png'
 import red_search_icon from './red_search_icon.png'
 import homepage_welcome_banner from './homepage_welcome_banner.webp'
+import white_save_icon_saved from './white_save_icon_saved.png'
+import white_save_icon from './white_save_icon.png'
+import white_report_icon from './white_report_icon.png'
+import white_close_icon from './white_close_icon.png'
+import blank_profile_icon from './blank_profile_icon.png'
 
 const assets = {
   wildcats_logo,
@@ -31,7 +36,12 @@ const assets = {
   white_notification_icon,
   white_profile_icon,
   white_settings_icon,
-  red_search_icon
+  red_search_icon,
+  white_save_icon_saved,
+  white_save_icon,
+  white_report_icon,
+  white_close_icon,
+  blank_profile_icon
 };
 
 export default assets;

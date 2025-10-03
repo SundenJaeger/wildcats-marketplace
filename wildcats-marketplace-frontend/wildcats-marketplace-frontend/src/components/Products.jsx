@@ -2,7 +2,7 @@ import React from 'react'
 import assets from "../assets/assets";
 import PhotoCard from "./PhotoCard";
 
-const Products = ({onProductClick}) => {  // Remove isMarketplaceView since it's not used
+const Products = ({onProductClick}) => { 
   const productList = [
     { id: 1, name: "Product 1", price: "$10.00", image: assets.blank_image_icon },
     { id: 2, name: "Product 2", price: "$20.00", image: assets.blank_image_icon },

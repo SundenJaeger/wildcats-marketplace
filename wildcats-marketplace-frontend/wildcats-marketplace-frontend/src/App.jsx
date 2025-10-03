@@ -20,7 +20,7 @@ function App() {
           <Navbar />
         </nav>
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center max-w-320">
          <Routes>
             <Route path="/" element={<Form />} />
             <Route path="/login" element={<Form />} />
