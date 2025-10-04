@@ -1,9 +1,22 @@
 import React from 'react'
-import assets from '../assets/assets.js'
+import assets from '../assets/assets'
 
 const ProductPost = ({ product, onBack }) => {
 
-  const [isPostSaved, setPostSaved] = React.useState()
+  const [isPostSaved, setPostSaved] = React.useState(false)
+
+  const [productImageIndex, setProductImageIndex] = React.useState(0)
+
+  function decIndex(){
+    setProductImageIndex( prev => prev<=0 ? 0 : prev - 1);
+    console.log("decreased" + productImageIndex)
+  }
+
+  function incIndex(){
+    setProductImageIndex(prev => prev >= product.imageList.length-1 ? product.imageList.length-1 : prev + 1);
+    console.log("increased" + productImageIndex)
+  }
+
   return (
     <div className="flex flex-col p-4 px-6 bg-[#FFF7D7]">
 
@@ -17,11 +30,17 @@ const ProductPost = ({ product, onBack }) => {
       
       <div className='flex justify-between gap-4 mb-2'>
         {/* Product Images */}
-        <div className='w-[160%] mt-4 rounded-md bg-cover bg-center'
-          style={{backgroundImage:`url(${product.image})`}}>
+        <div className='flex justify-between w-[160%] h-[435px] mt-4 rounded-md bg-cover bg-center'
+          style={{backgroundImage:`url(${product.imageList[productImageIndex]})`}}>
 
+          <div className='flex justify-start items-center m-1'>
+            <input type="image" onClick={decIndex} className='w-8 h-8' src={assets.previous_button_icon}></input>
+          </div>
+
+          <div className='flex justify-start items-center m-1'>
+            <input type="image" onClick={incIndex} className='w-8 h-8' src={assets.next_button_icon}></input>
+          </div>
         </div>
-        {/* <img src={product.image} alt={product.name} className="w-full max-w-md mt-4 rounded-md"/> */}
         
         {/* Name, Price, Date Listed */}
         <div className='flex flex-col py-4'>

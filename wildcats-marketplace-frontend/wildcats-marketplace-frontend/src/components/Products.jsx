@@ -4,10 +4,10 @@ import PhotoCard from "./PhotoCard";
 
 const Products = ({onProductClick}) => { 
   const productList = [
-    { id: 1, name: "Product 1", price: "$10.00", image: assets.blank_image_icon },
-    { id: 2, name: "Product 2", price: "$20.00", image: assets.blank_image_icon },
-    { id: 3, name: "Product 3", price: "$30.00", image: assets.blank_image_icon },
-    { id: 4, name: "Product 4", price: "$40.00", image: assets.blank_image_icon },
+    { id: 1, name: "Product 1", price: "$10.00", imageList: [assets.blank_image1_icon, assets.blank_image2_icon, assets.blank_image3_icon] },
+    { id: 2, name: "Product 2", price: "$20.00", imageList: [assets.blank_image1_icon, assets.blank_image2_icon, assets.blank_image3_icon] },
+    { id: 3, name: "Product 3", price: "$30.00", imageList: [assets.blank_image1_icon, assets.blank_image2_icon, assets.blank_image3_icon] },
+    { id: 4, name: "Product 4", price: "$40.00", imageList: [assets.blank_image1_icon, assets.blank_image2_icon, assets.blank_image3_icon] },
   ];
   
   return (
@@ -15,7 +15,7 @@ const Products = ({onProductClick}) => {
       {productList.map((product) => (
         <PhotoCard 
           key={product.id}
-          image={product.image}
+          image={product.imageList[0]}
           name={product.name}
           price={product.price}
           onClick={() => onProductClick(product)}
