@@ -46,11 +46,11 @@ const ProductPost = ({ product, onBack }) => {
           style={{backgroundImage:`url(${product.imageList[productImageIndex]})`}}>
 
           <div className='flex justify-start items-center m-1'>
-            <input type="image" onClick={decIndex} className='w-8 h-8' src={assets.previous_button_icon}></input>
+            <input type="image" onClick={decIndex} className='w-8 h-8 hover:scale-110' src={assets.previous_button_icon}></input>
           </div>
 
           <div className='flex justify-start items-center m-1'>
-            <input type="image" onClick={incIndex} className='w-8 h-8' src={assets.next_button_icon}></input>
+            <input type="image" onClick={incIndex} className='w-8 h-8 hover:scale-110' src={assets.next_button_icon}></input>
           </div>
         </div>
         
@@ -64,11 +64,11 @@ const ProductPost = ({ product, onBack }) => {
 
           {/*  Buttons  */}
           <div className='flex justify-between items-center gap-2'>
-            <button className='bg-[#B20000] w-full min-w-35 h-9.5 rounded-lg font-bold '>Message</button>
-            <div className='flex justify-center items-center p-3 bg-[#B20000] rounded-lg'>
+            <button className='bg-[#B20000] hover:bg-[#990000] w-full min-w-35 h-9.5 rounded-lg font-bold'>Message</button>
+            <div className='flex justify-center items-center p-3 bg-[#B20000] hover:bg-[#990000] rounded-lg'>
               <input onClick={handleSave} type="image" className="w-3.5 h-3.5" src={isPostSaved ? assets.white_save_icon : assets.white_save_icon_saved}></input>
             </div>
-            <div onClick={() => setShowReportModal(true)} className='flex justify-center items-center p-3 bg-[#B20000] rounded-lg'>
+            <div onClick={() => setShowReportModal(true)} className='flex justify-center items-center p-3 bg-[#B20000] hover:bg-[#990000] rounded-lg'>
               <input type="image" className="w-3.5 h-3.5" src={assets.white_report_icon}></input>
             </div>
           </div>

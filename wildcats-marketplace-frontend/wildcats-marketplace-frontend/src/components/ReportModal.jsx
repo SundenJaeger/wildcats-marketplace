@@ -26,7 +26,7 @@ const ReportModal = ({product, onClose, onSubmit}) => {
         {/* Line Break */}
         <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2 mx-1'></div>
 
-
+        
         <div className='flex flex-col items-start p-2 h-full gap-1 mb-2'>
             <label className='text-[#5B5B5B] font-bold' value="">Select a reason...</label>
             <button
