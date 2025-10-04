@@ -2,18 +2,44 @@ import React from 'react'
 import assets from '../assets/assets'
 import Products from './Products'
 import SellerDashboard from './SellerDashboard';
-import ProductPost from './ProductPost'; // ADD THIS IMPORT!
+import ProductPost from './ProductPost'; 
+import SettingsModal from './SettingsModal';
+import NotificationsModal from './NotificationsModal';
+import ProfileModal from './ProfileModal';
+import Navbar from './Navbar';
 
 const Homepage = () => {
 
     const [isMarketplaceView, setIsMarketplaceView] = React.useState(true);
     
-    const [selectedProduct, setSelectedProduct] = React.useState(null)
+    const [selectedProduct, setSelectedProduct] = React.useState(null);
+
+    const [showSettings, setShowSettings] = React.useState(false);
+        
+    const [showNotifications, setShowNotifications] = React.useState(false);
+
+    const [showProfile, setShowProfile] = React.useState(false);
 
     return (
     <div className="flex flex-col justify-top h-screen flex-1 max-w-[750px] min-w-[300px] mx-2">
 
-        {/* Fix the conditional rendering (you had the ternary backwards) */}
+        <Navbar 
+            onSettingsClick={() => {
+                console.log("Settings clicked in Homepage!");
+                setShowSettings(true);
+            }}
+            onNotificationsClick={() => {
+                console.log("Notifications clicked in Homepage!");
+                setShowNotifications(true);
+            }}
+            onProfileClick={() => {
+                console.log("Profile clicked in Homepage!");
+                console.log("showProfile before:", showProfile);
+                setShowProfile(true);
+                console.log("showProfile after setState called");
+            }}
+            />
+
         {!selectedProduct ? (
             <>
                 <div className='flex justify-between space-x-4'>
@@ -51,7 +77,6 @@ const Homepage = () => {
                                 <img className='w-5 h-5'src={assets.filter_icon}></img>
                             </div>
 
-                            {/* Pass setSelectedProduct to Products */}
                             <Products onProductClick={setSelectedProduct}/>
                         </div>
                     </>
@@ -69,6 +94,13 @@ const Homepage = () => {
         ) : (
             <ProductPost product={selectedProduct} onBack={() => setSelectedProduct(null)}/>
         )}
+
+        {console.log("Render check - showProfile:", showProfile)}
+   
+        {showSettings && (<SettingsModal onClose={() => setShowSettings(false)} />)}
+        {showNotifications && (<NotificationsModal onClose={() => setShowNotifications(false)} />)}
+        {showProfile && (<ProfileModal onClose={() => setShowProfile(false)} />)}
+
     </div>
     )
 }

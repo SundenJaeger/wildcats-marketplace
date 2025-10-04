@@ -1,22 +1,20 @@
-import React from 'react'
-import assets from '../assets/assets'
-import {useLocation } from 'react-router-dom';
+import React from 'react';
+import assets from '../assets/assets';
+import { useLocation } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
   const location = useLocation();
 
   const isHomepage = location.pathname === '/home';
 
   return (
-    <div className='flex items-center justify-center absolute top-0 left-0 w-full h-14 z-10 bg-[#A31800]'>
+    <div className='flex items-center justify-center absolute top-0 left-0 w-full h-14 z-50 bg-[#A31800]'>
       {/* Navbar for LoginSignup Page */}
       {!isHomepage && (
-          <div>
-            <div className='flex items-center gap-2 p-2 justify-center flex-1 max-w-3xl min-w-[300px] mx-2'>
-                <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
-                <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
-            </div>
-          </div>
+        <div className='flex items-center gap-2 p-2 justify-center flex-1 max-w-3xl min-w-[300px] mx-2'>
+          <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
+          <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
+        </div>
       )}
 
       {/* Navbar for Homepage */}
@@ -26,16 +24,24 @@ const Navbar = () => {
           {/* Left Side of Navbar */}
           <div className='flex items-center gap-1'>
             <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
-                <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
+            <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
           </div>
 
           {/* Right Side of Navbar */}
           <div className='flex flex-col'>
             <div className='flex items-center justify-end mb-1'>
-              <img className='w-4 h-4 mx-1' src={assets.white_settings_icon}></img>
-              <img className='w-4 h-4 mx-1' src={assets.white_notification_icon}></img>
-              <img className='w-4 h-4 mx-1' src={assets.white_profile_icon}></img>
-              <p className='text-xs pb-0.5'>username</p>
+              <button onClick={onSettingsClick} className='p-0 bg-transparent'>
+                <img className='w-4 h-4 mx-1' src={assets.white_settings_icon} alt="Settings" />
+              </button>
+              
+              <button onClick={onNotificationsClick} className='p-0 bg-transparent border-0'>
+                <img className='w-4 h-4 mx-1' src={assets.white_notification_icon} alt="Notifications" />
+              </button>
+              
+              <button onClick={onProfileClick} className='flex items-center p-0 bg-transparent border-0'>
+                <img className='w-4 h-4 mx-1' src={assets.white_profile_icon} alt="Profile" />
+                <p className='text-xs text-white pb-0.5'>username</p>
+              </button>
             </div>
 
             {/* Search bar */}
@@ -53,9 +59,7 @@ const Navbar = () => {
                 alt="Search Icon"
               />
             </div>
-
           </div>
-
         </div>
       )}
     </div>

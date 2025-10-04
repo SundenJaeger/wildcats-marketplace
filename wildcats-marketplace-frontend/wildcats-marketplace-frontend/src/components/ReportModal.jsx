@@ -12,7 +12,7 @@ const ReportModal = ({product, onClose, onSubmit}) => {
         onSubmit({reason: reportReason})
     }
   return (
-    <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40'>
+    <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
       <div className='flex flex-col justify-between bg-[#FFF7D7] border-[#FFE26D] rounded-md p-4 w-100 h-auto'> 
         
         <div className='flex justify-between items-center'>
@@ -20,13 +20,12 @@ const ReportModal = ({product, onClose, onSubmit}) => {
             <div onClick={onClose}
                 className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full'>
                 <input type="image" className="w-2.5  h-2.5" src={assets.white_close_icon}></input>
-                </div>
+            </div>
         </div>
 
         {/* Line Break */}
         <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2 mx-1'></div>
 
-        
         <div className='flex flex-col items-start p-2 h-full gap-1 mb-2'>
             <label className='text-[#5B5B5B] font-bold' value="">Select a reason...</label>
             <button
