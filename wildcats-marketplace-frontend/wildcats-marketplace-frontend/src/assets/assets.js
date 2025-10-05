@@ -24,6 +24,7 @@ import blank_profile_icon from './blank_profile_icon.png'
 import previous_button_icon from './previous_button_icon.png'
 import next_button_icon from './next_button_icon.png'
 import drop_down_icon from './drop_down_icon.png'
+import empty_space_icon from './empty_space_icon.png'
 
 const assets = {
   wildcats_logo,
@@ -51,7 +52,8 @@ const assets = {
   blank_profile_icon,
   previous_button_icon,
   next_button_icon,
-  drop_down_icon
+  drop_down_icon,
+  empty_space_icon
 };
 
 export default assets;

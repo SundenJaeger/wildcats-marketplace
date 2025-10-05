@@ -16,11 +16,13 @@ function App() {
         className="App relative w-screen z-10 bg-cover bg-white bg-no-repeat bg-center min-h-screen flex flex-col justify-between"
         style={{ backgroundImage: `url(${assets.wildcats_marketplace_bg_image})` }}
       >
-        <nav className="w-full sticky h-16 top-0 z-50">
-          <Navbar />
-        </nav>
+        <div className='flex justify-center items-center'>
+          <nav className="w-full sticky h-16 top-0 z-50">
+            <Navbar />
+          </nav>
+        </div>
 
-        <div className="flex items-center justify-center max-w-320">
+        <div className="flex items-center justify-center">
          <Routes>
             <Route path="/" element={<Form />} />
             <Route path="/login" element={<Form />} />

@@ -13,7 +13,7 @@ const ReportModal = ({product, onClose, onSubmit}) => {
     }
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-between bg-[#FFF7D7] border-[#FFE26D] rounded-md p-4 w-100 h-auto'> 
+      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-100 h-auto'> 
         
         <div className='flex justify-between items-center'>
             <h2 className='text-black font-bold text-xl'>Report: {product.name}</h2>
