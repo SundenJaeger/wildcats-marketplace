@@ -7,6 +7,7 @@ import SettingsModal from './SettingsModal';
 import NotificationsModal from './NotificationsModal';
 import ProfileModal from './ProfileModal';
 import Navbar from './Navbar';
+import ProductFilterModal from './ProductFilterModal'
 
 const Homepage = () => {
 
@@ -19,6 +20,8 @@ const Homepage = () => {
     const [showNotifications, setShowNotifications] = React.useState(false);
 
     const [showProfile, setShowProfile] = React.useState(false);
+
+    const [showProductFilter, setShowProductFilter] = React.useState(false);
 
     return (
     <div className="flex flex-col justify-top h-screen flex-1 max-w-[750px] min-w-[300px] mx-2">
@@ -74,7 +77,12 @@ const Homepage = () => {
                                 <h3 className='text-black font-bold text-xl '>
                                     Today's Picks
                                 </h3>
-                                <img className='w-5 h-5'src={assets.filter_icon}></img>
+                                <button
+                                type="button"
+                                className=""
+                                onClick={() => setShowProductFilter(!showProductFilter)}>
+                                <img className="w-5 h-5" src={assets.filter_icon} alt="filter" />
+                                </button>
                             </div>
 
                             <Products onProductClick={setSelectedProduct}/>
@@ -100,6 +108,8 @@ const Homepage = () => {
         {showSettings && (<SettingsModal onClose={() => setShowSettings(false)} />)}
         {showNotifications && (<NotificationsModal onClose={() => setShowNotifications(false)} />)}
         {showProfile && (<ProfileModal onClose={() => setShowProfile(false)} />)}
+        {showProductFilter && (<ProductFilterModal onClose={() => setShowProductFilter(false)}/>)}
+        
 
     </div>
     )
