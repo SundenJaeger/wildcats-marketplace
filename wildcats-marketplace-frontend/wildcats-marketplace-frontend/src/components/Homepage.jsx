@@ -24,7 +24,7 @@ const Homepage = () => {
     const [showProductFilter, setShowProductFilter] = React.useState(false);
 
     return (
-    <div className="flex flex-col justify-top h-screen flex-1 max-w-[750px] min-w-[300px] mx-2">
+    <div className="flex flex-col justify-top h-screen flex-1 max-w-[1000px] min-w-[300px] mx-2">
 
         <Navbar 
             onSettingsClick={() => {

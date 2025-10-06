@@ -13,10 +13,12 @@ const ReportModal = ({product, onClose, onSubmit}) => {
     }
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-100 h-auto'> 
+      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-150 h-100'> 
         
-        <div className='flex justify-between items-center'>
-            <h2 className='text-black font-bold text-xl'>Report: {product.name}</h2>
+        <div className='flex justify-between pl-3 mb-2'>
+            <div className='flex justify-between items-center mt-3'>
+                <h2 className='text-black font-bold text-xl'>Report: {product.name}</h2>
+            </div>
             <div onClick={onClose}
                 className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full'>
                 <input type="image" className="w-2.5  h-2.5" src={assets.white_close_icon}></input>
@@ -24,25 +26,20 @@ const ReportModal = ({product, onClose, onSubmit}) => {
         </div>
 
         {/* Line Break */}
-        <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2 mx-1'></div>
+        <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2 mx-2 '></div>
 
-        <div className='flex flex-col items-start p-2 h-full gap-1 mb-2'>
-            <label className='text-[#5B5B5B] font-bold' value="">Select a reason...</label>
-            <button
-                type='button'
-                onClick={() => setReportReason('scam')}
-                className={`text-left pl-2 p-1 rounded-md border-gray-400 border-2 w-full bg-[#fdf9e6] hover:bg-[#e6e1cd] ${reportReason === 'scam' ? 'focus:bg-[#e6e1cd]' : ''} text-[#5B5B5B] font-bold`}
-            >Scam or Fraud</button>
-            <button
-                type='button'
-                onClick={() => setReportReason('fake')}
-                className={`text-left pl-2 p-1 rounded-md border-gray-400 border-2 w-full bg-[#fdf9e6] hover:bg-[#e6e1cd] ${reportReason === 'fake' ? 'focus:bg-[#e6e1cd]' : ''} text-[#5B5B5B] font-bold`}
-            >Counterfeit Product</button>
-            <button
-                type='button'
-                onClick={() => setReportReason('inappropriate')}
-                className={`text-left pl-2 p-1 rounded-md border-gray-400 border-2 w-full bg-[#fdf9e6] hover:bg-[#e6e1cd] ${reportReason === 'inappropriate' ? 'focus:bg-[#e6e1cd]' : ''} text-[#5B5B5B] font-bold`}
-            >Inappropriate Listing</button>
+        <div className='flex flex-col items-start p-2 h-full gap-2 mb-2 mx-3'>
+            <h3 className='text-black font-bold' value="">Why are you reporting this post?</h3>
+            <p className='text-gray-500 font-semibold'>If someone is in immediate danger, get help. Don't wait.</p>
+            <button type='button' onClick={() => setReportReason('scam')}
+                className={`text-left pl-2 p-1 rounded-md border-gray-400 border-2 w-full bg-[#fdf9e6] hover:bg-[#e6e1cd] ${reportReason === 'scam' ? 'focus:bg-[#e6e1cd]' : ''} text-[#5B5B5B] font-bold`}>
+                Scam or Fraud</button>
+            <button type='button' onClick={() => setReportReason('fake')}
+                className={`text-left pl-2 p-1 rounded-md border-gray-400 border-2 w-full bg-[#fdf9e6] hover:bg-[#e6e1cd] ${reportReason === 'fake' ? 'focus:bg-[#e6e1cd]' : ''} text-[#5B5B5B] font-bold`}>
+                Counterfeit Product</button>
+            <button type='button' onClick={() => setReportReason('inappropriate')}
+                className={`text-left pl-2 p-1 rounded-md border-gray-400 border-2 w-full bg-[#fdf9e6] hover:bg-[#e6e1cd] ${reportReason === 'inappropriate' ? 'focus:bg-[#e6e1cd]' : ''} text-[#5B5B5B] font-bold`}>
+                Inappropriate Listing</button>
         </div>
 
         <div className='flex gap-1 justify-end items-center'>

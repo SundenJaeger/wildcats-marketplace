@@ -4,6 +4,8 @@ import ReportModal from './ReportModal'
 
 const ProductPost = ({ product, onBack }) => {
 
+  const placeholder_comment = [{name: "StrongKat", profile: assets.blank_profile_icon, comment: "Hey man I like tomboys spam W chat W W W"}]
+
   const [isPostSaved, setPostSaved] = React.useState(false)
 
   const [productImageIndex, setProductImageIndex] = React.useState(0)
@@ -42,7 +44,7 @@ const ProductPost = ({ product, onBack }) => {
       
       <div className='flex justify-between gap-4 mb-2'>
         {/* Product Images */}
-        <div className='flex justify-between w-[160%] h-[435px] mt-4 rounded-md bg-cover bg-center'
+        <div className='flex justify-between w-[100%] h-[500px] mt-4 rounded-md bg-cover bg-center'
           style={{backgroundImage:`url(${product.imageList[productImageIndex]})`}}>
 
           <div className='flex justify-start items-center m-1'>
@@ -59,7 +61,7 @@ const ProductPost = ({ product, onBack }) => {
           <div className='flex flex-col justify-start mb-4'>
             <h2 className="text-2xl text-black font-bold">{product.name}</h2>
             <h3 className="text-xl text-black font-bold">{product.price}</h3>
-            <h3 className='text-black text-sm'>Listed hours ago</h3>
+            <h3 className='text-black text-sm'>Listed by John Doe - 22-4444-123</h3>
           </div>
 
           {/*  Buttons  */}
@@ -76,28 +78,48 @@ const ProductPost = ({ product, onBack }) => {
           {/* Line Break */}
           <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-5 mx-1'></div>
 
-          <div>
+          <div className='mb-2'> 
           {/* Product Details */}
-          <h3 className='text-[#5B5B5B] text-lg font-bold'>Details</h3>
+          <h3 className='text-[#5B5B5B] text-md font-bold'>Details</h3>
             <div className='grid grid-cols-2 mb-2'>
-              <p className='text-[#5B5B5B] text-lg font-bold'>Condition</p>
-              <p className='text-[#999999] text-lg font-bold'>New</p>
+              <p className='text-[#5B5B5B] text-md font-bold'>Condition</p>
+              <p className='text-[#999999] text-sm font-bold'>New</p>
             </div>
 
-            <p className='text-[#999999] text-lg font-semibold leading-6'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium perferendis.</p>
+            <p className='text-[#999999] text-sm font-semibold leading-6'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium perferendis.</p>
           </div>
 
           {/* Line Break */}
-          <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-5 mx-1'></div>
+          <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-3 mx-1'></div>
           
-          {/* Seller Info */}
-          <h3 className='text-[#5B5B5B] text-lg font-bold'>Seller Information</h3>
-          <div className='flex justify-start items-center mt-2'>
-            <img className='w-8 h-8' src={assets.blank_profile_icon}></img>
-            <div className='flex flex-col ml-2 '>
-              <p className='text-[#5B5B5B] text-md font-bold leading-3.5'>John Doe</p>
-              <p className='text-[#999999] text-sm font-semibold leading-tight'>22-4444-123</p>
+          {/* Thread */}
+          <div className='flex flex-col justify-start items-start'>
+            <div className='flex ml-2 gap-1 my-1'>
+              <img className="w-4.5 h-4.5" src={assets.comment_icon}></img>
+              <p className='text-[#999999] text-sm font-semibold leading-tight'>1</p>
             </div>
+
+            <div className='flex px-2 items-center justify-between bg-white w-full h-8 rounded-md border-2 border-gray-200'>
+              <input type='text' className='w-full text-black placeholder-gray-400 text-xs font-semibold' placeholder='Write a message'></input>
+              <div className='p-1 rounded-md bg-gray-200 border-1 border-gray-400'>
+                <img className='w-2 h-2' src={assets.enter_icon}></img>
+              </div>
+            </div>
+          </div>
+
+          
+          {/* Line Break */}
+          <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-3 mx-1'></div>
+
+          <div>
+            <div className='flex items-center gap-2'>
+              <img className='w-6 h-6' src={placeholder_comment[0].profile}></img>
+              <div className='flex flex-col'>
+                <p className='text-black font-bold text-xs'>{placeholder_comment[0].name}</p>
+                <p className='text-gray-400 font-semibold text-xs'>{placeholder_comment[0].comment}</p>
+              </div>
+            </div>
+            <button className='text-gray-500 text-xs ml-8 font-bold'>Reply</button>
           </div>
         </div>
       </div>
