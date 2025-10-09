@@ -1,7 +1,8 @@
 function Footer() {
   return (
-    <footer className="flex items-start justify-around px-40 py-[40px] bg-[#350800] text-white">
-      {/* Left Section */}
+    <footer className="flex justify-center bg-[#350800] text-white">
+      <div className="flex justify-around max-w-265">
+        {/* Left Section */}
       <div className="text-left max-w-2/3">
         <h3 className="font-bold text-lg mb-2">Wildcats MarketPlace</h3>
         <p className="text-md text-justify leading-relaxed">
@@ -10,7 +11,7 @@ function Footer() {
             what an online marketplace for students could look like—providing buying, 
             selling, and sharing features within a campus-focused community.
         </p>
-        <p className="text-sm text-gray-300 mt-4">
+        <p className="text-sm text-gray-300 mt-4">s
             © 2025 Wildcats Marketplace. All rights reserved.
         </p>
       </div>
@@ -26,6 +27,7 @@ function Footer() {
             <li>John Clyde Perez</li>
             <li>Sol Angelo Singson</li>
         </ul>
+      </div>
       </div>
     </footer>
   );
