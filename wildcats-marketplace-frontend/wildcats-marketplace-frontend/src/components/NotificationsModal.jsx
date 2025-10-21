@@ -4,8 +4,8 @@ import assets from '../assets/assets'
 const NotificationsModal = ({onClose}) => {
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-190 h-auto'> 
-        
+      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-190 h-auto'>
+
         <div className='flex justify-between items-start'>
             <div className='flex flex-col ml-5 mt-5 mb-2'>
                 <h2 className='text-black font-bold text-xl'>My Notifications</h2>
@@ -21,15 +21,15 @@ const NotificationsModal = ({onClose}) => {
 
         {/* Main Body */}
         <div className='flex justify-around items-start py-5 h-100 gap-3'>
-            
-        
+
+
           {/* Idk what we should put here so its just a placeholder fn */}
           <div className='bg-[#FFFAE4] flex flex-col items-center justify-center w-full h-full'>
             <img className='w-20 h-20 rounded-xl m-2' src={assets.empty_space_icon}>
             </img>
             <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
           </div>
-        
+
         </div>
       </div>
     </div>

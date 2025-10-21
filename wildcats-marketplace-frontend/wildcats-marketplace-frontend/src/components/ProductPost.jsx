@@ -41,7 +41,7 @@ const ProductPost = ({ product, onBack }) => {
                 <input type="image" className="w-2.5  h-2.5" src={assets.white_close_icon}></input>
                 </div>
         </div>
-      
+
       <div className='flex justify-between gap-4 mb-2'>
         {/* Product Images */}
         <div className='flex justify-between w-[100%] h-[500px] mt-4 rounded-md bg-cover bg-center'
@@ -55,7 +55,7 @@ const ProductPost = ({ product, onBack }) => {
             <input type="image" onClick={incIndex} className='w-8 h-8 hover:scale-110' src={assets.next_button_icon}></input>
           </div>
         </div>
-        
+
         {/* Name, Price, Date Listed */}
         <div className='flex flex-col py-4'>
           <div className='flex flex-col justify-start mb-4'>
@@ -74,11 +74,11 @@ const ProductPost = ({ product, onBack }) => {
               <input type="image" className="w-3.5 h-3.5" src={assets.white_report_icon}></input>
             </div>
           </div>
-          
+
           {/* Line Break */}
           <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-5 mx-1'></div>
 
-          <div className='mb-2'> 
+          <div className='mb-2'>
           {/* Product Details */}
           <h3 className='text-[#5B5B5B] text-md font-bold'>Details</h3>
             <div className='grid grid-cols-2 mb-2'>
@@ -91,7 +91,7 @@ const ProductPost = ({ product, onBack }) => {
 
           {/* Line Break */}
           <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-3 mx-1'></div>
-          
+
           {/* Thread */}
           <div className='flex flex-col justify-start items-start'>
             <div className='flex ml-2 gap-1 my-1'>
@@ -107,7 +107,7 @@ const ProductPost = ({ product, onBack }) => {
             </div>
           </div>
 
-          
+
           {/* Line Break */}
           <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-3 mx-1'></div>
 
@@ -125,7 +125,7 @@ const ProductPost = ({ product, onBack }) => {
       </div>
 
       {showReportModal && (
-        <ReportModal 
+        <ReportModal
           product={product}
           onClose={() => setShowReportModal(false)}
           onSubmit={handleReportSubmit}

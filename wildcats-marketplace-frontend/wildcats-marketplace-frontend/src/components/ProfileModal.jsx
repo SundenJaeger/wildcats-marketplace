@@ -7,10 +7,10 @@ const ProfileModal = ({onClose}) => {
 
     const placeholder_user = {fullname: "John Doe",username: 'johndoe', student_id: "ex. 19-3946-347", student_email: "john.doe@cit.edu"}
 
-  return (
+    return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-170 h-auto'> 
-        
+        <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-170 h-auto'> 
+
         <div className='flex justify-between items-start '>
             <div className='flex flex-col ml-5 mt-5 mb-2'>
                 <h2 className='text-black font-bold text-xl'>My Profile</h2>
@@ -61,13 +61,13 @@ const ProfileModal = ({onClose}) => {
                             <option>PE Activity Area</option>
                             <option>Gymnasium</option>
                         </select>
-                        <img 
-                            src={assets.drop_down_icon} 
-                            alt="Dropdown" 
+                        <img
+                            src={assets.drop_down_icon}
+                            alt="Dropdown"
                             className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
                         />
                     </div>
-                    
+
                 </div>
                 {/* Change Password */}
                 <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
@@ -86,19 +86,19 @@ const ProfileModal = ({onClose}) => {
                             <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white' type='radio' name='gender' value='female' checked={selectedOption === 'female'} onChange={(e) => setSelectedOption(e.target.value)} />
                             Female
                         </label>
-                        <label className='flex items-center  gap-1 text-black font-semibold'>    
+                        <label className='flex items-center  gap-1 text-black font-semibold'>
                             <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white' type='radio' name='gender' value='other' checked={selectedOption === 'other'} onChange={(e) => setSelectedOption(e.target.value)} />
                             Other
                     </label>
                 </div>
-                    
+
                 </div>
-                {/* Date of Birth */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'>Date of Birth</label>
-                    <input type='date' className='bg-white rounded-sm border-2 border-gray-300 p-1 w-full text-black'></input>
+                    {/* Date of Birth */}
+                    <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
+                        <label className='text-black font-bold'>Date of Birth</label>
+                        <input type='date' className='bg-white rounded-sm border-2 border-gray-300 p-1 w-full text-black'></input>
+                    </div>
                 </div>
-            </div>
 
             {/* Right Side */}
             <div className='flex flex-col gap-2 items-center'>
@@ -113,9 +113,9 @@ const ProfileModal = ({onClose}) => {
                 Save
             </button>
         </div>
-      </div>
+        </div>
     </div>
-  )
+)
 }
 
 export default ProfileModal

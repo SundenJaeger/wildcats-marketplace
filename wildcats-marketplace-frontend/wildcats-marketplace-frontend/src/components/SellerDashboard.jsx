@@ -2,7 +2,7 @@ import React from 'react'
 import assets from '../assets/assets'
 
 const SellerDashboard = () => {
-  return (
+    return (
     <div className='flex flex-col justify-top h-screen w-full'>
     <br></br>
       {/* Overview */}
@@ -10,7 +10,7 @@ const SellerDashboard = () => {
             <h2 className="text-xl text-black font-bold mb-2">Overview</h2>
             <div className='bg-[#FFF7DA] border-[#9E7D00] p-4 rounded-lg shadow-md flex space-x-4 px-10'>
                 <div className='flex flex-col justify-center items-start w-1/2 border-1 rounded-md border-[#787878] bg-[#FFFCEE] p-2 px-4'>
-                    <div className='flex w-full h-full'> 
+                    <div className='flex w-full h-full'>
                         <h2 className="text-2xl text-black font-bold mb-4">
                             0
                         </h2>
@@ -21,11 +21,11 @@ const SellerDashboard = () => {
                 </div>
 
                 <div className='flex flex-col justify-center items-start w-1/2 border-1 rounded-md border-[#787878] bg-[#FFFCEE] p-2 px-4'>
-                    <div className='flex w-full h-full '> 
+                    <div className='flex w-full h-full '>
                         <h2 className="text-2xl text-black font-bold mb-4">
                             0
                         </h2>
-                        <img 
+                        <img
                         className='w-4.5 h-4.5 mt-2 ml-1'
                         src={assets.star_icon}></img>
                     </div>
@@ -45,7 +45,7 @@ const SellerDashboard = () => {
             </div>
             <div className='bg-[#FFF7DA] border-[#9E7D00] p-4 rounded-lg shadow-md flex space-x-4 px-10'>
                 <div className='flex flex-col justify-center items-start w-1/2 border-1 rounded-md border-[#787878] bg-[#FFFCEE] p-2 px-4'>
-                    <div className='flex w-full h-full'> 
+                    <div className='flex w-full h-full'>
                         <h2 className="text-2xl text-black font-bold mb-4">
                             0
                         </h2>
@@ -56,7 +56,7 @@ const SellerDashboard = () => {
                 </div>
 
                 <div className='flex flex-col justify-center items-start w-1/2 border-1 rounded-md border-[#787878] bg-[#FFFCEE] p-2 px-4'>
-                    <div className='flex w-full h-full'> 
+                    <div className='flex w-full h-full'>
                         <h2 className="text-2xl text-black font-bold mb-4">
                             0
                         </h2>
@@ -67,7 +67,7 @@ const SellerDashboard = () => {
                 </div>
 
                 <div className='flex flex-col justify-center items-start w-1/2 border-1 rounded-md border-[#787878] bg-[#FFFCEE] p-2 px-4'>
-                    <div className='flex w-full h-full '> 
+                    <div className='flex w-full h-full '>
                         <h2 className="text-2xl text-black font-bold mb-4">
                             0
                         </h2>
@@ -79,7 +79,7 @@ const SellerDashboard = () => {
             </div>
         </div>
     </div>
-  )
+    )
 }
 
 export default SellerDashboard

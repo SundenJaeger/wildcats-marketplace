@@ -20,7 +20,7 @@ const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
       {/* Navbar for Homepage */}
       {isHomepage && (
         <div className='flex items-center gap-2 p-2 max-px-40 justify-between flex-1 max-w-5xl min-w-[300px] mx-2'>
-          
+
           {/* Left Side of Navbar */}
           <div className='flex items-center gap-1'>
             <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
@@ -33,11 +33,11 @@ const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
               <button onClick={onSettingsClick} className='p-0 bg-transparent'>
                 <img className='w-4 h-4 mx-1' src={assets.white_settings_icon} alt="Settings" />
               </button>
-              
+
               <button onClick={onNotificationsClick} className='p-0 bg-transparent border-0'>
                 <img className='w-4 h-4 mx-1' src={assets.white_notification_icon} alt="Notifications" />
               </button>
-              
+
               <button onClick={onProfileClick} className='flex items-center p-0 bg-transparent border-0'>
                 <img className='w-4 h-4 mx-1' src={assets.white_profile_icon} alt="Profile" />
                 <p className='text-xs text-white pb-0.5'>username</p>

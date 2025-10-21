@@ -12,15 +12,15 @@ const ProductFilterModal = ({onClose}) => {
   const [chosenFilters, setChosenFilters] = React.useState([]);
 
   const toggleFilter = (filter) => {
-    setChosenFilters((prevFilters) => 
+    setChosenFilters((prevFilters) =>
       prevFilters.includes(filter) ? prevFilters.filter((f) => f !== filter) : [...prevFilters, filter]
     );
   };
 
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-start rounded-md p-4 border bg-[#FFF4CB] w-130 max-h-[90vh] overflow-y-au'> 
-        
+      <div className='flex flex-col justify-start rounded-md p-4 border bg-[#FFF4CB] w-130 max-h-[90vh] overflow-y-au'>
+
         <div className='flex justify-between items-start'>
             <div className='flex flex-col ml-5 mt-5 mb-2'>
                 <h2 className='text-black font-bold text-xl'>Filter</h2>
@@ -36,7 +36,7 @@ const ProductFilterModal = ({onClose}) => {
 
         {/* Main Body */}
         <div className='flex flex-col justify-between items-between py-5 h-auto gap-1'>
-            
+
           {/* Main Categories */}
           <div className='flex items-center text-start gap-1 my-1 bg-white rounded-lg w-full h-16 px-3'>
             <h3 className='text-black font-bold mx-1 w-31'>Category:</h3>
@@ -79,12 +79,12 @@ const ProductFilterModal = ({onClose}) => {
             </div>
           </div>
 
-          
+
           <div className='relative w-full h-auto'>
             {/* Academic Books & Notes Category Filters */}
           {(chosenCategory === "academics") && (
             <div className=" items-center text-start gap-2 my-2 bg-white rounded-lg w-full h-full p-2 pl-3">
-              
+
               <div>
                 <h3 className="text-black font-bold mb-2">Type:</h3>
                 <div className="flex flex-col gap-1 ml-3">
@@ -98,7 +98,7 @@ const ProductFilterModal = ({onClose}) => {
                       className="flex items-center gap-2 text-black font-semibold"
                     >
                       <span
-                        className={`border-2 border-gray-400 w-3 h-3 rounded-full 
+                        className={`border-2 border-gray-400 w-3 h-3 rounded-full
                         ${chosenFilters.includes(value) ? "bg-gray-500" : "bg-[#FFF4CB]"}`}
                       ></span>
                       <label>{label}</label>
@@ -126,7 +126,7 @@ const ProductFilterModal = ({onClose}) => {
                       className="flex items-center gap-2 text-black font-semibold"
                     >
                       <span
-                        className={`border-2 border-gray-400 w-3 h-3 rounded-full 
+                        className={`border-2 border-gray-400 w-3 h-3 rounded-full
                         ${chosenFilters.includes(value) ? "bg-gray-500" : "bg-[#FFF4CB]"}`}
                       ></span>
                       <label>{label}</label>
@@ -157,7 +157,7 @@ const ProductFilterModal = ({onClose}) => {
                       className="flex items-center gap-2 text-black font-semibold"
                     >
                       <span
-                        className={`border-2 border-gray-400 w-3 h-3 rounded-full 
+                        className={`border-2 border-gray-400 w-3 h-3 rounded-full
                         ${chosenFilters.includes(value) ? "bg-gray-500" : "bg-[#FFF4CB]"}`}
                       ></span>
                       <label>{label}</label>
@@ -173,7 +173,7 @@ const ProductFilterModal = ({onClose}) => {
           {/* General Items */}
           {chosenCategory === 'general' && (
             <div className="items-center text-start gap-2 my-2 bg-white rounded-lg w-full h-full p-2 pl-3">
-              
+
               <div>
                 <h3 className="text-black font-bold mb-2">Type:</h3>
                 <div className="flex flex-col gap-1 ml-3">
@@ -190,7 +190,7 @@ const ProductFilterModal = ({onClose}) => {
                       className="flex items-center gap-2 text-black font-semibold"
                     >
                       <span
-                        className={`border-2 border-gray-400 w-3 h-3 rounded-full 
+                        className={`border-2 border-gray-400 w-3 h-3 rounded-full
                         ${chosenFilters.includes(value) ? "bg-gray-500" : "bg-[#FFF4CB]"}`}
                       ></span>
                       <label>{label}</label>
@@ -202,7 +202,7 @@ const ProductFilterModal = ({onClose}) => {
           )}
 
           </div>
-        
+
         </div>
       </div>
     </div>

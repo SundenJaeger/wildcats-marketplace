@@ -6,8 +6,8 @@ const PhotoCard = ({ image, name, price, onClick }) => {
 
   return (
     <div
-      className="bg-[#FFF9E0] w-full h-65 rounded-md shadow-md relative 
-                 hover:shadow-md hover:scale-101 transition-transform duration-100 cursor-pointer"
+      className="bg-[#FFF9E0] w-full h-65 rounded-md shadow-md relative
+      hover:shadow-md hover:scale-101 transition-transform duration-100 cursor-pointer"
     >
       {/* Product image */}
       <img

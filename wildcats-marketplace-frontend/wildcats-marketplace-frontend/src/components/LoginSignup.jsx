@@ -111,18 +111,18 @@ const LoginSignup = () => {
       alert('Please fix the errors before submitting');
       return false;
     }
-    
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Prevent double submission
     if (isSubmitting) return;
-    
+
     console.log('🚀 Validating form before submission...');
-    
+
     // Validate all fields
     const isValid = validateForm();
     if (!isValid) return;
@@ -135,9 +135,9 @@ const LoginSignup = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       alert(`${isSignupMode ? 'Registration' : 'Login'} successful!`);
-      
+
       navigate('/home', {
         state: {
           isNewUser: isSignupMode,
@@ -145,12 +145,12 @@ const LoginSignup = () => {
         }
       });
 
-      
+
     } catch (error) {
       alert('Submission failed. Please try again.');
     } finally {
       setIsSubmitting(false);
-    } 
+    }
   };
 
   return (
@@ -168,21 +168,21 @@ const LoginSignup = () => {
             <div className="relative w-[90%]">
               <div className='flex items-center relative'>
                 {/* Icon */}
-                <img 
-                  src={assets.user_icon} 
-                  alt="user icon" 
+                <img
+                  src={assets.user_icon}
+                  alt="user icon"
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
                 />
 
                 {/* Input */}
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={formData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
                   onBlur={() => handleFieldNameBlur('fullName')}
-                  placeholder="Full Name" 
+                  placeholder="Full Name"
                   className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                    ${errors.fullName && touched.fullName ? 'border-red-500 focus:ring-red-500' 
+                    ${errors.fullName && touched.fullName ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                     `}
                 />
@@ -200,20 +200,20 @@ const LoginSignup = () => {
           <div className="relative w-[90%]">
             <div className='flex items-center relative'>
               {/* Icon */}
-              <img 
-                src={assets.user_icon} 
-                alt="user icon" 
+              <img
+                src={assets.user_icon}
+                alt="user icon"
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
               />
 
               {/* Input */}
-              <input 
-                type="text" 
+              <input
+                type="text"
                 onChange={(e) => handleInputChange('userName', e.target.value)}
                 onBlur={() => handleFieldNameBlur('userName')}
-                placeholder="Username" 
+                placeholder="Username"
                 className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                  {errors.userName && touched.userName ? 'border-red-500 focus:ring-red-500' 
+                  {errors.userName && touched.userName ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                     `}
               />
@@ -231,20 +231,20 @@ const LoginSignup = () => {
             <div className="relative w-[90%]">
               <div className='flex items-center relative'>
                 {/* Icon */}
-                <img 
-                  src={assets.email_icon} 
-                  alt="email icon" 
+                <img
+                  src={assets.email_icon}
+                  alt="email icon"
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
                 />
 
                 {/* Input */}
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   onBlur={() => handleFieldNameBlur('email')}
-                  placeholder="Email" 
+                  placeholder="Email"
                   className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                  {errors.email && touched.email ? 'border-red-500 focus:ring-red-500' 
+                  {errors.email && touched.email ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                     `}
                 />
@@ -262,27 +262,27 @@ const LoginSignup = () => {
           <div className="relative w-[90%]">
             <div className='flex items-center relative'>
               {/* Icon */}
-              <img 
-                src={assets.lock_icon} 
-                alt="lock icon" 
+              <img
+                src={assets.lock_icon}
+                alt="lock icon"
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
               />
 
-             <input 
-                type={showPassword ? "text" : "password"} 
+              <input
+                type={showPassword ? "text" : "password"}
                 onChange={(e) => handleInputChange('password', e.target.value)}
                 onBlur={() => handleFieldNameBlur('password')}
-                placeholder="Password" 
+                placeholder="Password"
                 className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                  ${errors.password && touched.password ? 'border-red-500 focus:ring-red-500' 
+                  ${errors.password && touched.password ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                 `}
               />
 
               {/* Password visibility icon */}
-              <img 
-                src={showPassword ? assets.pw_visible_icon : assets.pw_hidden_icon} 
-                alt="toggle password visibility" 
+              <img
+                src={showPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
+                alt="toggle password visibility"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
               />
@@ -291,7 +291,7 @@ const LoginSignup = () => {
             {errors.password && touched.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>
               )}
-            
+
           </div>
         </div>
 
@@ -301,27 +301,27 @@ const LoginSignup = () => {
             <div className={`relative w-[90%]`}>
               <div className='flex items-center relative'>
                 {/* Icon */}
-                <img 
-                  src={assets.lock_icon} 
-                  alt="lock icon" 
+                <img
+                  src={assets.lock_icon}
+                  alt="lock icon"
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
                 />
 
-                <input 
-                  type={showConfirmPassword ? "text" : "password"} 
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
                   onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                   onBlur={() => handleFieldNameBlur('confirmPassword')}
-                  placeholder="Confirm Password" 
+                  placeholder="Confirm Password"
                   className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                    ${errors.confirmPassword && touched.confirmPassword ? 'border-red-500 focus:ring-red-500' 
+                    ${errors.confirmPassword && touched.confirmPassword ? 'border-red-500 focus:ring-red-500'
                       : 'focus:ring-blue-500'}
                   `}
                 />
 
                 {/* Confirm password visibility icon */}
-                <img 
-                  src={showConfirmPassword ? assets.pw_visible_icon : assets.pw_hidden_icon} 
-                  alt="toggle confirm password visibility" 
+                <img
+                  src={showConfirmPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
+                  alt="toggle confirm password visibility"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
                 />
@@ -337,15 +337,15 @@ const LoginSignup = () => {
 
       {/* Submit buttons with dynamic text */}
     <div  className={`flex items-center justify-around w-full ${isSignupMode ? '' : 'mt-5'}`}>
-        <button 
-          disabled={isSubmitting} 
-          onClick={isSignupMode ? handleSubmit : toggleMode} 
+        <button
+          disabled={isSubmitting}
+          onClick={isSignupMode ? handleSubmit : toggleMode}
           className={`w-[40%] ml-1/2 mb-4 ${isSignupMode? "!bg-[#A31800] hover:!bg-[#801300]" : "!bg-[#BFB58F]"} text-white p-2 rounded-md transition duration-300 font-medium`}>
           Sign up
         </button>
-        <button 
-          disabled={isSubmitting} 
-          onClick={isSignupMode ? toggleMode : handleSubmit} 
+        <button
+          disabled={isSubmitting}
+          onClick={isSignupMode ? toggleMode : handleSubmit}
           className={`w-[40%] mr-1/2 mb-4 ${isSignupMode? "!bg-[#BFB58F]" : "!bg-[#A31800] hover:!bg-[#801300]"} text-white p-2 rounded-md  transition duration-300 font-medium`}>
           Login
         </button>

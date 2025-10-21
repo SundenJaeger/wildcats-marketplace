@@ -7,8 +7,8 @@ const SettingsModal = ({onClose}) => {
 
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-190 h-auto'> 
-        
+      <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-190 h-auto'>
+
         <div className='flex justify-between items-start'>
             <div className='flex flex-col ml-5 mt-5 mb-2'>
                 <h2 className='text-black font-bold text-xl'>Settings</h2>
@@ -24,13 +24,13 @@ const SettingsModal = ({onClose}) => {
 
         {/* Main Body */}
         <div className='flex justify-around items-start py-5 h-100 gap-3'>
-            
+
           {/* Left Side */}
           <div className='flex flex-col items-start justify-center w-1/3 pl-3'>
               <button type='button' onClick={() => setSettingsOption('notifs')}
               className={`w-full text-black font-bold text-lg text-left p-3 px-5 m-1 rounded-md ${settingsOption === 'notifs' ? 'bg-[#FFFAE4]' : 'bg-[#FFF4CB]' }`}>
               Notification Settings
-              </button> 
+              </button>
               <button type='button' onClick={() => setSettingsOption('transacts')}
               className={`w-full text-black font-bold text-lg text-left p-3 px-5 m-1 rounded-md  ${settingsOption === 'transacts' ? 'bg-[#FFFAE4]' : 'bg-[#FFF4CB]' }`}>
               My transactions
@@ -47,7 +47,7 @@ const SettingsModal = ({onClose}) => {
             </img>
             <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
           </div>
-        
+
         </div>
       </div>
     </div>
