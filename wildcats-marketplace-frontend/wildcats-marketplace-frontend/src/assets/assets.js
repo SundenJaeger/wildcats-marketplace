@@ -16,9 +16,9 @@ import white_profile_icon from './white_profile_icon.png'
 import white_settings_icon from './white_settings_icon.png'
 import red_search_icon from './red_search_icon.png'
 import homepage_welcome_banner from './homepage_welcome_banner.webp'
-import white_save_icon_saved from './white_save_icon_saved.png'
-import white_save_icon from './white_save_icon.png'
-import white_report_icon from './white_report_icon.png'
+import save_icon_saved from './save_icon_saved.png'
+import save_icon from './save_icon.png'
+import report_icon from './report_icon.png'
 import white_close_icon from './white_close_icon.png'
 import blank_profile_icon from './blank_profile_icon.png'
 import previous_button_icon from './previous_button_icon.png'
@@ -47,9 +47,9 @@ const assets = {
   white_profile_icon,
   white_settings_icon,
   red_search_icon,
-  white_save_icon_saved,
-  white_save_icon,
-  white_report_icon,
+  save_icon_saved,
+  save_icon,
+  report_icon,
   white_close_icon,
   blank_profile_icon,
   previous_button_icon,
