@@ -66,7 +66,7 @@ const Homepage = () => {
                         <div>
                             <img src={assets.homepage_welcome_banner}
                                 alt="Wildcats"
-                                className="w-full h-full object-contain rounded-lg" 
+                                className="w-full h-full object-contain rounded-lg mt-0.5" 
                             />
                         </div>
 

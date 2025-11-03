@@ -48,11 +48,11 @@ const ProductPost = ({ product, onBack }) => {
           style={{backgroundImage:`url(${product.imageList[productImageIndex]})`}}>
 
           <div className='flex justify-start items-center m-1'>
-            <input type="image" onClick={decIndex} className='w-8 h-8 hover:scale-110' src={assets.previous_button_icon}></input>
+            <input type="image" onClick={decIndex} className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70' src={assets.previous_button_icon}></input>
           </div>
 
           <div className='flex justify-start items-center m-1'>
-            <input type="image" onClick={incIndex} className='w-8 h-8 hover:scale-110' src={assets.next_button_icon}></input>
+            <input type="image" onClick={incIndex} className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70' src={assets.next_button_icon}></input>
           </div>
         </div>
 

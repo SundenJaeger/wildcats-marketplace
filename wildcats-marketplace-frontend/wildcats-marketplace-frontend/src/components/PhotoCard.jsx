@@ -23,7 +23,7 @@ const PhotoCard = ({ image, name, price, onClick }) => {
       {/* Button */}
       <button
         onClick={handleButtonClick}
-        className="absolute bottom-3 right-2 bg-[#a50000] text-white text-xs px-4 py-1.5 rounded-md hover:bg-[#c50000] focus:outline-none"
+        className="absolute bottom-3 right-2 bg-[#a50000] text-white text-xs font-semibold px-4 py-1.5 rounded-md hover:bg-[#c50000] focus:outline-none"
       >
         See Details
       </button>

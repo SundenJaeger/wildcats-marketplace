@@ -13,7 +13,7 @@ const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
       {!isHomepage && (
         <div className='flex items-center gap-2 p-2 justify-center flex-1 max-w-5xl min-w-[300px] mx-2'>
           <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
-          <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
+          <h2 className='text-lg font-extrabold font-mono text-white'>Wildcat's Marketplace</h2>
         </div>
       )}
 
@@ -24,7 +24,7 @@ const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
           {/* Left Side of Navbar */}
           <div className='flex items-center gap-1'>
             <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
-            <h2 className='text-lg font-extrabold font-serif text-white'>Wildcat's Marketplace</h2>
+            <h2 className='text-2xl font-extrabold font-sans text-white'>Wildcat's Marketplace</h2>
           </div>
 
           {/* Right Side of Navbar */}
