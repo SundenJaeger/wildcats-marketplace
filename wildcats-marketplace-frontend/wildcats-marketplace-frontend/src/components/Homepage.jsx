@@ -8,8 +8,15 @@ import NotificationsModal from './NotificationsModal';
 import ProfileModal from './ProfileModal';
 import Navbar from './Navbar';
 import ProductFilterModal from './ProductFilterModal'
+import VerificationModel from './VerificationModal';
+import { useLocation } from 'react-router-dom';
 
 const Homepage = () => {
+
+    const location = useLocation();
+    
+    // 2. Safely extract the state data
+    const { isNewUser, username } = location.state || {};
 
     const [isMarketplaceView, setIsMarketplaceView] = React.useState(true);
 
@@ -22,6 +29,8 @@ const Homepage = () => {
     const [showProfile, setShowProfile] = React.useState(false);
 
     const [showProductFilter, setShowProductFilter] = React.useState(false);
+
+    const [showVerificationModal, setShowVerificationModal] = React .useState(isNewUser);
 
     return (
     <div className="flex flex-col justify-top h-screen flex-1 max-w-[1000px] min-w-[300px] mx-2">
@@ -110,7 +119,12 @@ const Homepage = () => {
         {showProfile && (<ProfileModal onClose={() => setShowProfile(false)} />)}
         {showProductFilter && (<ProductFilterModal onClose={() => setShowProductFilter(false)}/>)}
 
-
+        {showVerificationModal && (
+        <VerificationModel
+            username={username}
+            onClose={() => setShowVerificationModal(false)}
+        />
+        )}
     </div>
     )
 }

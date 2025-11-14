@@ -136,7 +136,8 @@ const LoginSignup = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      alert(`${isSignupMode ? 'Registration' : 'Login'} successful!`);
+      //alert(`${isSignupMode ? 'Registration' : 'Login'} successful!`);
+
 
       navigate('/home', {
         state: {
