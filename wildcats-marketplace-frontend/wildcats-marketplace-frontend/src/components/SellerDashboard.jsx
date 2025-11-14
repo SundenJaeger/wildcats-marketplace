@@ -1,9 +1,12 @@
 import React from 'react'
 import assets from '../assets/assets'
+import CreateListingModal from './CreateListingModal'
 
 const SellerDashboard = () => {
 
     const [isActiveListing, setIsActiveListing] = React.useState(true)
+
+    const [createNewListing, setCreateNewListing] = React.useState(false)
 
     return (
     <div className='flex flex-col justify-top h-screen w-full'>
@@ -40,7 +43,10 @@ const SellerDashboard = () => {
         <div className='mb-4'>
             <div className='flex justify-between items-center mb-2'>
                 <h2 className="text-xl text-black font-bold">Your Listings</h2>
-                <button className='bg-[#8B0000] rounded-md text-[10px] p-2 px-4 font-bold'>+ Create new Listing</button>
+                <button 
+                    onClick={setCreateNewListing}
+                    className='bg-[#8B0000] rounded-md text-[10px] p-2 px-4 font-bold hover:scale-102'>+ Create new Listing
+                </button>
             </div>
             <div className='bg-[#FFF7DA] border-[#9E7D00] p-4 rounded-lg shadow-md flex space-x-4 px-5 min-h-[50vh]'>
                 <button
@@ -58,6 +64,12 @@ const SellerDashboard = () => {
             </div>
 
         </div>
+
+        {createNewListing && (
+            <CreateListingModal
+                onClose={() => setCreateNewListing(false)}>
+            </CreateListingModal>
+        )}
     </div>
     )
 }

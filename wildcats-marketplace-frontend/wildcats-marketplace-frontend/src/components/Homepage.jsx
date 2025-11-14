@@ -14,8 +14,7 @@ import { useLocation } from 'react-router-dom';
 const Homepage = () => {
 
     const location = useLocation();
-    
-    // 2. Safely extract the state data
+
     const { isNewUser, username } = location.state || {};
 
     const [isMarketplaceView, setIsMarketplaceView] = React.useState(true);
