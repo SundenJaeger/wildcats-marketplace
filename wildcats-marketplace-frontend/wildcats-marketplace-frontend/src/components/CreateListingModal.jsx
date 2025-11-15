@@ -2,7 +2,7 @@ import React from 'react'
 import assets from '../assets/assets'
 import { Upload, X } from 'lucide-react';                 
 
-const CreateListingModal = ({ onClose }) => {
+const CreateListingModal = ({ onClose, onSuccess}) => {
 
   const [chosenCategory, setChosenCategory] = React.useState('academics');
   
@@ -12,8 +12,9 @@ const CreateListingModal = ({ onClose }) => {
   
     const [chosenFilters, setChosenFilters] = React.useState([]);
 
+
     const [images, setImages] = React.useState([]);
-    const maxImages = 5;
+    const maxImages = 4;
 
     const handleImageUpload = (e) => {
       const files = Array.from(e.target.files);
@@ -46,9 +47,34 @@ const CreateListingModal = ({ onClose }) => {
       );
     };
 
+    const handleCreateListing = () => {
+    
+    // Close modal first
+    onClose();
+    
+    // Then trigger success alert in parent
+    if (onSuccess) {
+    onSuccess();
+  }
+  };
+
+
+
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-        <div className="flex flex-col p-2 px-3 bg-[#FFF7D7] h-[700px] w-200 rounded-lg">
+
+      {/* Success Alert - Add this at the top
+      {showSuccessAlert && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-[60] flex items-center gap-2">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="font-semibold">Listing created successfully!</span>
+        </div>
+      )} */}
+
+
+        <div className="flex flex-col p-3 px-4 bg-[#FFF7D7] h-[700px] w-200 rounded-lg">
 
           <div className='flex justify-between pl-3 mb-2 items-center'>
               <div className='flex justify-between items-center mt-3'>
@@ -126,11 +152,11 @@ const CreateListingModal = ({ onClose }) => {
             </div>
 
             {/* Right Side */}
-            <div className="flex items-start  min-w-[40%]">
+            <div className="flex items-start w-full">
               <div className="bg-white rounded-2xl px-8 py-3 w-full h-full max-w-4xl">
                 <h2 className="text-xl font-bold text-gray-800 mb-5">Upload Images</h2>
 
-                <div className="flex flex-wrap justify-center gap-4">
+                <div className="flex flex-wrap justify-around gap-4">
                   {images.map((image) => (
                     <div
                       key={image.id}
@@ -177,6 +203,11 @@ const CreateListingModal = ({ onClose }) => {
                 )}
               </div>
             </div>
+        </div>
+
+        {/* Create */}
+        <div className='flex justify-end p-2  items-center'>
+          <button onClick={handleCreateListing} className=' bg-[#B20000] rounded-lg text-xs font-extrabold p-2 px-5 hover:scale-101'>Create Listing</button>
         </div>
 
       </div>

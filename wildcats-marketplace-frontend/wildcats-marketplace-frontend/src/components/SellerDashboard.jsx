@@ -7,11 +7,22 @@ const SellerDashboard = () => {
     const [isActiveListing, setIsActiveListing] = React.useState(true)
 
     const [createNewListing, setCreateNewListing] = React.useState(false)
+    
+    const [showSuccessAlert, setShowSuccessAlert] = React.useState(false)
+
+    const handleSuccess = () => {
+        setShowSuccessAlert(true);
+        setTimeout(() => {
+            setShowSuccessAlert(false);
+        }, 3000);
+    };
 
     return (
     <div className='flex flex-col justify-top h-screen w-full'>
-    <br></br>
-      {/* Overview */}
+        
+
+        <br></br>
+        {/* Overview */}
         <div className='mb-4'>
             <h2 className="text-xl text-black font-bold mb-2">Your Profile</h2>
             <div className='bg-[#FFF7DA] border-[#9E7D00] p-4 rounded-lg shadow-md  space-x-4 px-5'>
@@ -44,7 +55,7 @@ const SellerDashboard = () => {
             <div className='flex justify-between items-center mb-2'>
                 <h2 className="text-xl text-black font-bold">Your Listings</h2>
                 <button 
-                    onClick={setCreateNewListing}
+                    onClick={() => setCreateNewListing(true)}
                     className='bg-[#8B0000] rounded-md text-[10px] p-2 px-4 font-bold hover:scale-102'>+ Create new Listing
                 </button>
             </div>
@@ -67,8 +78,19 @@ const SellerDashboard = () => {
 
         {createNewListing && (
             <CreateListingModal
-                onClose={() => setCreateNewListing(false)}>
+                onClose={() => setCreateNewListing(false)}
+                onSuccess={handleSuccess}>
             </CreateListingModal>
+        )}
+
+        {/* Success Alert */}
+        {showSuccessAlert && (
+            <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-[#FFF7DA] border-2 border-rose-950 text-black px-6 py-3 rounded-lg shadow-lg z-[60] flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="font-semibold">Listing created successfully!</span>
+            </div>
         )}
     </div>
     )
