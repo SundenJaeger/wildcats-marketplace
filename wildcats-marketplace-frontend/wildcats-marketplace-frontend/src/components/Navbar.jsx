@@ -50,11 +50,11 @@ const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
                 className="peer outline-0 w-full caret-transparent bg-transparent"
                 type="text"
               />
-              <span className="absolute left-2 text-gray-400 text-xs opacity-0 peer-focus:opacity-100 transition-opacity duration-150">
+              <span className="absolute left-2 text-gray-400 text-xs opacity-0 peer-focus:opacity-100 transition-opacity duration-150 pointer-event-none">
                 Search here...
               </span>
               <img
-                className="duration-150 w-3.5 h-3.5"
+                className="duration-150 w-3.5 h-3.5 absolute right-1.5 pointer-events-none"
                 src={assets.red_search_icon}
                 alt="Search Icon"
               />
