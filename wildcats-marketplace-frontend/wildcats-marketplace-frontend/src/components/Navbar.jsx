@@ -2,7 +2,7 @@ import React from 'react';
 import assets from '../assets/assets';
 import { useLocation } from 'react-router-dom';
 
-const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
+const Navbar = ({onAdminClick ,onSettingsClick, onNotificationsClick, onProfileClick}) => {
   const location = useLocation();
 
   const isHomepage = location.pathname === '/home';
@@ -30,6 +30,10 @@ const Navbar = ({onSettingsClick, onNotificationsClick, onProfileClick}) => {
           {/* Right Side of Navbar */}
           <div className='flex flex-col'>
             <div className='flex items-center justify-end mb-1'>
+              <button onClick={onAdminClick} className='p-0 bg-transparent'>
+                <img className='w-4 h-4 mx-1' src={assets.white_admin_icon} alt="Settings" />
+              </button>
+
               <button onClick={onSettingsClick} className='p-0 bg-transparent'>
                 <img className='w-4 h-4 mx-1' src={assets.white_settings_icon} alt="Settings" />
               </button>
