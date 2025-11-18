@@ -60,18 +60,7 @@ const SellerDashboard = () => {
                 </button>
             </div>
             <div className='bg-[#FFF7DA] border-[#9E7D00] p-4 rounded-lg shadow-md flex space-x-4 px-5 min-h-[50vh]'>
-                <button
-                    onClick={() => setIsActiveListing(true)}
-                    className={`w-1/2 rounded-md h-10 shadow-xs
-                    ${!isActiveListing ? 'bg-gray-400 border-2 border-gray-400 text-gray-100' : 'bg-[#FFFCEE] border-2 border-gray-400 text-black'}`}>
-                    Active
-                </button>
-                <button
-                    onClick={() => setIsActiveListing(false)}
-                    className={`w-1/2 rounded-md h-10 shadow-xs
-                    ${isActiveListing ? 'bg-gray-400 border-2 border-gray-400 text-gray-100' : 'bg-[#FFFCEE] border-2 border-gray-400 text-black'}`}>
-                    Draft
-                </button>
+                
             </div>
 
         </div>
