@@ -32,6 +32,8 @@ import warning_icon from './warning_icon.png'
 import total_reports_icon from './total_reports_icon.png'
 import clock_icon from './clock_icon.png'
 import check_icon from './check_icon.png'
+import filter_1_icon from './filter_1_icon.png'
+import filter_2_icon from './filter_2_icon.png'
 
 const assets = {
   wildcats_logo,
@@ -67,7 +69,9 @@ const assets = {
   warning_icon,
   total_reports_icon,
   clock_icon,
-  check_icon
+  check_icon,
+  filter_1_icon,
+  filter_2_icon
 };
 
 export default assets;
