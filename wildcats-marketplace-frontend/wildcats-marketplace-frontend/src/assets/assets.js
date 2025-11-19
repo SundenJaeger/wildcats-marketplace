@@ -27,6 +27,11 @@ import drop_down_icon from './drop_down_icon.png'
 import empty_space_icon from './empty_space_icon.png'
 import comment_icon from './comment_icon.png'
 import enter_icon from './enter_icon.png'
+import white_admin_icon from './white_admin_icon.png'
+import warning_icon from './warning_icon.png'
+import total_reports_icon from './total_reports_icon.png'
+import clock_icon from './clock_icon.png'
+import check_icon from './check_icon.png'
 
 const assets = {
   wildcats_logo,
@@ -57,7 +62,12 @@ const assets = {
   drop_down_icon,
   empty_space_icon,
   comment_icon,
-  enter_icon
+  enter_icon,
+  white_admin_icon,
+  warning_icon,
+  total_reports_icon,
+  clock_icon,
+  check_icon
 };
 
 export default assets;

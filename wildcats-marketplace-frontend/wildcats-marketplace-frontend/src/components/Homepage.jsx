@@ -179,7 +179,7 @@ const Homepage = () => {
                     {/* Marketplace */}
                     {isMarketplaceView && (
                         <>
-                            <div>
+                            <div className='mb-5'>
                                 <img src={assets.homepage_welcome_banner}
                                     alt="Wildcats"
                                     className="w-full h-full object-contain rounded-lg mt-0.5" 
@@ -189,7 +189,7 @@ const Homepage = () => {
                             <br></br>
 
                             <div>
-                                <div className='flex justify-between items-center mx-1'>
+                                <div className='flex justify-between items-center'>
                                     <h3 className='text-black font-bold text-xl '>
                                         Today's Picks
                                     </h3>

@@ -12,7 +12,7 @@ const Products = ({onProductClick}) => {
   ];
 
   return (
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 p-2 font-mono'>
+    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 py-2 font-mono'>
       {productList.map((product) => (
         <PhotoCard
           key={product.id}
