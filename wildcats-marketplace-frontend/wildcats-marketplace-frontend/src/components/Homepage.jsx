@@ -52,7 +52,7 @@ const Homepage = () => {
 
     const handleLogout = () => {
     setShowSettings(false);
-    navigate('/');
+    navigate('/', { state: { hasLoggedOut : true }});
     };
 
     return (

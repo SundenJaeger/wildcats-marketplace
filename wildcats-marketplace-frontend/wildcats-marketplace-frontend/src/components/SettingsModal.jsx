@@ -45,7 +45,7 @@ const SettingsModal = ({onClose, onLogout}) => {
                 className='p-2 bg-red-700'>Log out?</button>
               </div>
             </div>
-          </>
+          </>       
         )
       default:
 

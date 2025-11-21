@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import assets from '../assets/assets'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 const LoginSignup = () => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const [formData, setFormData] = useState({
     fullName:'',
@@ -23,6 +24,21 @@ const LoginSignup = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [showSuccessAlert, setShowSuccessAlert] = React.useState(false)
+
+  useEffect(() => {
+    if (location.state?.hasLoggedOut) {
+      setShowSuccessAlert(true);
+      setTimeout(() => {
+        setShowSuccessAlert(false);
+      }, 3000);
+
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
+
+
 
   const validateField = (fieldName, value) => {
     switch (fieldName) {
@@ -355,6 +371,17 @@ const LoginSignup = () => {
       </div>
 
       </div>
+
+      {/* Success Alert */}11
+        {showSuccessAlert && (
+            <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-[#FFF7DA] border-2 border-rose-950 text-black px-6 py-3 rounded-lg shadow-lg z-[60] flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="font-semibold">You've logged out successfully!</span>
+            </div>
+        )}
+
     </div>
   )
 };
