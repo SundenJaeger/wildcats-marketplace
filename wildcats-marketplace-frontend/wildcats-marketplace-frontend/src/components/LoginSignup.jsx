@@ -35,7 +35,8 @@ const LoginSignup = () => {
 
       case 'userName':
         if (!value.trim()) return 'Username is required';
-        if (value.length < 3 || value.length > 15) return 'Username must be at least 3 characters';
+        if (isSignupMode)
+          if (value.length < 3 || value.length > 15) return 'Username must be at least 3 characters';
         if (!/^[a-zA-Z0-9_.@-]+$/.test(value)) return 'Only letters, numbers, _, ., -, @ are allowed';
 
         return '';
@@ -48,7 +49,8 @@ const LoginSignup = () => {
 
       case 'password':
         if (!value) return 'Password is required';
-        if (value.length < 8) return 'Password must be at least 8 characters';
+        if(isSignupMode)
+          if (value.length < 8) return 'Password must be at least 8 characters';
         return '';
 
       case 'confirmPassword':
