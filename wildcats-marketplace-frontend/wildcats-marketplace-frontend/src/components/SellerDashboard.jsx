@@ -4,7 +4,7 @@ import CreateListingModal from './CreateListingModal'
 
 const SellerDashboard = () => {
 
-    const [isActiveListing, setIsActiveListing] = React.useState(true)
+    const [isActiveListing, setIsActiveListing] = React.useState(false)
 
     const [createNewListing, setCreateNewListing] = React.useState(false)
     
@@ -19,7 +19,7 @@ const SellerDashboard = () => {
 
     return (
     <div className='flex flex-col justify-top h-screen w-full'>
-        
+
 
         <br></br>
         {/* Overview */}
@@ -74,7 +74,16 @@ const SellerDashboard = () => {
                 </button>
             </div>
             <div className='bg-[#FFF7DA] border-2 border-[#A31800] p-4 rounded-lg shadow-md flex space-x-4 px-5 min-h-[50vh]'>
-                
+                {!isActiveListing && (
+                    <>
+                        <div className='flex max-h-full w-full justify-center items-center'>
+                            <div className='w-full h-full flex flex-col justify-center items-center pb-15 box-border'>
+                                <img className='w-15 h-15' src={assets.empty_space_icon}></img>
+                                <h3 className='text-red-900 font-bold'>Poof! Its empty...</h3>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
         </div>
