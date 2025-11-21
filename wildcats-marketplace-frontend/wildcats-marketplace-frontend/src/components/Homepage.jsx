@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import ProductFilterModal from './ProductFilterModal'
 import VerificationModel from './VerificationModal';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Homepage = () => {
 
@@ -45,6 +46,13 @@ const Homepage = () => {
 
     const handleButtonClick = (filter) => {
         setSelectedFilter(filter);
+    };
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+    setShowSettings(false);
+    navigate('/');
     };
 
     return (
@@ -308,7 +316,12 @@ const Homepage = () => {
 
         {console.log("Render check - showProfile:", showProfile)}
 
-        {showSettings && (<SettingsModal onClose={() => setShowSettings(false)} />)}
+        {showSettings && (
+            <SettingsModal 
+                onClose={() => setShowSettings(false)}
+                onLogout={handleLogout}
+            />
+        )}
         {showNotifications && (<NotificationsModal onClose={() => setShowNotifications(false)} />)}
         {showProfile && (<ProfileModal onClose={() => setShowProfile(false)} />)}
         {showProductFilter && (<ProductFilterModal onClose={() => setShowProductFilter(false)}/>)}

@@ -1,9 +1,56 @@
 import React from 'react'
 import assets from '../assets/assets'
 
-const SettingsModal = ({onClose}) => {
+const SettingsModal = ({onClose, onLogout}) => {
 
   const [settingsOption, setSettingsOption] = React.useState('notifs')
+
+  const handleLogout = () => {
+    if(onLogout){
+      onLogout();
+    }
+  }
+
+  const renderContent = () => {
+    switch(settingsOption){
+      case 'notifs':
+        return (
+          <>
+            <div className='flex flex-col items-center justify-center h-full'>
+              <img className='w-20 h-20 rounded-xl m-2' src={assets.empty_space_icon}>
+              </img>
+              <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
+            </div>
+          </>
+        )
+      case 'transacts':
+        return (
+          <>
+            <div className='flex flex-col items-center justify-center h-full'>
+              <img className='w-20 h-20 rounded-xl m-2' src={assets.empty_space_icon}>
+              </img>
+              <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
+            </div>
+          </>
+        )
+      case 'logout':
+        return (
+          <>
+            <div className='flex flex-col items-center justify-center h-full'>
+              <h3 className='text-black'>Are you sure you want to log out?</h3>
+              <p className='text-gray-400'>We'll miss you fo sho twin? T-T</p>
+              <div>
+                <button
+                onClick={handleLogout}
+                className='p-2 bg-red-700'>Log out?</button>
+              </div>
+            </div>
+          </>
+        )
+      default:
+
+    }
+  }
 
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
@@ -24,7 +71,7 @@ const SettingsModal = ({onClose}) => {
           </div>
 
           {/* Line Break */}
-          <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2 mx-1'></div>
+          <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2'></div>
 
           {/* Main Body */}
           <div className='flex justify-between items-start py-5 h-full gap-3'>
@@ -46,10 +93,8 @@ const SettingsModal = ({onClose}) => {
             </div>
 
             {/* Idk what we should put here so its just a placeholder fn */}
-            <div className='bg-[#FFFAE4] flex flex-col items-center justify-center w-full h-full'>
-              <img className='w-20 h-20 rounded-xl m-2' src={assets.empty_space_icon}>
-              </img>
-              <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
+            <div className='bg-[#FFFAE4] w-full h-full rounded-lg'>
+              {renderContent()}
             </div>
 
           </div>
