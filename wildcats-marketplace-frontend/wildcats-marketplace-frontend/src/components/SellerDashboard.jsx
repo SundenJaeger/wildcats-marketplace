@@ -23,27 +23,41 @@ const SellerDashboard = () => {
 
         <br></br>
         {/* Overview */}
-        <div className='mb-4'>
-            <h2 className="text-xl text-black font-bold mb-2">Your Profile</h2>
-            <div className='bg-[#FFF7DA] border-[#9E7D00] p-4 rounded-lg shadow-md  space-x-4 px-5'>
-                <div className='bg-[#FFFCEE] flex'>
-                    <div className='flex flex-col justify-center items-start p-2 px-4'>
-                        <img src={assets.blank_profile_icon} className='w-40'></img>
-                    </div>
-
-                    <div className='flex flex-col justify-center items-start w-full rounded-md p-2 px-4'>
-                        <div className='flex w-full mb-1'>
-                            <h2 className="text-2xl text-black font-bold mr-1">
-                                John Doe 
-                            </h2>
-                            <h2 className='text-gray-500 text-2xl font-bold'>(johndoe)</h2>
+        <div className='flex flex-col mb-4'>
+            <h1 className="!text-3xl text-red-950 font-bold mb-2">Your Profile</h1>
+            <div className='flex gap-5 justify-between'>
+                <div className='flex bg-[#FFF7DA] border-2 border-[#A31800] py-3 rounded-lg shadow-md space-x-4 px-5 w-full'>
+                        <div className='flex flex-col justify-center items-start p-2 px-4'>
+                            <img src={assets.blank_profile_icon} className='w-40'></img>
                         </div>
-                        <h3 className="text-xs text-black font-bold mb-1">
-                            22-4444-123
-                        </h3>
-                        <h3 className="text-xs text-black font-bold mb-1">
-                            john.doe@cit.edu
-                        </h3>
+
+                        <div className='flex flex-col justify-center items-start w-full rounded-md p-2 px-4'>
+                            <div className='flex w-full mb-1'>
+                                <h2 className="text-2xl text-red-950 font-bold mr-1">
+                                    John Doe 
+                                </h2>
+                                <h2 className='text-gray-500 text-2xl font-bold'>(johndoe)</h2>
+                            </div>
+                            <h3 className="text-xs text-red-950 font-bold mb-1">
+                                22-4444-123
+                            </h3>
+                            <h3 className="text-xs text-red-950 font-bold mb-1">
+                                john.doe@cit.edu
+                            </h3>
+                        </div>
+                </div>
+
+                <div className='flex bg-[#FFF7DA] border-2 border-[#A31800] py-3 rounded-lg shadow-md space-x-4 px-5 w-[50%]'>
+                    <div className='flex justify-center items-center w-full rounded-md p-2 px-4'>
+                        <div className='flex flex-col w-full mb-1 p-2'>
+                            <h3 className="text-md text-red-950 font-bold mr-1">
+                                Active Listings
+                            </h3>
+                            <h2 className="text-4xl text-red-950 font-bold mb-1">
+                                0
+                            </h2>
+                        </div>
+                        <img className='w-13 h-13 m-2' src={assets.listing_icon}/>
                     </div>
                 </div>
             </div>
@@ -53,13 +67,13 @@ const SellerDashboard = () => {
         {/* Your Listings */}
         <div className='mb-4'>
             <div className='flex justify-between items-center mb-2'>
-                <h2 className="text-xl text-black font-bold">Your Listings</h2>
+                <h1 className="!text-3xl text-red-950 font-bold">Your Listings</h1>
                 <button 
                     onClick={() => setCreateNewListing(true)}
                     className='bg-[#8B0000] rounded-md text-[10px] p-2 px-4 font-bold hover:scale-102'>+ Create new Listing
                 </button>
             </div>
-            <div className='bg-[#FFF7DA] border-[#9E7D00] p-4 rounded-lg shadow-md flex space-x-4 px-5 min-h-[50vh]'>
+            <div className='bg-[#FFF7DA] border-2 border-[#A31800] p-4 rounded-lg shadow-md flex space-x-4 px-5 min-h-[50vh]'>
                 
             </div>
 
