@@ -2,7 +2,7 @@ import React from 'react';
 import assets from '../assets/assets';
 import { useLocation } from 'react-router-dom';
 
-const Navbar = ({onAdminClick ,onSettingsClick, onNotificationsClick, onProfileClick}) => {
+const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, onProfileClick}) => {
   const location = useLocation();
 
   const isHomepage = location.pathname === '/home';
@@ -27,7 +27,8 @@ const Navbar = ({onAdminClick ,onSettingsClick, onNotificationsClick, onProfileC
             <h2 className='text-2xl font-extrabold font-sans text-white '>Wildcat's Marketplace</h2>
           </div>
 
-          {/* Right Side of Navbar */}
+        {/* Right Side of Navbar */}
+        {!isAdmin && (
           <div className='flex flex-col'>
             <div className='flex items-center justify-end mb-1'>
               <button onClick={onAdminClick} className='p-0 bg-transparent'>
@@ -64,6 +65,7 @@ const Navbar = ({onAdminClick ,onSettingsClick, onNotificationsClick, onProfileC
               />
             </div>
           </div>
+        )}
         </div>
       )}
     </div>

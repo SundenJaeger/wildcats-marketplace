@@ -51,6 +51,7 @@ const Homepage = () => {
     <div className="flex flex-col justify-top h-screen flex-1 max-w-[1000px] min-w-[300px] mx-2">
 
         <Navbar
+            isAdmin={isAdmin}
             onAdminClick={() => {
                 console.log("Admin clicked in Homepage!");
                 setIsAdmin(true);
@@ -91,7 +92,7 @@ const Homepage = () => {
                         </div>
                     </div>
 
-                    <div className='flex justify-between'>
+                    <div className='flex justify-between gap-2'>
                         <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800'>
                             <div className='flex flex-col'>
                                 <h6>
