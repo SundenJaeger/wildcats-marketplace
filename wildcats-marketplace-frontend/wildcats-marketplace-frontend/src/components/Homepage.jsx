@@ -194,15 +194,15 @@ const Homepage = () => {
             <>
                 {!selectedProduct ? (
                 <>
-                    <div className='flex justify-'>
+                    <div className='flex justify-evenly'>
                         <button
-                            className={`w-1/2 mb-2 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
+                            className={`w-1/2 mb-2 mt-1 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
                             ${isMarketplaceView ? ' border-red-950' : 'border-transparent'}`}
                             onClick={() => setIsMarketplaceView(true)}>
                             Marketplace
                         </button>
                         <button
-                            className={`w-1/2 mb-2 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
+                            className={`w-1/2 mb-2 mt-1 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
                             ${!isMarketplaceView ? 'border-red-950' : 'border-transparent'}`}
                             onClick={() => setIsMarketplaceView(false)}>
                             Seller Dashboard
