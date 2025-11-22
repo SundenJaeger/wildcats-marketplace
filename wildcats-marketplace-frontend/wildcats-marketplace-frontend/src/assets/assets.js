@@ -35,6 +35,7 @@ import check_icon from './check_icon.png'
 import filter_1_icon from './filter_1_icon.png'
 import filter_2_icon from './filter_2_icon.png'
 import listing_icon from './listing_icon.png'
+import sad_icon from './sad_icon.png'
 
 const assets = {
   wildcats_logo,
@@ -73,7 +74,8 @@ const assets = {
   check_icon,
   filter_1_icon,
   filter_2_icon,
-  listing_icon
+  listing_icon,
+  sad_icon
 };
 
 export default assets;

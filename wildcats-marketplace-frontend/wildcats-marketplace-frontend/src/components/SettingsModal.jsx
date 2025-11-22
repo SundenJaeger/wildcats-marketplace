@@ -36,13 +36,13 @@ const SettingsModal = ({onClose, onLogout}) => {
       case 'logout':
         return (
           <>
-            <div className='flex flex-col items-center justify-center h-full'>
-              <h3 className='text-black'>Are you sure you want to log out?</h3>
-              <p className='text-gray-400'>We'll miss you fo sho twin? T-T</p>
-              <div>
+            <div className='flex flex-col items-center justify-center h-full gap-2'>
+              <img className='w-30 h-30' src={assets.sad_icon}></img>
+              <h3 className='text-black font-bold'>Are you sure you want to log out?</h3>
+              <div className='my-10'>
                 <button
                 onClick={handleLogout}
-                className='p-2 bg-red-700'>Log out?</button>
+                className='p-3 bg-red-700 font-bold rounded-lg px-5 hover:scale-102'>Log out?</button>
               </div>
             </div>
           </>       
