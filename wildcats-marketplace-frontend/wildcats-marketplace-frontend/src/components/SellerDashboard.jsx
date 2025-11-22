@@ -23,12 +23,12 @@ const SellerDashboard = () => {
 
         <br></br>
         {/* Overview */}
-        <div className='flex flex-col mb-4'>
-            <h1 className="!text-3xl text-red-950 font-bold mb-2">Your Profile</h1>
+        <div className='flex flex-col mb-4 gap-2'>
+            <h1 className="!text-3xl text-red-950 font-bold">Your Profile</h1>
             <div className='flex gap-5 justify-between'>
                 <div className='flex bg-[#FFF7DA] border-2 border-[#A31800] py-3 rounded-lg shadow-md space-x-4 px-5 w-full'>
                         <div className='flex flex-col justify-center items-start p-2 px-4'>
-                            <img src={assets.blank_profile_icon} className='w-40'></img>
+                            <img src={assets.blank_profile_icon} className='w-22'></img>
                         </div>
 
                         <div className='flex flex-col justify-center items-start w-full rounded-md p-2 px-4'>
@@ -65,8 +65,8 @@ const SellerDashboard = () => {
 
         <br className='h-3'></br>
         {/* Your Listings */}
-        <div className='mb-4'>
-            <div className='flex justify-between items-center mb-2'>
+        <div className='flex flex-col gap-2 my-2'>
+            <div className='flex justify-between items-center '>
                 <h1 className="!text-3xl text-red-950 font-bold">Your Listings</h1>
                 <button 
                     onClick={() => setCreateNewListing(true)}
