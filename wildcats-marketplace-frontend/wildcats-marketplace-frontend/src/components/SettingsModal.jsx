@@ -77,17 +77,17 @@ const SettingsModal = ({onClose, onLogout}) => {
           <div className='flex justify-between items-start py-5 h-full gap-3'>
 
             {/* Left Side */}
-            <div className='flex flex-col items-start justify-center w-[22%] gap-1'>
+            <div className='flex flex-col items-start justify-center w-[25%] gap-1'>
                 <button type='button' onClick={() => setSettingsOption('notifs')}
-                className={`w-full text-black text-center font-bold text-xs p-3 px-3 rounded-md ${settingsOption === 'notifs' ? 'bg-[#FFF7DA]' : 'bg-[#FFEB99]' }`}>
+                className={`w-full text-black text-center font-bold text-sm p-3 px-3 rounded-md ${settingsOption === 'notifs' ? 'bg-[#FFF7DA]' : 'bg-[#FFEB99]' }`}>
                 Notification Settings
                 </button>
                 <button type='button' onClick={() => setSettingsOption('transacts')}
-                className={`w-full text-black font-bold text-xs text-center p-3 px-5 rounded-md  ${settingsOption === 'transacts' ? 'bg-[#FFF7DA]' : 'bg-[#FFEB99]' }`}>
+                className={`w-full text-black font-bold text-sm text-center p-3 px-5 rounded-md  ${settingsOption === 'transacts' ? 'bg-[#FFF7DA]' : 'bg-[#FFEB99]' }`}>
                 My transactions
                 </button>
                 <button type='button' onClick={() => setSettingsOption('logout')}
-                className={`w-full text-black font-bold text-xs text-center p-3 px-5 rounded-md ${settingsOption === 'logout' ? 'bg-[#FFF7DA]' : 'bg-[#FFEB99]' }`}>
+                className={`w-full text-black font-bold text-sm text-center p-3 px-5 rounded-md ${settingsOption === 'logout' ? 'bg-[#FFF7DA]' : 'bg-[#FFEB99]' }`}>
                 Logout
                 </button>
             </div>
