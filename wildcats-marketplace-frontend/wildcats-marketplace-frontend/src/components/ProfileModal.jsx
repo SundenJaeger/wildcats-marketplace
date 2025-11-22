@@ -50,26 +50,6 @@ const ProfileModal = ({onClose}) => {
                     <label className='text-red-950 font-bold text-sm text-nowrap'>Student Email</label>
                     <input type='text' placeholder={placeholder_user.student_email} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                 </div>
-                {/* Preferred Location */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
-                    <label className='text-red-950 font-bold text-sm text-nowrap'>Preferred Location</label>
-                    <div className='relative bg-white rounded-sm border-2 border-gray-300 py-[4px]'>
-                        <select className='w-full text-sm font-bold text-gray-600 appearance-none pl-2'>
-                            <option className='font-bold'>RTL Building</option>
-                            <option className='font-bold'>NGE Building</option>
-                            <option className='font-bold'>GLE Building</option>
-                            <option className='font-bold'>Acad Building</option>
-                            <option className='font-bold'>PE Activity Area</option>
-                            <option className='font-bolvvvvvvvvvvvvvvvd'>Gymnasium</option>
-                        </select>
-                        <img
-                            src={assets.drop_down_icon}
-                            alt="Dropdown"
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
-                        />
-                    </div>
-
-                </div>
                 {/* Change Password */}
                 <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                     <label className='text-red-950 font-bold text-sm text-nowrap'>Change Password</label>
