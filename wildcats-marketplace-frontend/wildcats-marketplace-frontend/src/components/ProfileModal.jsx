@@ -3,18 +3,19 @@ import assets from '../assets/assets'
 
 const ProfileModal = ({onClose}) => {
 
+
     const [selectedOption, setSelectedOption] = React.useState('');
 
     const placeholder_user = {fullname: "John Doe",username: 'johndoe', student_id: "ex. 19-3946-347", student_email: "john.doe@cit.edu"}
 
     return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-        <div className='flex flex-col justify-between bg-[#FFF4CB] border-[#FFE26D] rounded-md p-4 w-170 h-auto'> 
+        <div className='flex flex-col justify-between bg-[#FFEB99] border-[#FFE26D] rounded-md p-4 w-200 h-auto pb-8'> 
 
         <div className='flex justify-between items-start '>
             <div className='flex flex-col ml-5 mt-5 mb-2'>
-                <h2 className='text-black font-bold text-xl'>My Profile</h2>
-                <p className='text-black font-semibold'>Manage your account.</p>
+                <h2 className='text-red-950 font-bold !text-3xl'>My Profile</h2>
+                <p className='text-red-950 font-semibold text-sm'>Manage your account.</p>
             </div>
                 <div onClick={onClose}
                 className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full'>
@@ -23,43 +24,43 @@ const ProfileModal = ({onClose}) => {
         </div>
 
         {/* Line Break */}
-        <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2 mx-1'></div>
+        <div className='flex justify-center items-center w-auto h-[1px] bg-red-950 my-2 mx-5'></div>
 
         {/* Main Body */}
-        <div className='flex justify-around items-start py-5'>
+        <div className='flex justify-evenly items-start py-5 gap-2'>
             {/* Left Side */}
-            <div className='grid grid-cols-1 w-2/3'>
+            <div className='grid grid-cols-1 w-full pr-15 pl-5 gap-2'>
                 {/* Full Name */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'>Full Name</label>
-                    <input type='text' placeholder={placeholder_user.fullname} className='placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                    <label className='text-red-950 font-bold text-sm text-nowrap'>Full Name</label>
+                    <input type='text' placeholder={placeholder_user.fullname} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                 </div>
                 {/* Username */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'>Username</label>
-                    <input type='text' placeholder={placeholder_user.username} className='placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                    <label className='text-red-950 font-bold text-sm text-nowrap'>Username</label>
+                    <input type='text' placeholder={placeholder_user.username} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                 </div>
                 {/* Student ID */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'> Student ID</label>
-                    <input type='text' placeholder={placeholder_user.student_id} className='placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                    <label className='text-red-950 font-bold text-sm text-nowrap'> Student ID</label>
+                    <input type='text' placeholder={placeholder_user.student_id} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                 </div>
                 {/* Student Email */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'>Student Email</label>
-                    <input type='text' placeholder={placeholder_user.student_email} className='placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                    <label className='text-red-950 font-bold text-sm text-nowrap'>Student Email</label>
+                    <input type='text' placeholder={placeholder_user.student_email} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                 </div>
                 {/* Preferred Location */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'>Preferred Location</label>
-                    <div className='relative bg-white rounded-sm border-2 border-gray-300 p-1'>
-                        <select className='w-full'>
-                            <option>RTL Building</option>
-                            <option>NGE Building</option>
-                            <option>GLE Building</option>
-                            <option>Acad Building</option>
-                            <option>PE Activity Area</option>
-                            <option>Gymnasium</option>
+                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                    <label className='text-red-950 font-bold text-sm text-nowrap'>Preferred Location</label>
+                    <div className='relative bg-white rounded-sm border-2 border-gray-300 py-[4px]'>
+                        <select className='w-full text-sm font-bold text-gray-600 appearance-none pl-2'>
+                            <option className='font-bold'>RTL Building</option>
+                            <option className='font-bold'>NGE Building</option>
+                            <option className='font-bold'>GLE Building</option>
+                            <option className='font-bold'>Acad Building</option>
+                            <option className='font-bold'>PE Activity Area</option>
+                            <option className='font-bolvvvvvvvvvvvvvvvd'>Gymnasium</option>
                         </select>
                         <img
                             src={assets.drop_down_icon}
@@ -70,23 +71,23 @@ const ProfileModal = ({onClose}) => {
 
                 </div>
                 {/* Change Password */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'>Change Password</label>
+                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                    <label className='text-red-950 font-bold text-sm text-nowrap'>Change Password</label>
                     <input className='bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                 </div>
                 {/* Gender */}
-                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                    <label className='text-black font-bold'>Gender</label>
+                <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                    <label className='text-red-950 font-bold text-sm text-nowrap'>Gender</label>
                     <div className='grid grid-cols-3 justify-items-center gap-1'>
-                        <label className='flex items-center  gap-1 text-black font-semibold'>
+                        <label className='text-sm flex items-center  gap-1 text-red-950 font-semibold'>
                             <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white' type='radio' name='gender' value='male' checked={selectedOption === 'male'} onChange={(e) => setSelectedOption(e.target.value)} />
                             Male
                         </label>
-                        <label className='flex items-center  gap-1 text-black font-semibold'>
+                        <label className='text-sm flex items-center  gap-1 text-red-950 font-semibold'>
                             <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white' type='radio' name='gender' value='female' checked={selectedOption === 'female'} onChange={(e) => setSelectedOption(e.target.value)} />
                             Female
                         </label>
-                        <label className='flex items-center  gap-1 text-black font-semibold'>
+                        <label className='text-sm flex items-center  gap-1 text-red-950 font-semibold'>
                             <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white' type='radio' name='gender' value='other' checked={selectedOption === 'other'} onChange={(e) => setSelectedOption(e.target.value)} />
                             Other
                     </label>
@@ -94,22 +95,22 @@ const ProfileModal = ({onClose}) => {
 
                 </div>
                     {/* Date of Birth */}
-                    <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2 my-2'>
-                        <label className='text-black font-bold'>Date of Birth</label>
-                        <input type='date' className='bg-white rounded-sm border-2 border-gray-300 p-1 w-full text-black'></input>
+                    <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                        <label className='text-red-950 font-bold text-sm text-nowrap'>Date of Birth</label>
+                        <input type='date' className='text-sm font-bold bg-white rounded-sm border-2 border-gray-300 p-1 w-full text-gray-600'></input>
                     </div>
                 </div>
 
             {/* Right Side */}
-            <div className='flex flex-col gap-2 items-center'>
-                <img className='w-20 h-20 bg-white rounded-full' src={assets.blank_profile_icon}></img>
-                <button className='bg-[#B20000] p-1 rounded-md px-2 text-xs font-semibold'>Change Picture</button>
+            <div className='flex flex-col gap-2 items-center w-[25%] mr-10'>
+                <img className='w-32 h-32 bg-white p-5 border-3 border-gray-300 rounded-md' src={assets.blank_profile_icon}></img>
+                <button className='bg-[#B20000] p-2 px-3 rounded-md text-xs font-bold hover:scale-101 box-border border-2 border-red-800'>Change Picture</button>
             </div>
         </div>
 
         {/* Save Button */}
-        <div className='flex justify-end'>
-            <button className='bg-[#B20000] p-1 rounded-md px-5 text-sm font-bold'>
+        <div className='flex justify-end px-5'>
+            <button className='bg-[#B20000] p-2 rounded-md px-5 text-sm font-bold box-border border-2 border-red-800'>
                 Save
             </button>
         </div>
