@@ -54,7 +54,7 @@ const SettingsModal = ({onClose, onLogout}) => {
 
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-start bg-[#fff1bd] border-2 border-red-800 rounded-lg p-4 w-230 min-h-200'>
+      <div className='flex flex-col justify-start bg-[#fff1bd] border-2 border-[#726948] rounded-lg p-4 w-230 min-h-200'>
 
         <div className='flex justify-end items-start'>
                 <div onClick={onClose}

@@ -4,7 +4,7 @@ import assets from '../assets/assets'
 const NotificationsModal = ({onClose}) => {
   return (
     <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-between bg-[#fff1bd] border-[#FFE26D] rounded-md p-4 w-190 h-auto'>
+      <div className='flex flex-col justify-between bg-[#fff1bd] rounded-md p-4 w-190 h-auto border-2 border-[#726948]'>
 
         <div className='flex justify-between items-start'>
             <div className='flex flex-col ml-5 mt-5 mb-2'>
