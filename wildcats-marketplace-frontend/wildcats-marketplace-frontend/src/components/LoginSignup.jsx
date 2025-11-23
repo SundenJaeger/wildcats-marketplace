@@ -372,7 +372,7 @@ const LoginSignup = () => {
 
       </div>
 
-      {/* Success Alert */}11
+      {/* Success Alert */}
         {showSuccessAlert && (
             <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-[#FFF7DA] border-2 border-rose-950 text-black px-6 py-3 rounded-lg shadow-lg z-[60] flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
