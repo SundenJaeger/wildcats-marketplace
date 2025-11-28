@@ -20,7 +20,7 @@ const NotificationsModal = ({onClose}) => {
         <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2 mx-1'></div>
 
         {/* Main Body */}
-        <div className='flex justify-around items-start py-5 h-100 gap-3'>
+        <div className='flex justify-around items-start pb-5 h-100 gap-3'>
 
 
           {/* Idk what we should put here so its just a placeholder fn */}
