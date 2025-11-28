@@ -35,9 +35,8 @@ const ProductPost = ({ product, onBack }) => {
     <>
       {/* Go Back */}
         <div className='flex justify-end items-center'>
-          <div onClick={onBack  }
-              className='flex justify-center items-center w-8 h-8 m-1 opacity-85 hover:scale-110 bg-[#B20000] rounded-full'>
-              <input type="image" className="w-3  h-3" src={assets.white_close_icon}></input>
+          <div className='flex justify-end h-fit my-2'>
+              <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800' onClick={onBack}>Go Back</button>
           </div>
         </div>
       <div className="flex flex-col p-3 px-3 bg-[#FFF7D7] h-150">
@@ -85,7 +84,7 @@ const ProductPost = ({ product, onBack }) => {
 
 
             {/* Line Break */}
-            <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-2'></div>
+            <div className='flex justify-center items-center w-auto h-[2px] bg-gray-400 my-2'></div>
 
             <div className='mb-2 py-3'>
             {/* Product Details */}
@@ -96,7 +95,7 @@ const ProductPost = ({ product, onBack }) => {
               <p className='text-[#999999] text-sm font-bold'>New</p>
             </div>
 
-              <p className='text-[#999999] text-sm font-semibold leading-6'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat cupiditate aspernatur autem officia perspiciatis unde aliquid in doloribus, libero voluptate, vitae consequuntur, necessitatibus adipisci nesciunt facilis quos similique fuga aperiam.</p>
+              <p className='text-[#6c6c6c] text-sm font-semibold leading-6 text-justify'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat cupiditate aspernatur autem officia perspiciatis unde aliquid in doloribus, libero voluptate, vitae consequuntur, necessitatibus adipisci nesciunt facilis quos similique fuga aperiam.</p>
             </div>
 
             {/* Thread */}
