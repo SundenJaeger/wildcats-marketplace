@@ -77,7 +77,7 @@ const SellerDashboard = () => {
                 {!isActiveListing && (
                     <>
                         <div className='flex max-h-full w-full justify-center items-center'>
-                            <div className='w-full h-full flex flex-col justify-center items-center pb-15 box-border'>
+                            <div className='w-full h-full flex flex-col justify-center items-center pb-15 box-border gap-2'>
                                 <img className='w-15 h-15' src={assets.empty_space_icon}></img>
                                 <h3 className='text-red-900 font-bold'>Poof! Its empty...</h3>
                             </div>

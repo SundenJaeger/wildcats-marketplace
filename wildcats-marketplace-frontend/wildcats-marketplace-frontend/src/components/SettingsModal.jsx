@@ -37,7 +37,7 @@ const SettingsModal = ({onClose, onLogout}) => {
         return (
           <>
             <div className='flex flex-col items-center justify-center h-full gap-2'>
-              <img className='w-30 h-30' src={assets.sad_icon}></img>
+              <img className='w-20 h-20' src={assets.sad_icon}></img>
               <h3 className='text-black font-bold'>Are you sure you want to log out?</h3>
               <div className='my-10'>
                 <button
@@ -66,15 +66,15 @@ const SettingsModal = ({onClose, onLogout}) => {
         <div className='flex flex-col px-5 h-full'>
 
           {/* Settings title */}
-          <div className='flex flex-col mb-2'>
+          <div className='flex flex-col'>
             <h2 className='text-black font-bold text-3xl'>Settings</h2>
           </div>
 
           {/* Line Break */}
-          <div className='flex justify-center items-center w-auto h-[1px] bg-black my-2'></div>
+          <div className='flex justify-center items-center w-auto h-[1px] bg-transparent my-2'></div>
 
           {/* Main Body */}
-          <div className='flex justify-between items-start py-5 h-full gap-3'>
+          <div className='flex justify-between items-start pb-5 h-full gap-3'>
 
             {/* Left Side */}
             <div className='flex flex-col items-start justify-center w-[25%] gap-1'>
