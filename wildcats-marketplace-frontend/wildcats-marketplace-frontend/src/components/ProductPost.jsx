@@ -44,28 +44,32 @@ const ProductPost = ({ product, onBack }) => {
 
         <div className='flex justify-between h-[100%] b-2'>
           {/* Product Images or Left Side */}
-          <div className='flex flex-col justify-center w-1/2 h-full mt-1 rounded-md bg-cover bg-center m-10 box-border'
-            style={{backgroundImage:`url(${product.imageList[productImageIndex]})`}}>
+          <div className='flex flex-col justify-center w-1/2 h-[90h] m-2 box-content'
+            >
+              <div className='w-full h-full flex justify-between items-center bg-cover bg-center rounded-lg'
+              style={{backgroundImage:`url(${product.imageList[productImageIndex]})`}}>
+                <div className='flex justify-between w-full'>
+                  <div className='flex justify-start items-center m-1'>
+                    <input type="image" onClick={decIndex} className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70' src={assets.previous_button_icon}></input>
+                  </div>
 
-            <div className='flex justify-between'>
-              <div className='flex justify-start items-center m-1'>
-                <input type="image" onClick={decIndex} className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70' src={assets.previous_button_icon}></input>
+                  <div className='flex justify-start items-center m-1'>
+                    <input type="image" onClick={incIndex} className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70' src={assets.next_button_icon}></input>
+                  </div>
+                </div>
               </div>
 
-              <div className='flex justify-start items-center m-1'>
-                <input type="image" onClick={incIndex} className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70' src={assets.next_button_icon}></input>
-              </div>
-            </div>
+            
           </div>
 
           {/*Product Details or Right Side*/}
           <div className='flex flex-col py-3 h-auto w-1/2 p-3'>
             <div className='flex items-start justify-between'>
               {/* Name, Price, Date Listed */}
-              <div className='flex flex-col justify-start mb-1'>
-                <h2 className="text-3xl text-black font-extrabold">{product.name}</h2>
-                <h3 className="text-xl text-black leading-3 font-semibold">{product.price}</h3>
-                <h3 className='text-xs leading-7 text-[#5B5B5B] font-semibold'>Listed by John Doe - 22-4444-123</h3>
+              <div className='flex flex-col justify-start mb-2 gap-2'>
+                <h2 className="text-4xl text-black font-extrabold">{product.name}</h2>
+                <h3 className="text-2xl text-black leading-2 font-semibold">{product.price}</h3>
+                <h3 className='text-xs leading-7 text-[#5B5B5B] font-semibold'>Listed by Michael - 22-4444-123</h3>
               </div>
 
               {/*  Buttons  */}
@@ -83,16 +87,16 @@ const ProductPost = ({ product, onBack }) => {
             {/* Line Break */}
             <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 my-2'></div>
 
-            <div className='mb-2'>
+            <div className='mb-2 py-3'>
             {/* Product Details */}
-            <div className='grid grid-cols-[100px_1fr] mb-2'>
+            <div className='grid grid-cols-[100px_1fr] mb-2 gap-2'>
               <p className='text-[#5B5B5B] text-md font-bold'>Category</p>
               <p className='text-[#999999] text-sm font-bold'>Academic Books and Notes</p>
               <p className='text-[#5B5B5B] text-md font-bold'>Condition</p>
               <p className='text-[#999999] text-sm font-bold'>New</p>
             </div>
 
-              <p className='text-[#999999] text-sm font-semibold leading-6'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium perferendis.</p>
+              <p className='text-[#999999] text-sm font-semibold leading-6'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat cupiditate aspernatur autem officia perspiciatis unde aliquid in doloribus, libero voluptate, vitae consequuntur, necessitatibus adipisci nesciunt facilis quos similique fuga aperiam.</p>
             </div>
 
             {/* Thread */}
@@ -105,12 +109,12 @@ const ProductPost = ({ product, onBack }) => {
 
 
             {/* Line Break */}
-            <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 mt-1 mb-3'></div>
+            <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 mt-1 mb-2'></div>
 
-            <div>
+            <div className='py-3 flex flex-col justify-between flex-grow'>
               <div className='flex items-start gap-1.5'>
-                <img className='w-7.5 h-7.5' src={placeholder_comment[0].profile}></img>
-                <div className='flex flex-col bg-white w-full rounded-xl p-2.5'>
+                <img className='w-10 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200' src={placeholder_comment[0].profile}></img>
+                <div className='flex flex-col bg-[#fffcf2] w-full rounded-xl p-2.5'>
                   <p className='text-gray-700 font-bold text-sm'>{placeholder_comment[0].name}</p>
                   <p className='text-gray-500 font-semibold text-sm'>{placeholder_comment[0].comment}</p>
                 </div>
@@ -118,10 +122,10 @@ const ProductPost = ({ product, onBack }) => {
 
               <div className='flex justify-center items-center mt-8'>
                 <div className='p-1 rounded-md border-gray-400'>
-                  <img className='w-8 h-7' src={assets.blank_profile_icon}></img>
+                  <img className='w-11 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200' src={assets.blank_profile_icon}></img>
                 </div>
-                <div className='flex px-2 items-center justify-between bg-white w-full h-12 rounded-xl border-2 border-gray-200'>
-                  <input type='text' className='w-full text-black placeholder-gray-400 text-xs font-semibold' placeholder='Comment as John Doe'></input>
+                <div className='flex px-2 items-center justify-between bg-[#fffcf2] w-full h-12 rounded-xl border-2 border-gray-200 '>
+                  <input type='text' className='w-full focus:outline-none text-black placeholder-gray-400 text-xs font-semibold' placeholder='Comment as John Doe'></input>
                   <div className='p-1 rounded-md border-gray-400'>
                     <img className='w-3 h-3 opacity-50' src={assets.enter_icon}></img>
                   </div>
