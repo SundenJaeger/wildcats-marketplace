@@ -13,7 +13,7 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
       {!isHomepage && (
         <div className='flex items-center gap-2 p-2 justify-center flex-1 max-w-5xl min-w-[300px] mx-2'>
           <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10" />
-          <h2 className='text-lg font-extrabold font-mono text-white'>Wildcat's Marketplace</h2>
+          <h2 className='text-2xl font-extrabold text-white'>Wildcat's Marketplace</h2>
         </div>
       )}
 
@@ -31,10 +31,6 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
         {!isAdmin && (
           <div className='flex flex-col'>
             <div className='flex items-center justify-end mb-1'>
-              <button onClick={onAdminClick} className='p-0 bg-transparent'>
-                <img className='w-4 h-4 mx-1' src={assets.white_admin_icon} alt="Verify" />
-              </button>
-
               <button onClick={onAdminClick} className='p-0 bg-transparent'>
                 <img className='w-4 h-4 mx-1' src={assets.white_admin_icon} alt="Settings" />
               </button>

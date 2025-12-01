@@ -20,7 +20,7 @@ const ProfileModal = ({onClose}) => {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        
+
         if (file) {
             // Validate file type
             const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
@@ -28,14 +28,14 @@ const ProfileModal = ({onClose}) => {
                 alert('Please select a valid image file (JPEG, PNG, or GIF)');
                 return;
             }
-            
+
             // Validate file size (max 5MB)
             const maxSize = 5 * 1024 * 1024; // 5MB in bytes
             if (file.size > maxSize) {
                 alert('Image size should be less than 5MB');
                 return;
             }
-            
+
             // Create a preview URL
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -69,10 +69,10 @@ const ProfileModal = ({onClose}) => {
                         <img className="w-2.5 h-2.5" src={assets.white_close_icon} alt="Close" />
                     </div>
                 </div>
-                
+
                 {/* Line Break */}
                 <div className='flex justify-center items-center w-auto h-[1px] bg-red-950 my-2 mx-5'></div>
-                
+
                 {/* Main Body */}
                 <div className='flex justify-evenly items-start py-5 gap-2'>
                     {/* Left Side */}
@@ -82,31 +82,31 @@ const ProfileModal = ({onClose}) => {
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Full Name</label>
                             <input type='text' placeholder={placeholder_user.fullname} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                         </div>
-                        
+
                         {/* Username */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Username</label>
                             <input type='text' placeholder={placeholder_user.username} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                         </div>
-                        
+
                         {/* Student ID */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Student ID</label>
                             <input type='text' placeholder={placeholder_user.student_id} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                         </div>
-                        
+
                         {/* Student Email */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Student Email</label>
                             <input type='text' placeholder={placeholder_user.student_email} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                         </div>
-                        
+
                         {/* Change Password */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Change Password</label>
                             <input type='password' className='bg-white rounded-sm border-2 border-gray-300 p-1'></input>
                         </div>
-                        
+
                         {/* Gender */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Gender</label>
@@ -134,14 +134,14 @@ const ProfileModal = ({onClose}) => {
                                 </label>
                             </div>
                         </div>
-                        
+
                         {/* Date of Birth */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Date of Birth</label>
                             <input type='date' className='text-sm font-bold bg-white rounded-sm border-2 border-gray-300 p-1 w-full text-gray-600'></input>
                         </div>
                     </div>
-                    
+
                     {/* Right Side */}
                     <div className='flex flex-col gap-2 items-center w-[25%] mr-10'>
                         <img 
@@ -149,7 +149,7 @@ const ProfileModal = ({onClose}) => {
                             src={profileImage} 
                             alt="Profile"
                         />
-                        
+
                         {/* Hidden file input */}
                         <input 
                             type="file" 
@@ -158,14 +158,14 @@ const ProfileModal = ({onClose}) => {
                             accept="image/jpeg,image/jpg,image/png,image/gif"
                             className='hidden'
                         />
-                        
+
                         <div className='flex gap-1'>
                             <button 
                                 onClick={handleButtonClick}
                                 className='bg-[#B20000] text-white p-2 px-3 rounded-md text-xs font-bold hover:bg-[#8B0000] hover:scale-101 box-border border-2 border-red-800 transition-all cursor-pointer'>
                                 Change
                             </button>
-                            
+
                             {profileImage !== assets.blank_profile_icon && (
                                 <button 
                                     onClick={handleRemoveImage}
@@ -176,7 +176,7 @@ const ProfileModal = ({onClose}) => {
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Save Button */}
                 <div className='flex justify-end px-5'>
                     <button className='bg-[#B20000] text-white p-2 rounded-md px-5 text-sm font-bold box-border border-2 border-red-800 hover:bg-[#8B0000] transition-colors cursor-pointer'>
@@ -188,19 +188,4 @@ const ProfileModal = ({onClose}) => {
     )
 }
 
-// Demo wrapper to show the modal
-export default function App() {
-    const [showModal, setShowModal] = React.useState(true);
-    
-    return (
-        <div className="w-full h-screen bg-gray-100 flex items-center justify-center">
-            <button 
-                onClick={() => setShowModal(true)}
-                className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold hover:bg-blue-600">
-                Open Profile Modal
-            </button>
-            
-            {showModal && <ProfileModal onClose={() => setShowModal(false)} />}
-        </div>
-    );
-}
+export default ProfileModal;
