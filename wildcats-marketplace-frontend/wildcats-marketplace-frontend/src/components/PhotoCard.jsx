@@ -8,6 +8,7 @@ const PhotoCard = ({ image, name, price, onClick }) => {
     <div
       className="bg-[#FFF9E0] w-full h-65 rounded-md shadow-md relative
       hover:shadow-md hover:scale-101 transition-transform duration-100 cursor-pointer"
+      onClick={handleButtonClick}
     >
       {/* Product image */}
       <img
@@ -22,8 +23,8 @@ const PhotoCard = ({ image, name, price, onClick }) => {
 
       {/* Button */}
       <button
-        onClick={handleButtonClick}
         className="absolute bottom-3 right-2 bg-[#a50000] text-white text-xs font-semibold px-4 py-1.5 rounded-md hover:bg-[#c50000] focus:outline-none"
+        onClick={handleButtonClick}
       >
         See Details
       </button>
@@ -31,4 +32,4 @@ const PhotoCard = ({ image, name, price, onClick }) => {
   );
 };
 
-export default PhotoCard; // FIXED: Was "ProductPost"
+export default PhotoCard;
