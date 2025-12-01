@@ -172,6 +172,13 @@ const LoginSignup = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+  if (e.key === 'Enter' && !isSubmitting) {
+    e.preventDefault();
+    handleSubmit(e);
+  }
+};
+
   return (
     <div className='min-w-full h-full bg-[#FFF7D4] rounded-md'>
       <div className={`flex flex-col items-center justify-center p-3 ${isSignupMode ? 'gap-1' : 'gap-3'}`}>
@@ -199,9 +206,10 @@ const LoginSignup = () => {
                   value={formData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
                   onBlur={() => handleFieldNameBlur('fullName')}
+                  onKeyDown={handleKeyDown}
                   placeholder="Full Name"
                   className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                    ${errors.fullName && touched.fullName ? 'border-red-500 focus:ring-red-500'
+                    {errors.fullName && touched.fullName ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                     `}
                 />
@@ -230,6 +238,7 @@ const LoginSignup = () => {
                 type="text"
                 onChange={(e) => handleInputChange('userName', e.target.value)}
                 onBlur={() => handleFieldNameBlur('userName')}
+                onKeyDown={handleKeyDown}
                 placeholder="Username"
                 className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                   {errors.userName && touched.userName ? 'border-red-500 focus:ring-red-500'
@@ -261,6 +270,7 @@ const LoginSignup = () => {
                   type="email"
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   onBlur={() => handleFieldNameBlur('email')}
+                  onKeyDown={handleKeyDown}
                   placeholder="Email"
                   className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                   {errors.email && touched.email ? 'border-red-500 focus:ring-red-500'
@@ -291,9 +301,10 @@ const LoginSignup = () => {
                 type={showPassword ? "text" : "password"}
                 onChange={(e) => handleInputChange('password', e.target.value)}
                 onBlur={() => handleFieldNameBlur('password')}
+                onKeyDown={handleKeyDown}
                 placeholder="Password"
                 className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                  ${errors.password && touched.password ? 'border-red-500 focus:ring-red-500'
+                  {errors.password && touched.password ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                 `}
               />
@@ -330,6 +341,7 @@ const LoginSignup = () => {
                   type={showConfirmPassword ? "text" : "password"}
                   onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                   onBlur={() => handleFieldNameBlur('confirmPassword')}
+                  onKeyDown={handleKeyDown}
                   placeholder="Confirm Password"
                   className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                     ${errors.confirmPassword && touched.confirmPassword ? 'border-red-500 focus:ring-red-500'

@@ -11,6 +11,7 @@ import ProductFilterModal from './ProductFilterModal'
 import VerificationModel from './VerificationModal';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import VerificationRequest from './VerificationRequest';
 
 const Homepage = () => {
 
@@ -33,6 +34,8 @@ const Homepage = () => {
     const [showProductFilter, setShowProductFilter] = React.useState(false);
 
     const [showVerificationModal, setShowVerificationModal] = React .useState(isNewUser);
+
+    const [adminView, setAdminView] = React.useState('reports'); // 'reports' or 'verification'
 
     const [selectedFilter, setSelectedFilter] = React.useState('All Reports');
 
@@ -84,111 +87,125 @@ const Homepage = () => {
             <>
                 <div className='p-2 w-full h-full flex flex-col gap-4'>
 
-
                     <div className='flex justify-between'>
-                        <div>
-                            <h1 className='!important text-lg text-red-900 font-bold'>
-                                Reports Dashboard
-                            </h1>
-                            <h3 className='text-red-900 font-medium'>
-                                Monitor and manage resource Reports
-                            </h3>
+                        <div className='flex justify-evenly mb-2 mt-1'>
+                            <button
+                                className={`w-1/2 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
+                                ${adminView === 'reports' ? 'border-red-950' : 'border-transparent'}`}
+                                onClick={() => setAdminView('reports')}>
+                                Reports
+                            </button>
+                            <button
+                                className={`w-1/2 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
+                                ${adminView === 'verification' ? 'border-red-950' : 'border-transparent'}`}
+                                onClick={() => setAdminView('verification')}>
+                                Verification Requests
+                            </button>
                         </div>
 
                         <div className='flex justify-end h-fit m-2'>
-                            <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800' onClick={() => setIsAdmin(false)}>Go Back</button>
+                            <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800 text-white' onClick={() => setIsAdmin(false)}>Go Back</button>
                         </div>
                     </div>
 
-                    <div className='flex justify-between gap-2'>
-                        <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800'>
-                            <div className='flex flex-col'>
-                                <h6>
-                                    Total Reports
-                                </h6>
-                                <h4 className='text-3xl font-bold'>
-                                    0
-                                </h4>
+                    {/* REPORTS VIEW */}
+                    {adminView === 'reports' && (
+                        <>
+                            <div className='flex justify-between gap-2'>
+                                <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800'>
+                                    <div className='flex flex-col'>
+                                        <h6>
+                                            Total Reports
+                                        </h6>
+                                        <h4 className='text-3xl font-bold'>
+                                            0
+                                        </h4>
+                                    </div>
+                                    <img className='w-10 h-10' src={assets.total_reports_icon}></img>
+                                </div>
+
+                                <div className= 'flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-orange-600 to-amber-700'>
+                                    <div className='flex flex-col'>
+                                        <h6>
+                                            Pending
+                                        </h6>
+                                        <h4 className='text-3xl font-bold'>
+                                            0
+                                        </h4>
+                                    </div>
+                                    <img className='w-8 h-8' src={assets.clock_icon}></img>
+                                </div>
+
+                                <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-blue-700 to-indigo-800'> 
+                                    <div className='flex flex-col'>
+                                        <h6>
+                                            Under Review
+                                        </h6>
+                                        <h4 className='text-3xl font-bold'>
+                                            0
+                                        </h4>
+                                    </div>
+                                    <img className='w-8 h-8' src={assets.clock_icon}></img>
+                                </div>
+
+                                <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800'>
+                                    <div className='flex flex-col'>
+                                        <h6>
+                                            Resolved
+                                        </h6>
+                                        <h4 className='text-3xl font-bold'>
+                                            0
+                                        </h4>
+                                    </div>
+                                    <img className='w-8 h-8' src={assets.check_icon}></img>
+                                </div>
                             </div>
-                            <img className='w-10 h-10' src={assets.total_reports_icon}></img>
-                        </div>
 
-                        <div className= 'flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-orange-600 to-amber-700'>
-                            <div className='flex flex-col'>
-                                <h6>
-                                    Pending
-                                </h6>
-                                <h4 className='text-3xl font-bold'>
-                                    0
-                                </h4>
+                            <div className='p-3 px-6 flex flex-col bg-[#FFF7DA] rounded-md shadow-md border-2 border-[#A31800]'>
+                                <div className='flex items-center py-3 gap-2'>
+                                    <img className='w-4 h-4' src={assets.filter_1_icon}></img>
+                                    <h4 className='text-red-900 font-bold'>Filter Reports</h4>
+                                </div>
+
+                                <div className='flex gap-1 mb-3'>
+                                    {filters.map((filter) => (
+                                        <button
+                                        key={filter} 
+                                        onClick={() => handleButtonClick(filter)}
+                                        className={`${baseClasses} ${
+                                            selectedFilter === filter ? activeClasses : inactiveClasses
+                                        }`}
+                                        >
+                                        {filter}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                            <img className='w-8 h-8' src={assets.clock_icon}></img>
-                        </div>
 
-                        <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-blue-700 to-indigo-800'> 
-                            <div className='flex flex-col'>
-                                <h6>
-                                    Under Review
-                                </h6>
-                                <h4 className='text-3xl font-bold'>
-                                    0
-                                </h4>
+                            <div>
+                                <div className='flex justify-between items-center py-2'>
+                                    <h2 className='text-red-900 text-xl font-bold'>All Reports</h2>
+                                    <h6 className='text-red-900 text-xs font-bold'> 0 reports</h6>
+                                </div>
+
+                                <div className='w-full h-100 bg-[#FFF7DA] flex rounded-md shadow-md border-2 border-[#A31800]'>
+                                    <div className='w-full h-full flex flex-col justify-center items-center pb-15 box-border'>
+                                        <img className='w-15 h-15' src={assets.warning_icon}></img>
+                                        <h3 className='text-red-900 font-bold'>No reports found</h3>
+                                        <p className='text-red-900'>There are no reports in the systems yet.</p>
+                                    </div>
+                                </div>
                             </div>
-                            <img className='w-8 h-8' src={assets.clock_icon}></img>
-                        </div>
+                        </>
+                    )}
 
-                        <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800'>
-                            <div className='flex flex-col'>
-                                <h6>
-                                    Resolved
-                                </h6>
-                                <h4 className='text-3xl font-bold'>
-                                    0
-                                </h4>
-                            </div>
-                            <img className='w-8 h-8' src={assets.check_icon}></img>
-                        </div>
-                    </div>
-
-                    <div className='p-3 px-6 flex flex-col bg-[#FFF7DA] rounded-md shadow-md border-2 border-[#A31800]'>
-                        <div className='flex items-center py-3 gap-2'>
-                            <img className='w-4 h-4' src={assets.filter_1_icon}></img>
-                            <h4 className='text-red-900 font-bold'>Filter Reports</h4>
-                        </div>
-
-                        <div className='flex gap-1 mb-3'>
-                            {filters.map((filter) => (
-                                <button
-                                key={filter} 
-                                onClick={() => handleButtonClick(filter)}
-                                className={`${baseClasses} ${
-                                    selectedFilter === filter ? activeClasses : inactiveClasses
-                                }`}
-                                >
-                                {filter}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className='flex justify-between items-center py-2'>
-                            <h2 className='text-red-900 text-xl font-bold'>All Reports</h2>
-                            <h6 className='text-red-900 text-xs font-bold'> 0 reports</h6>
-                        </div>
-
-                        <div className='w-full h-100 bg-[#FFF7DA] flex rounded-md shadow-md border-2 border-[#A31800]'>
-                            <div className='w-full h-full flex flex-col justify-center items-center pb-15 box-border'>
-                                <img className='w-15 h-15' src={assets.warning_icon}></img>
-                                <h3 className='text-red-900 font-bold'>No reports found</h3>
-                                <p className='text-red-900'>There are no reports in the systems yet.</p>
-                            </div>
-                        </div>
-                    </div>
+                    {/* VERIFICATION REQUESTS VIEW */}
+                    {adminView === 'verification' && (
+                        <VerificationRequest />
+                    )}
 
                 </div>
             </>
-
         ) : (
 
             <>
