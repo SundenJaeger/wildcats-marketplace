@@ -72,7 +72,7 @@ const ReportModal = ({product, onClose, onSubmit}) => {
                         placeholder='Why did you report this post?'
                         value={customReason}
                         onChange={(e) => setCustomReason(e.target.value)}
-                        className='w-full p-2 rounded-md border border-gray-300 text-sm focus:outline-none focus:border-[#FFE26D]'
+                        className='w-full p-2 rounded-md border bg-[#fdf9e6] border-gray-300 text-sm focus:outline-none focus:border-[#FFE26D]'
                     />
                 )}
 
@@ -80,7 +80,7 @@ const ReportModal = ({product, onClose, onSubmit}) => {
                     placeholder='Description (optional)'
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className='w-full p-2 rounded-md border border-gray-300 text-sm h-20 resize-none focus:outline-none focus:border-[#FFE26D]'
+                    className='w-full p-2 rounded-md border-1 border-transparent bg-[#fdf9e6] text-sm h-20 resize-none focus:outline-none focus:border-[#FFE26D] placeholder-gray-500 font-semibold'
                 />
             </div>
 

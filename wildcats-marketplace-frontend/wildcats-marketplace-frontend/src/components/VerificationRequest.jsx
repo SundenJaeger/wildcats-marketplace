@@ -166,9 +166,9 @@ export default function VerificationRequestScreen() {
         </div>
 
         {filteredRequests.length > 0 ? (
-          <div className="w-full bg-white rounded-md shadow-md border-2 border-amber-700 overflow-hidden">
+          <div className="w-full h-70 bg-[#FFF7DA] rounded-md shadow-md border-2 border-amber-700 overflow-hidden">
             <div className="space-y-2 p-3 h-100">
-             
+
             </div>
           </div>
         ) : (
