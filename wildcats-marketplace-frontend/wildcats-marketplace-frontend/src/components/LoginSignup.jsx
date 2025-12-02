@@ -1,401 +1,434 @@
 import React, {useState, useEffect} from 'react'
 import assets from '../assets/assets'
-import { useNavigate, useLocation } from 'react-router-dom'
+import {useNavigate, useLocation} from 'react-router-dom'
+import {authService} from '../services/authService';
 
 const LoginSignup = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+    const navigate = useNavigate()
+    const location = useLocation()
 
-  const [formData, setFormData] = useState({
-    fullName:'',
-    userName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-
-  const [errors, setErrors] = useState({});
-
-  const [touched, setTouched] = useState({});
-
-  const [isSignupMode, setIsSignupMode] = React.useState(false);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const [showSuccessAlert, setShowSuccessAlert] = React.useState(false)
-
-  useEffect(() => {
-    if (location.state?.hasLoggedOut) {
-      setShowSuccessAlert(true);
-      setTimeout(() => {
-        setShowSuccessAlert(false);
-      }, 3000);
-
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location, navigate]);
-
-
-
-  const validateField = (fieldName, value) => {
-    switch (fieldName) {
-      case 'fullName':
-        if (isSignupMode && !value.trim()) return 'Full Name is required';
-        const words = value.trim().split(/\s+/);
-        if (words.length < 2) return 'Please enter at least first and last name';
-        if (!/^[a-zA-Z\s]+$/.test(value)) return 'Full Name can only contain letters and spaces';
-        return '';
-
-      case 'userName':
-        if (!value.trim()) return 'Username is required';
-        if (isSignupMode)
-          if (value.length < 3 || value.length > 15) return 'Username must be at least 3 characters';
-        if (!/^[a-zA-Z0-9_.@-]+$/.test(value)) return 'Only letters, numbers, _, ., -, @ are allowed';
-
-        return '';
-
-      case 'email':
-        if (isSignupMode && !value.trim()) return 'Email is required';
-        const emailRegex = /^[A-Za-z0-9._%+-]+@cit\.edu$/;
-        if (isSignupMode && !emailRegex.test(value)) return 'Invalid email address';
-        return '';
-
-      case 'password':
-        if (!value) return 'Password is required';
-        if(isSignupMode)
-          if (value.length < 8) return 'Password must be at least 8 characters';
-        return '';
-
-      case 'confirmPassword':
-        if (isSignupMode && !value) return 'Please confirm your password';
-        if (isSignupMode && value !== formData.password) return 'Passwords do not match';
-        return '';
-
-      default:
-        return '';
-    }
-  };
-
-  const handleInputChange = (fieldName, value) => {
-    setFormData(prev => ({ ...prev, [fieldName]: value }));
-
-    if (touched[fieldName]) {
-      const error = validateField(fieldName, value);
-      setErrors(prev => ({ ...prev, [fieldName]: error }));
-    }
-  };
-
-  const handleFieldNameBlur = (fieldName) => {
-    setTouched(prev => ({ ...prev, [fieldName]: true }));
-
-    const handleError = validateField(fieldName, formData[fieldName]);
-    setErrors(prev => ({ ...prev, [fieldName]: handleError }));
-  };
-
-  // Toggle between login and signup
-  const toggleMode = () => {
-    setIsSignupMode(!isSignupMode);
-  };
-
-  // Validate whole Form
-  const validateForm = () => {
-    const fieldsToValidate = isSignupMode
-      ? ['fullName', 'userName', 'email', 'password', 'confirmPassword']
-      : ['userName', 'password'];
-
-    const newErrors = {};
-    let isValid = true;
-
-    fieldsToValidate.forEach(fieldName => {
-      const error = validateField(fieldName, formData[fieldName]);
-      if (error) {
-        newErrors[fieldName] = error;
-        isValid = false;
-      }
+    const [formData, setFormData] = useState({
+        fullName: '',
+        userName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
     });
 
-    const newTouched = {};
-    fieldsToValidate.forEach(fieldName => {
-      newTouched[fieldName] = true;
-    });
-    setTouched(prev => ({ ...prev, ...newTouched }));
-    setErrors(newErrors);
+    const [errors, setErrors] = useState({});
 
-    if (!isValid) {
-      console.log('❌ Form has errors, stopping submission');
-      alert('Please fix the errors before submitting');
-      return false;
-    }
+    const [touched, setTouched] = useState({});
 
-    return true;
-  };
+    const [isSignupMode, setIsSignupMode] = React.useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Prevent double submission
-    if (isSubmitting) return;
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    console.log('🚀 Validating form before submission...');
+    const [showSuccessAlert, setShowSuccessAlert] = React.useState(false)
 
-    // Validate all fields
-    const isValid = validateForm();
-    if (!isValid) return;
+    useEffect(() => {
+        if (location.state?.hasLoggedOut) {
+            setShowSuccessAlert(true);
+            setTimeout(() => {
+                setShowSuccessAlert(false);
+            }, 3000);
 
-    console.log('✅ Form is valid, proceeding with submission');
-
-    // Start submission
-    setIsSubmitting(true);
-
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      //alert(`${isSignupMode ? 'Registration' : 'Login'} successful!`);
-
-
-      navigate('/home', {
-        state: {
-          isNewUser: isSignupMode,
-          username: formData.userName
+            navigate(location.pathname, {replace: true, state: {}});
         }
-      });
+    }, [location, navigate]);
 
 
-    } catch (error) {
-      alert('Submission failed. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    const validateField = (fieldName, value) => {
+        switch (fieldName) {
+            case 'fullName':
+                if (isSignupMode && !value.trim()) return 'Full Name is required';
+                const words = value.trim().split(/\s+/);
+                if (words.length < 2) return 'Please enter at least first and last name';
+                if (!/^[a-zA-Z\s]+$/.test(value)) return 'Full Name can only contain letters and spaces';
+                return '';
 
-  const handleKeyDown = (e) => {
-  if (e.key === 'Enter' && !isSubmitting) {
-    e.preventDefault();
-    handleSubmit(e);
-  }
-};
+            case 'userName':
+                if (!value.trim()) return 'Username is required';
+                if (isSignupMode)
+                    if (value.length < 3 || value.length > 15) return 'Username must be at least 3 characters';
+                if (!/^[a-zA-Z0-9_.@-]+$/.test(value)) return 'Only letters, numbers, _, ., -, @ are allowed';
 
-  return (
-    <div className='min-w-full h-full bg-[#FFF7D4] rounded-md'>
-      <div className={`flex flex-col items-center justify-center p-3 ${isSignupMode ? 'gap-1' : 'gap-3'}`}>
+                return '';
 
-        {/* Form Title */}
-        <h2 className={`text-4xl font-extrabold font-serif text-black my-5 ${isSignupMode ? "" : "mb-15"}`}>
-          {isSignupMode ? 'SIGN UP' : 'LOGIN'}
-        </h2>
+            case 'email':
+                if (isSignupMode && !value.trim()) return 'Email is required';
+                const emailRegex = /^[A-Za-z0-9._%+-]+@cit\.edu$/;
+                if (isSignupMode && !emailRegex.test(value)) return 'Invalid email address';
+                return '';
 
-        {/* Full Name field - only visible in signup mode */}
-        {isSignupMode && (
-          <div className="w-full flex items-center justify-center mb-2.5">
-            <div className="relative w-[90%]">
-              <div className='flex items-center relative'>
-                {/* Icon */}
-                <img
-                  src={assets.user_icon}
-                  alt="user icon"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-                />
+            case 'password':
+                if (!value) return 'Password is required';
+                if (isSignupMode)
+                    if (value.length < 8) return 'Password must be at least 8 characters';
+                return '';
 
-                {/* Input */}
-                <input
-                  type="text"
-                  value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  onBlur={() => handleFieldNameBlur('fullName')}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Full Name"
-                  className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
+            case 'confirmPassword':
+                if (isSignupMode && !value) return 'Please confirm your password';
+                if (isSignupMode && value !== formData.password) return 'Passwords do not match';
+                return '';
+
+            default:
+                return '';
+        }
+    };
+
+    const handleInputChange = (fieldName, value) => {
+        setFormData(prev => ({...prev, [fieldName]: value}));
+
+        if (touched[fieldName]) {
+            const error = validateField(fieldName, value);
+            setErrors(prev => ({...prev, [fieldName]: error}));
+        }
+    };
+
+    const handleFieldNameBlur = (fieldName) => {
+        setTouched(prev => ({...prev, [fieldName]: true}));
+
+        const handleError = validateField(fieldName, formData[fieldName]);
+        setErrors(prev => ({...prev, [fieldName]: handleError}));
+    };
+
+    // Toggle between login and signup
+    const toggleMode = () => {
+        setIsSignupMode(!isSignupMode);
+    };
+
+    // Validate whole Form
+    const validateForm = () => {
+        const fieldsToValidate = isSignupMode
+            ? ['fullName', 'userName', 'email', 'password', 'confirmPassword']
+            : ['userName', 'password'];
+
+        const newErrors = {};
+        let isValid = true;
+
+        fieldsToValidate.forEach(fieldName => {
+            const error = validateField(fieldName, formData[fieldName]);
+            if (error) {
+                newErrors[fieldName] = error;
+                isValid = false;
+            }
+        });
+
+        const newTouched = {};
+        fieldsToValidate.forEach(fieldName => {
+            newTouched[fieldName] = true;
+        });
+        setTouched(prev => ({...prev, ...newTouched}));
+        setErrors(newErrors);
+
+        if (!isValid) {
+            console.log('❌ Form has errors, stopping submission');
+            alert('Please fix the errors before submitting');
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (isSubmitting) return;
+
+        console.log('🚀 Validating form before submission...');
+
+        const isValid = validateForm();
+        if (!isValid) return;
+
+        console.log('✅ Form is valid, proceeding with submission');
+
+        setIsSubmitting(true);
+
+        try {
+            if (isSignupMode) {
+                const response = await authService.register(formData);
+                console.log('Registration successful:', response);
+
+                if (response.token) {
+                    localStorage.setItem('authToken', response.token);
+                }
+
+                alert('Registration successful! Your account is pending verification.');
+            } else {
+                const response = await authService.login({
+                    userName: formData.userName,
+                    password: formData.password
+                });
+
+                console.log('Login successful:', response);
+
+                localStorage.setItem('authToken', response.token);
+                localStorage.setItem('userData', JSON.stringify(response));
+
+                navigate('/home', {
+                    state: {
+                        isNewUser: false,
+                        username: formData.userName
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Submission failed:', error);
+            alert(error.message || 'Submission failed. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !isSubmitting) {
+            e.preventDefault();
+            handleSubmit(e);
+        }
+    };
+
+    return (
+        <div className='min-w-full h-full bg-[#FFF7D4] rounded-md'>
+            <div className={`flex flex-col items-center justify-center p-3 ${isSignupMode ? 'gap-1' : 'gap-3'}`}>
+
+                {/* Form Title */}
+                <h2 className={`text-4xl font-extrabold font-serif text-black my-5 ${isSignupMode ? "" : "mb-15"}`}>
+                    {isSignupMode ? 'SIGN UP' : 'LOGIN'}
+                </h2>
+
+                {/* Full Name field - only visible in signup mode */}
+                {isSignupMode && (
+                    <div className="w-full flex items-center justify-center mb-2.5">
+                        <div className="relative w-[90%]">
+                            <div className='flex items-center relative'>
+                                {/* Icon */}
+                                <img
+                                    src={assets.user_icon}
+                                    alt="user icon"
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                />
+
+                                {/* Input */}
+                                <input
+                                    type="text"
+                                    value={formData.fullName}
+                                    onChange={(e) => handleInputChange('fullName', e.target.value)}
+                                    onBlur={() => handleFieldNameBlur('fullName')}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Full Name"
+                                    className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                     {errors.fullName && touched.fullName ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                     `}
-                />
-              </div>
-              {/* Error message */}
-              {errors.fullName && touched.fullName && (
-                <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
-              )}
-            </div>
-          </div>
-        )}
+                                />
+                            </div>
+                            {/* Error message */}
+                            {errors.fullName && touched.fullName && (
+                                <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
+                            )}
+                        </div>
+                    </div>
+                )}
 
-        {/* Username field - always visible */}
-        <div className="w-full flex items-center justify-center mb-2.5">
-          <div className="relative w-[90%]">
-            <div className='flex items-center relative'>
-              {/* Icon */}
-              <img
-                src={assets.user_icon}
-                alt="user icon"
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-              />
+                {/* Username field - always visible */}
+                <div className="w-full flex items-center justify-center mb-2.5">
+                    <div className="relative w-[90%]">
+                        <div className='flex items-center relative'>
+                            {/* Icon */}
+                            <img
+                                src={assets.user_icon}
+                                alt="user icon"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                            />
 
-              {/* Input */}
-              <input
-                type="text"
-                onChange={(e) => handleInputChange('userName', e.target.value)}
-                onBlur={() => handleFieldNameBlur('userName')}
-                onKeyDown={handleKeyDown}
-                placeholder="Username"
-                className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
+                            {/* Input */}
+                            <input
+                                type="text"
+                                onChange={(e) => handleInputChange('userName', e.target.value)}
+                                onBlur={() => handleFieldNameBlur('userName')}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Username"
+                                className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                   {errors.userName && touched.userName ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                     `}
-              />
-            </div>
-            {/* Error message */}
-            {errors.userName && touched.userName && (
-                <p className="text-red-500 text-xs mt-1">{errors.userName}</p>
-              )}
-          </div>
-        </div>
+                            />
+                        </div>
+                        {/* Error message */}
+                        {errors.userName && touched.userName && (
+                            <p className="text-red-500 text-xs mt-1">{errors.userName}</p>
+                        )}
+                    </div>
+                </div>
 
-        {/* Email field - only visible in signup mode */}
-        {isSignupMode && (
-          <div className="w-full flex items-center justify-center mb-2.5">
-            <div className="relative w-[90%]">
-              <div className='flex items-center relative'>
-                {/* Icon */}
-                <img
-                  src={assets.email_icon}
-                  alt="email icon"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-                />
+                {/* Email field - only visible in signup mode */}
+                {isSignupMode && (
+                    <div className="w-full flex items-center justify-center mb-2.5">
+                        <div className="relative w-[90%]">
+                            <div className='flex items-center relative'>
+                                {/* Icon */}
+                                <img
+                                    src={assets.email_icon}
+                                    alt="email icon"
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                />
 
-                {/* Input */}
-                <input
-                  type="email"
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  onBlur={() => handleFieldNameBlur('email')}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Email"
-                  className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
+                                {/* Input */}
+                                <input
+                                    type="email"
+                                    onChange={(e) => handleInputChange('email', e.target.value)}
+                                    onBlur={() => handleFieldNameBlur('email')}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Email"
+                                    className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                   {errors.email && touched.email ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                     `}
-                />
-              </div>
-              {/* Error message */}
-              {errors.email && touched.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-              )}
-            </div>
-          </div>
-        )}
+                                />
+                            </div>
+                            {/* Error message */}
+                            {errors.email && touched.email && (
+                                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                            )}
+                        </div>
+                    </div>
+                )}
 
-        {/* Password field - always visible */}
-        <div className="w-full flex items-center justify-center mb-2.5">
-          <div className="relative w-[90%]">
-            <div className='flex items-center relative'>
-              {/* Icon */}
-              <img
-                src={assets.lock_icon}
-                alt="lock icon"
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-              />
+                {/* Password field - always visible */}
+                <div className="w-full flex items-center justify-center mb-2.5">
+                    <div className="relative w-[90%]">
+                        <div className='flex items-center relative'>
+                            {/* Icon */}
+                            <img
+                                src={assets.lock_icon}
+                                alt="lock icon"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                            />
 
-              <input
-                type={showPassword ? "text" : "password"}
-                onChange={(e) => handleInputChange('password', e.target.value)}
-                onBlur={() => handleFieldNameBlur('password')}
-                onKeyDown={handleKeyDown}
-                placeholder="Password"
-                className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                onChange={(e) => handleInputChange('password', e.target.value)}
+                                onBlur={() => handleFieldNameBlur('password')}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Password"
+                                className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                   {errors.password && touched.password ? 'border-red-500 focus:ring-red-500'
                     : 'focus:ring-blue-500'}
                 `}
-              />
+                            />
 
-              {/* Password visibility icon */}
-              <img
-                src={showPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
-                alt="toggle password visibility"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
-              />
-            </div>
-            {/* Error message */}
-            {errors.password && touched.password && (
-                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-              )}
+                            {/* Password visibility icon */}
+                            <img
+                                src={showPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
+                                alt="toggle password visibility"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                            />
+                        </div>
+                        {/* Error message */}
+                        {errors.password && touched.password && (
+                            <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                        )}
 
-          </div>
-        </div>
+                    </div>
+                </div>
 
-        {/* Confirm Password field - only visible in signup mode */}
-        {isSignupMode && (
-          <div className="w-full flex items-center justify-center mb-2.5">
-            <div className={`relative w-[90%]`}>
-              <div className='flex items-center relative'>
-                {/* Icon */}
-                <img
-                  src={assets.lock_icon}
-                  alt="lock icon"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-                />
+                {/* Confirm Password field - only visible in signup mode */}
+                {isSignupMode && (
+                    <div className="w-full flex items-center justify-center mb-2.5">
+                        <div className={`relative w-[90%]`}>
+                            <div className='flex items-center relative'>
+                                {/* Icon */}
+                                <img
+                                    src={assets.lock_icon}
+                                    alt="lock icon"
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                />
 
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                  onBlur={() => handleFieldNameBlur('confirmPassword')}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Confirm Password"
-                  className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                                    onBlur={() => handleFieldNameBlur('confirmPassword')}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Confirm Password"
+                                    className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
                     ${errors.confirmPassword && touched.confirmPassword ? 'border-red-500 focus:ring-red-500'
-                      : 'focus:ring-blue-500'}
+                                        : 'focus:ring-blue-500'}
                   `}
-                />
+                                />
 
-                {/* Confirm password visibility icon */}
-                <img
-                  src={showConfirmPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
-                  alt="toggle confirm password visibility"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
-                />
-              </div>
-              {/* Error message */}
-              {errors.confirmPassword && touched.confirmPassword && (
-                <p className={`text-red-500 text-xs mt-1 `}>{errors.confirmPassword}</p>
-              )}
+                                {/* Confirm password visibility icon */}
+                                <img
+                                    src={showConfirmPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
+                                    alt="toggle confirm password visibility"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                                />
+                            </div>
+                            {/* Error message */}
+                            {errors.confirmPassword && touched.confirmPassword && (
+                                <p className={`text-red-500 text-xs mt-1 `}>{errors.confirmPassword}</p>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+
+                {/* Submit buttons with dynamic text */}
+                <div className={`flex items-center justify-around w-full ${isSignupMode ? '' : 'mt-5'}`}>
+                    <button
+                        disabled={isSubmitting}
+                        onClick={isSignupMode ? handleSubmit : toggleMode}
+                        className={`w-[40%] ml-1/2 mb-4 ${isSignupMode ? "!bg-[#A31800] hover:!bg-[#801300]" : "!bg-[#BFB58F]"} text-white p-2 rounded-md transition duration-300 font-medium flex items-center justify-center`}>
+                        {isSubmitting && isSignupMode ? (
+                            <>
+                                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                     fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor"
+                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Signing up...
+                            </>
+                        ) : 'Sign up'}
+                    </button>
+                    <button
+                        disabled={isSubmitting}
+                        onClick={isSignupMode ? toggleMode : handleSubmit}
+                        className={`w-[40%] mr-1/2 mb-4 ${isSignupMode ? "!bg-[#BFB58F]" : "!bg-[#A31800] hover:!bg-[#801300]"} text-white p-2 rounded-md transition duration-300 font-medium flex items-center justify-center`}>
+                        {isSubmitting && !isSignupMode ? (
+                            <>
+                                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                     fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor"
+                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Logging in...
+                            </>
+                        ) : 'Login'}
+                    </button>
+                </div>
             </div>
-          </div>
-        )}
 
+            {/* Success Alert */}
+            {showSuccessAlert && (
+                <div
+                    className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-[#FFF7DA] border-2 border-rose-950 text-black px-6 py-3 rounded-lg shadow-lg z-[60] flex items-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span className="font-semibold">You've logged out successfully!</span>
+                </div>
+            )}
 
-      {/* Submit buttons with dynamic text */}
-    <div  className={`flex items-center justify-around w-full ${isSignupMode ? '' : 'mt-5'}`}>
-        <button
-          disabled={isSubmitting}
-          onClick={isSignupMode ? handleSubmit : toggleMode}
-          className={`w-[40%] ml-1/2 mb-4 ${isSignupMode? "!bg-[#A31800] hover:!bg-[#801300]" : "!bg-[#BFB58F]"} text-white p-2 rounded-md transition duration-300 font-medium`}>
-          Sign up
-        </button>
-        <button
-          disabled={isSubmitting}
-          onClick={isSignupMode ? toggleMode : handleSubmit}
-          className={`w-[40%] mr-1/2 mb-4 ${isSignupMode? "!bg-[#BFB58F]" : "!bg-[#A31800] hover:!bg-[#801300]"} text-white p-2 rounded-md  transition duration-300 font-medium`}>
-          Login
-        </button>
-      </div>
-
-      </div>
-
-      {/* Success Alert */}
-        {showSuccessAlert && (
-            <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-[#FFF7DA] border-2 border-rose-950 text-black px-6 py-3 rounded-lg shadow-lg z-[60] flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="font-semibold">You've logged out successfully!</span>
-            </div>
-        )}
-
-    </div>
-  )
+        </div>
+    )
 };
 
 export default LoginSignup
