@@ -13,6 +13,7 @@ import ReportsDashboard from './ReportsDashboard';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import VerificationRequest from './VerificationRequest';
+import CategoriesManagement from './CategoriesManagement';
 
 const Homepage = () => {
     const location = useLocation();
@@ -25,7 +26,7 @@ const Homepage = () => {
     const [isAdmin, setIsAdmin] = React.useState(false)
     const [showProductFilter, setShowProductFilter] = React.useState(false);
     const [showVerificationModal, setShowVerificationModal] = React.useState(isNewUser);
-    const [adminView, setAdminView] = React.useState('reports'); // 'reports' or 'verification'
+    const [adminView, setAdminView] = React.useState('reports'); 
     
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -72,6 +73,12 @@ const Homepage = () => {
                                 onClick={() => setAdminView('verification')}>
                                 Verification Requests
                             </button>
+                            <button
+                                className={`w-1/3 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
+                                ${adminView === 'categories' ? 'border-red-950' : 'border-transparent'}`}
+                                onClick={() => setAdminView('categories')}>
+                                Categories
+                            </button>
                         </div>
                         <div className='flex justify-end h-fit my-2'>
                             <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800 text-white' onClick={() => setIsAdmin(false)}>Go Back</button>
@@ -81,6 +88,8 @@ const Homepage = () => {
                     {adminView === 'reports' && <ReportsDashboard />}
                     {/* VERIFICATION REQUESTS VIEW */}
                     {adminView === 'verification' && <VerificationRequest />}
+                    {/* CATEGORIES MANAGEMENT VIEW */}
+                    {adminView === 'categories' && <CategoriesManagement />}
                 </div>
             </>
         ) : (

@@ -153,7 +153,7 @@ export default function VerificationRequestScreen() {
       
       {/* Requests List Section */}
       <div>
-        <div className="flex justify-between items-center py-2">
+        <div className="flex justify-between items-center py-3">
           <h2 className="text-red-900 text-xl font-bold">{selectedFilter}</h2>
           <h6 className='text-red-900 text-xs font-bold'>{filteredRequests.length} requests</h6>
         </div>

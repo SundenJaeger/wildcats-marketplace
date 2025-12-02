@@ -1,15 +1,15 @@
 import React from 'react'
 import assets from '../assets/assets'
-import { Upload, X } from 'lucide-react';                 
+import { Upload, X } from 'lucide-react';
 
 const CreateListingModal = ({ onClose, onSuccess}) => {
 
   const [chosenCategory, setChosenCategory] = React.useState('academics');
-  
+
     const [chosenCondition, setChosenCondition] = React.useState('bnew');
-  
+
     const [price, setPrice] = React.useState('-100');
-  
+
     const [chosenFilters, setChosenFilters] = React.useState([]);
 
 
@@ -48,10 +48,10 @@ const CreateListingModal = ({ onClose, onSuccess}) => {
     };
 
     const handleCreateListing = () => {
-    
+
     // Close modal first
     onClose();
-    
+
     // Then trigger success alert in parent
     if (onSuccess) {
     onSuccess();

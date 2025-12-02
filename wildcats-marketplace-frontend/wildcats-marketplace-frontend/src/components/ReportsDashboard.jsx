@@ -71,7 +71,7 @@ const ReportsDashboard = () => {
             </div>
 
             <div>
-                <div className='flex justify-between items-center py-2'>
+                <div className='flex justify-between items-center py-3'>
                     <h2 className='text-red-900 text-xl font-bold'>All Reports</h2>
                     <h6 className='text-red-900 text-xs font-bold'>0 reports</h6>
                 </div>
