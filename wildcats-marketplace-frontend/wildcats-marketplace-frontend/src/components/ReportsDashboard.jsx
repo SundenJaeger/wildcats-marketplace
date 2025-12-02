@@ -1,5 +1,6 @@
 import React from 'react';
 import assets from '../assets/assets';
+import { CheckCircle, AlertCircle, Clock, X } from 'lucide-react';
 
 const ReportsDashboard = () => {
     const [selectedFilter, setSelectedFilter] = React.useState('All Reports');
@@ -21,7 +22,7 @@ const ReportsDashboard = () => {
                         <h6>Total Reports</h6>
                         <h4 className='text-3xl font-bold'>0</h4>
                     </div>
-                    <img className='w-10 h-10' src={assets.total_reports_icon} alt="Total Reports" />
+                    <img className='w-11 h-11' src={assets.total_reports_icon} alt="Total Reports" />
                 </div>
 
                 <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-orange-600 to-amber-700'>
@@ -29,7 +30,7 @@ const ReportsDashboard = () => {
                         <h6>Pending</h6>
                         <h4 className='text-3xl font-bold'>0</h4>
                     </div>
-                    <img className='w-8 h-8' src={assets.clock_icon} alt="Pending" />
+                    <Clock className="w-9 h-9" />
                 </div>
 
                 <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-blue-700 to-indigo-800'> 
@@ -37,7 +38,7 @@ const ReportsDashboard = () => {
                         <h6>Under Review</h6>
                         <h4 className='text-3xl font-bold'>0</h4>
                     </div>
-                    <img className='w-8 h-8' src={assets.clock_icon} alt="Under Review" />
+                    <Clock className="w-9 h-9" />
                 </div>
 
                 <div className='flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800'>
@@ -45,7 +46,7 @@ const ReportsDashboard = () => {
                         <h6>Resolved</h6>
                         <h4 className='text-3xl font-bold'>0</h4>
                     </div>
-                    <img className='w-8 h-8' src={assets.check_icon} alt="Resolved" />
+                    <Clock className="w-9 h-9" />
                 </div>
             </div>
 

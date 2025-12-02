@@ -73,7 +73,7 @@ const Homepage = () => {
                                 Verification Requests
                             </button>
                         </div>
-                        <div className='flex justify-end h-fit m-2'>
+                        <div className='flex justify-end h-fit my-2'>
                             <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800 text-white' onClick={() => setIsAdmin(false)}>Go Back</button>
                         </div>
                     </div>
