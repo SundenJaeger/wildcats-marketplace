@@ -1,6 +1,7 @@
 import React from 'react'
 import assets from '../assets/assets'
 import Products from './Products'
+import SavedProducts from './SavedProducts'
 import SellerDashboard from './SellerDashboard';
 import ProductPost from './ProductPost'; 
 import SettingsModal from './SettingsModal';
@@ -26,12 +27,17 @@ const Homepage = () => {
     const [isAdmin, setIsAdmin] = React.useState(false)
     const [showProductFilter, setShowProductFilter] = React.useState(false);
     const [showVerificationModal, setShowVerificationModal] = React.useState(isNewUser);
-    const [adminView, setAdminView] = React.useState('reports'); 
+    const [adminView, setAdminView] = React.useState('reports');
+    const [showSavedProducts, setShowSavedProducts] = React.useState(false);
     
     const navigate = useNavigate();
     const handleLogout = () => {
         setShowSettings(false);
         navigate('/', { state: { hasLoggedOut : true }});
+    };
+    
+    const toggleSavedProducts = () => {
+        setShowSavedProducts(!showSavedProducts);
     };
     
     return (
@@ -62,13 +68,13 @@ const Homepage = () => {
                     <div className='flex justify-between'>
                         <div className='flex justify-evenly mb-2 mt-1'>
                             <button
-                                className={`w-1/2 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
+                                className={`w-1/3 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
                                 ${adminView === 'reports' ? 'border-red-950' : 'border-transparent'}`}
                                 onClick={() => setAdminView('reports')}>
                                 Listing Reports
                             </button>
                             <button
-                                className={`w-full px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
+                                className={`w-1/3 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
                                 ${adminView === 'verification' ? 'border-red-950' : 'border-transparent'}`}
                                 onClick={() => setAdminView('verification')}>
                                 Verification Requests
@@ -122,17 +128,35 @@ const Homepage = () => {
                             <br></br>
                             <div>
                                 <div className='flex justify-between items-center'>
-                                    <h3 className='text-black font-bold text-xl '>
-                                        Today's Picks
+                                    <h3 className='text-black font-bold text-2xl '>
+                                        {showSavedProducts ? 'Saved Products' : "Today's Picks"}
                                     </h3>
-                                    <button
-                                    type="button"
-                                    className=""
-                                    onClick={() => setShowProductFilter(!showProductFilter)}>
-                                    <img className="w-5 h-5" src={assets.filter_1_icon} alt="filter" />
-                                    </button>
+                                    <div className='flex gap-2'>
+                                        <button
+                                            type="button"
+                                            className={`flex justify-center items-center gap-1 w-25 p-1.5 px-4 rounded-lg text-sm font-semibold transition-all ${
+                                                showSavedProducts 
+                                                    ? 'bg-[#8b0000]' 
+                                                    : 'bg-[#a50000]'
+                                            }`}
+                                            onClick={toggleSavedProducts}>
+                                            <img className="w-3 h-3" src={assets.white_save_icon} alt="save" />
+                                            Saved
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="flex justify-center items-center gap-1 w-25 bg-[#a50000] p-1.5 px-4 rounded-lg text-sm font-semibold"
+                                            onClick={() => setShowProductFilter(!showProductFilter)}>
+                                            <img className="w-4 h-4" src={assets.white_filter_icon} alt="filter" />
+                                            Filter
+                                        </button>
+                                    </div>
                                 </div>
-                                <Products onProductClick={setSelectedProduct}/>
+                                {showSavedProducts ? (
+                                    <SavedProducts onProductClick={setSelectedProduct} />
+                                ) : (
+                                    <Products onProductClick={setSelectedProduct} />
+                                )}
                             </div>
                         </>
                     )}
