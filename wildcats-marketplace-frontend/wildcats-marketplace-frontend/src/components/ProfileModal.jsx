@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
 // Placeholder assets - replace with your actual imports
 const assets = {
@@ -7,39 +7,41 @@ const assets = {
 }
 
 const ProfileModal = ({onClose}) => {
-    const [selectedOption, setSelectedOption] = React.useState('');
-    const [profileImage, setProfileImage] = React.useState(assets.blank_profile_icon);
+    const [selectedOption, setSelectedOption] = useState('');
+    const [profileImage, setProfileImage] = useState(assets.blank_profile_icon);
     const fileInputRef = React.useRef(null);
-    
-    const placeholder_user = {
-        fullname: "John Doe",
-        username: 'johndoe', 
-        student_id: "ex. 19-3946-347", 
-        student_email: "john.doe@cit.edu"
-    }
+
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        const storedData = localStorage.getItem('userData');
+        if (storedData) {
+            try {
+                setUserData(JSON.parse(storedData));
+            } catch (error) {
+                console.error('Error parsing user data:', error);
+            }
+        }
+    }, []);
+
+    const defaultUser = {
+        fullName: "John Doe",
+        username: "johndoe",
+        email: "john.doe@cit.edu",
+        studentId: "19-1234",
+        program: "Computer Science",
+        yearLevel: "3rd Year"
+    };
+
+    const user = userData || defaultUser;
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-
         if (file) {
-            // Validate file type
-            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-            if (!validTypes.includes(file.type)) {
-                alert('Please select a valid image file (JPEG, PNG, or GIF)');
-                return;
-            }
-
-            // Validate file size (max 5MB)
-            const maxSize = 5 * 1024 * 1024; // 5MB in bytes
-            if (file.size > maxSize) {
-                alert('Image size should be less than 5MB');
-                return;
-            }
-
-            // Create a preview URL
             const reader = new FileReader();
             reader.onloadend = () => {
                 setProfileImage(reader.result);
+                localStorage.setItem('profileImage', reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -51,21 +53,31 @@ const ProfileModal = ({onClose}) => {
 
     const handleRemoveImage = () => {
         setProfileImage(assets.blank_profile_icon);
+        localStorage.removeItem('profileImage');
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
     };
 
+    useEffect(() => {
+        const savedImage = localStorage.getItem('profileImage');
+        if (savedImage) {
+            setProfileImage(savedImage);
+        }
+    }, []);
+
     return (
         <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-            <div className='flex flex-col justify-between bg-[#fff1bd] rounded-md p-4 w-200 h-auto pb-8 border-2 border-[#726948]'> 
+            <div className='flex flex-col justify-between bg-[#fff1bd] rounded-md p-4 w-200 h-auto pb-8 border-2 border-[#726948]'>
                 <div className='flex justify-between items-start'>
                     <div className='flex flex-col ml-5 mt-5 mb-2'>
                         <h2 className='text-red-950 font-bold !text-3xl'>My Profile</h2>
-                        <p className='text-red-950 font-semibold text-sm'>Manage your account.</p>
+                        <p className='text-red-950 font-semibold text-sm'>
+                            Welcome, {user.username}!
+                        </p>
                     </div>
                     <div onClick={onClose}
-                        className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full cursor-pointer hover:bg-[#8B0000] transition-colors'>
+                         className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full cursor-pointer hover:bg-[#8B0000] transition-colors'>
                         <img className="w-2.5 h-2.5" src={assets.white_close_icon} alt="Close" />
                     </div>
                 </div>
@@ -80,94 +92,111 @@ const ProfileModal = ({onClose}) => {
                         {/* Full Name */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Full Name</label>
-                            <input type='text' placeholder={placeholder_user.fullname} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                            <input
+                                type='text'
+                                value={user.fullName}
+                                readOnly
+                                className='text-sm font-bold pl-2 text-gray-800 bg-gray-100 rounded-sm border-2 border-gray-300 p-1'
+                            />
                         </div>
 
                         {/* Username */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Username</label>
-                            <input type='text' placeholder={placeholder_user.username} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                            <input
+                                type='text'
+                                value={user.username}
+                                readOnly
+                                className='text-sm font-bold pl-2 text-gray-800 bg-gray-100 rounded-sm border-2 border-gray-300 p-1'
+                            />
                         </div>
 
                         {/* Student ID */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Student ID</label>
-                            <input type='text' placeholder={placeholder_user.student_id} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                            <input
+                                type='text'
+                                value={user.studentId}
+                                readOnly
+                                className='text-sm font-bold pl-2 text-gray-800 bg-gray-100 rounded-sm border-2 border-gray-300 p-1'
+                            />
                         </div>
 
                         {/* Student Email */}
                         <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
                             <label className='text-red-950 font-bold text-sm text-nowrap'>Student Email</label>
-                            <input type='text' placeholder={placeholder_user.student_email} className='text-sm font-bold pl-2 placeholder-gray-600 bg-white rounded-sm border-2 border-gray-300 p-1'></input>
+                            <input
+                                type='text'
+                                value={user.email}
+                                readOnly
+                                className='text-sm font-bold pl-2 text-gray-800 bg-gray-100 rounded-sm border-2 border-gray-300 p-1'
+                            />
                         </div>
 
-                        {/* Change Password */}
-                        <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
-                            <label className='text-red-950 font-bold text-sm text-nowrap'>Change Password</label>
-                            <input type='password' className='bg-white rounded-sm border-2 border-gray-300 p-1'></input>
-                        </div>
-
-                        {/* Gender */}
-                        <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
-                            <label className='text-red-950 font-bold text-sm text-nowrap'>Gender</label>
-                            <div className='grid grid-cols-3 justify-items-center gap-1'>
-                                <label className='text-sm flex items-center gap-1 text-red-950 font-semibold cursor-pointer'>
-                                    <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white checked:bg-[#B20000] checked:border-[#B20000] cursor-pointer' 
-                                        type='radio' name='gender' value='male' 
-                                        checked={selectedOption === 'male'} 
-                                        onChange={(e) => setSelectedOption(e.target.value)} />
-                                    Male
-                                </label>
-                                <label className='text-sm flex items-center gap-1 text-red-950 font-semibold cursor-pointer'>
-                                    <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white checked:bg-[#B20000] checked:border-[#B20000] cursor-pointer' 
-                                        type='radio' name='gender' value='female' 
-                                        checked={selectedOption === 'female'} 
-                                        onChange={(e) => setSelectedOption(e.target.value)} />
-                                    Female
-                                </label>
-                                <label className='text-sm flex items-center gap-1 text-red-950 font-semibold cursor-pointer'>
-                                    <input className='appearance-none w-4 h-4 rounded-full border-2 border-gray-300 bg-white checked:bg-[#B20000] checked:border-[#B20000] cursor-pointer' 
-                                        type='radio' name='gender' value='other' 
-                                        checked={selectedOption === 'other'} 
-                                        onChange={(e) => setSelectedOption(e.target.value)} />
-                                    Other
-                                </label>
+                        {/* Program */}
+                        {user.program && (
+                            <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                                <label className='text-red-950 font-bold text-sm text-nowrap'>Program</label>
+                                <input
+                                    type='text'
+                                    value={`${user.program} ${user.yearLevel ? `(${user.yearLevel})` : ''}`}
+                                    readOnly
+                                    className='text-sm font-bold pl-2 text-gray-800 bg-gray-100 rounded-sm border-2 border-gray-300 p-1'
+                                />
                             </div>
-                        </div>
+                        )}
 
-                        {/* Date of Birth */}
-                        <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
-                            <label className='text-red-950 font-bold text-sm text-nowrap'>Date of Birth</label>
-                            <input type='date' className='text-sm font-bold bg-white rounded-sm border-2 border-gray-300 p-1 w-full text-gray-600'></input>
-                        </div>
+                        {/* Display user type */}
+                        {user.userType && (
+                            <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                                <label className='text-red-950 font-bold text-sm text-nowrap'>Account Type</label>
+                                <div className='text-sm font-bold pl-2 text-gray-800'>
+                                    {user.userType === 'S' ? 'Student' : 'Admin'}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Verification Status */}
+                        {user.isVerified !== undefined && (
+                            <div className='grid grid-cols-[140px_1fr] items-center text-end gap-2'>
+                                <label className='text-red-950 font-bold text-sm text-nowrap'>Verified</label>
+                                <div className={`text-sm font-bold pl-2 ${user.isVerified ? 'text-green-600' : 'text-yellow-600'}`}>
+                                    {user.isVerified ? '✓ Verified' : '⏳ Pending'}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Right Side */}
+                    {/* Right Side - Profile Image */}
                     <div className='flex flex-col gap-2 items-center w-[25%] mr-10'>
-                        <img 
-                            className='w-32 h-32 bg-white p-2 border-3 border-gray-300 rounded-md object-cover' 
-                            src={profileImage} 
+                        <img
+                            className='w-32 h-32 bg-white p-2 border-3 border-gray-300 rounded-md object-cover'
+                            src={profileImage}
                             alt="Profile"
                         />
+                        <p className='text-xs text-gray-600 text-center'>
+                            {user.username}<br/>
+                            {user.program || 'Student'}
+                        </p>
 
                         {/* Hidden file input */}
-                        <input 
-                            type="file" 
+                        <input
+                            type="file"
                             ref={fileInputRef}
                             onChange={handleImageChange}
-                            accept="image/jpeg,image/jpg,image/png,image/gif"
+                            accept="image/*"
                             className='hidden'
                         />
 
                         <div className='flex gap-1'>
-                            <button 
+                            <button
                                 onClick={handleButtonClick}
                                 className='bg-[#B20000] text-white p-2 px-3 rounded-md text-xs font-bold hover:bg-[#8B0000] hover:scale-101 box-border border-2 border-red-800 transition-all cursor-pointer'>
-                                Change
+                                Change Photo
                             </button>
 
                             {profileImage !== assets.blank_profile_icon && (
-                                <button 
+                                <button
                                     onClick={handleRemoveImage}
                                     className='bg-gray-500 text-white p-2 px-3 rounded-md text-xs font-bold hover:bg-gray-600 hover:scale-101 box-border border-2 border-gray-700 transition-all cursor-pointer'>
                                     Remove
@@ -177,11 +206,9 @@ const ProfileModal = ({onClose}) => {
                     </div>
                 </div>
 
-                {/* Save Button */}
-                <div className='flex justify-end px-5'>
-                    <button className='bg-[#B20000] text-white p-2 rounded-md px-5 text-sm font-bold box-border border-2 border-red-800 hover:bg-[#8B0000] transition-colors cursor-pointer'>
-                        Save
-                    </button>
+                {/* Note about editing */}
+                <div className='text-center text-xs text-gray-600 mt-4'>
+                    <p>Contact administrator to update profile information.</p>
                 </div>
             </div>
         </div>
