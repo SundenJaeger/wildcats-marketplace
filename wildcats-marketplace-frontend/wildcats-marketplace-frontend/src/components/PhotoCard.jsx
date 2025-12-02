@@ -1,33 +1,39 @@
-const PhotoCard = ({ image, name, price, onClick }) => {
-  const handleButtonClick = (e) => {
-    e.stopPropagation(); // Prevent the click from bubbling to parent div
-    onClick(); // Trigger the onClick function
+const PhotoCard = ({ image, name, price, category, seller, onClick }) => {
+  const handleCardClick = () => {
+    onClick();
   };
-
+  
   return (
     <div
-      className="bg-[#FFF9E0] w-full h-65 rounded-md shadow-md relative
-      hover:shadow-md hover:scale-101 transition-transform duration-100 cursor-pointer"
-      onClick={handleButtonClick}
+      onClick={handleCardClick}
+      className="flex flex-col bg-[#FFF7D7] rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-100 border-1 border-[#FFF7D7] hover:border-[#A31800] my-2"
     >
-      {/* Product image */}
-      <img
-        src={image}
-        alt="Product"
-        className="w-full h-[65%] object-cover rounded-md"
-      />
+      {/* Product Image */}
+      <div className="relative w-full h-48 bg-gray-200">
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover"
+        />
+      </div>
 
-      {/* Product details */}
-      <h2 className="font-bold text-black mt-0 pt-1 px-2">{name}</h2>
-      <p className="font-bold text-black text-sm px-2">{price}</p>
-
-      {/* Button */}
-      <button
-        className="absolute bottom-3 right-2 bg-[#a50000] text-white text-xs font-semibold px-4 py-1.5 rounded-md hover:bg-[#c50000] focus:outline-none"
-        onClick={handleButtonClick}
-      >
-        See Details
-      </button>
+      {/* Product Details */}
+      <div className="p-3 flex flex-col flex-grow">
+        <h3 className="text-black font-bold text-sm mb-1 line-clamp-2">
+          {name}
+        </h3>
+        <p className="text-[#A31800] font-extrabold text-lg mb-2">
+          {price}
+        </p>
+        <div className="flex flex-col gap-1 text-xs text-gray-600 mb-2">
+          <p className="font-semibold">
+            <span className="text-gray-500">Category:</span> {category}
+          </p>
+          <p className="font-semibold">
+            <span className="text-gray-500">Seller:</span> {seller}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
