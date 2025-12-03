@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import assets from '../assets/assets'
 import CreateListingModal from './CreateListingModal'
-import {listingService} from '../services/listingService'; // Add this import
+import {listingService} from '../services/listingService';
 
 const SellerDashboard = () => {
     const [isActiveListing, setIsActiveListing] = useState(false)
@@ -37,11 +37,20 @@ const SellerDashboard = () => {
     const fetchUserListings = async (studentId) => {
         try {
             setListingsLoading(true)
-            const listings = await listingService.getUserListings(studentId)
+            // Use the new function that includes images
+            const listings = await listingService.getUserListingsWithImages(studentId)
             setUserListings(listings)
             setIsActiveListing(listings.length > 0)
         } catch (error) {
             console.error('Error fetching user listings:', error)
+            // Fallback to old method if new one fails
+            try {
+                const oldListings = await listingService.getUserListings(studentId)
+                setUserListings(oldListings)
+                setIsActiveListing(oldListings.length > 0)
+            } catch (fallbackError) {
+                console.error('Fallback also failed:', fallbackError)
+            }
         } finally {
             setListingsLoading(false)
         }
@@ -169,11 +178,26 @@ const SellerDashboard = () => {
                             {userListings.map(listing => (
                                 <div key={listing.resourceId}
                                      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                                    {listing.images && listing.images.length > 0 ? (
+                                    {/* Updated image display */}
+                                    {listing.primaryImage ? (
                                         <img
-                                            src={listing.images[0].imagePath}
+                                            src={listing.primaryImage}
                                             alt={listing.title}
                                             className="w-full h-48 object-cover"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+                                            }}
+                                        />
+                                    ) : listing.images && listing.images.length > 0 ? (
+                                        <img
+                                            src={listingService.getImageUrl(listing.images[0].imagePath)}
+                                            alt={listing.title}
+                                            className="w-full h-48 object-cover"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+                                            }}
                                         />
                                     ) : (
                                         <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
@@ -187,8 +211,8 @@ const SellerDashboard = () => {
                                             <span className="font-bold text-red-700">{formatPrice(listing.price)}</span>
                                             <span
                                                 className={`text-xs px-2 py-1 rounded-full ${listing.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                                                {listing.status}
-                                            </span>
+                                {listing.status}
+                            </span>
                                         </div>
                                         <div className="mt-2 text-xs text-gray-500">
                                             {new Date(listing.datePosted).toLocaleDateString()}
