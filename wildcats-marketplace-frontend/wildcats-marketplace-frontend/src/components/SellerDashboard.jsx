@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import assets from '../assets/assets'
 import CreateListingModal from './CreateListingModal'
+import {listingService} from '../services/listingService'; // Add this import
 
 const SellerDashboard = () => {
     const [isActiveListing, setIsActiveListing] = useState(false)
@@ -8,6 +9,8 @@ const SellerDashboard = () => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [userListings, setUserListings] = useState([])
+    const [listingsLoading, setListingsLoading] = useState(false)
 
     useEffect(() => {
         const loadUserData = () => {
@@ -16,6 +19,10 @@ const SellerDashboard = () => {
                 if (storedData) {
                     const parsedData = JSON.parse(storedData)
                     setUserData(parsedData)
+
+                    if (parsedData.studentId) {
+                        fetchUserListings(parsedData.studentId)
+                    }
                 }
             } catch (error) {
                 console.error('Error loading user data:', error)
@@ -27,8 +34,25 @@ const SellerDashboard = () => {
         loadUserData()
     }, [])
 
+    const fetchUserListings = async (studentId) => {
+        try {
+            setListingsLoading(true)
+            const listings = await listingService.getUserListings(studentId)
+            setUserListings(listings)
+            setIsActiveListing(listings.length > 0)
+        } catch (error) {
+            console.error('Error fetching user listings:', error)
+        } finally {
+            setListingsLoading(false)
+        }
+    }
+
     const handleSuccess = () => {
         setShowSuccessAlert(true);
+        if (userData?.studentId) {
+            fetchUserListings(userData.studentId)
+        }
+
         setTimeout(() => {
             setShowSuccessAlert(false);
         }, 3000);
@@ -47,6 +71,13 @@ const SellerDashboard = () => {
         return userData.fullName || `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 'User';
     };
 
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        }).format(price);
+    };
+
     if (loading) {
         return (
             <div className='flex flex-col justify-center items-center h-screen w-full'>
@@ -58,7 +89,6 @@ const SellerDashboard = () => {
 
     return (
         <div className='flex flex-col justify-top h-screen w-full'>
-
             <br></br>
             {/* Overview */}
             <div className='flex flex-col mb-4 gap-2'>
@@ -98,7 +128,7 @@ const SellerDashboard = () => {
                                     Active Listings
                                 </h3>
                                 <h2 className="text-4xl text-red-950 font-bold mb-1">
-                                    0
+                                    {userListings.length}
                                 </h2>
                             </div>
                             <img className='w-13 h-13 m-2' src={assets.listing_icon}/>
@@ -118,21 +148,57 @@ const SellerDashboard = () => {
                         + Create new Listing
                     </button>
                 </div>
+
                 <div
                     className='bg-[#FFF7DA] border-2 border-[#A31800] p-4 rounded-lg shadow-md flex space-x-4 px-5 min-h-[50vh]'>
-                    {!isActiveListing && (
-                        <>
-                            <div className='flex max-h-full w-full justify-center items-center'>
-                                <div
-                                    className='w-full h-full flex flex-col justify-center items-center pb-15 box-border gap-2'>
-                                    <img className='w-15 h-15' src={assets.empty_space_icon}></img>
-                                    <h3 className='text-red-900 font-bold'>Poof! Its empty...</h3>
-                                </div>
+                    {listingsLoading ? (
+                        <div className='flex max-h-full w-full justify-center items-center'>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A31800] mb-4"></div>
+                        </div>
+                    ) : userListings.length === 0 ? (
+                        <div className='flex max-h-full w-full justify-center items-center'>
+                            <div
+                                className='w-full h-full flex flex-col justify-center items-center pb-15 box-border gap-2'>
+                                <img className='w-15 h-15' src={assets.empty_space_icon}></img>
+                                <h3 className='text-red-900 font-bold'>Poof! Its empty...</h3>
+                                <p className='text-gray-600 text-sm'>Create your first listing!</p>
                             </div>
-                        </>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-4 w-full">
+                            {userListings.map(listing => (
+                                <div key={listing.resourceId}
+                                     className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                                    {listing.images && listing.images.length > 0 ? (
+                                        <img
+                                            src={listing.images[0].imagePath}
+                                            alt={listing.title}
+                                            className="w-full h-48 object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                            <span className="text-gray-500">No image</span>
+                                        </div>
+                                    )}
+                                    <div className="p-4">
+                                        <h3 className="font-bold text-lg text-red-900 mb-2 truncate">{listing.title}</h3>
+                                        <p className="text-gray-600 text-sm mb-2 line-clamp-2">{listing.description}</p>
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-bold text-red-700">{formatPrice(listing.price)}</span>
+                                            <span
+                                                className={`text-xs px-2 py-1 rounded-full ${listing.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                                                {listing.status}
+                                            </span>
+                                        </div>
+                                        <div className="mt-2 text-xs text-gray-500">
+                                            {new Date(listing.datePosted).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </div>
-
             </div>
 
             {createNewListing && (
