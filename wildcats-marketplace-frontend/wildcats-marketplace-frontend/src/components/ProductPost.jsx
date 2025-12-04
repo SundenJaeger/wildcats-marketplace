@@ -1,6 +1,7 @@
 import React from 'react'
 import assets from '../assets/assets'
 import ReportModal from './ReportModal'
+import { bookmarkService } from '../services/bookmarkService'
 
 const ProductPost = ({ product, onBack, onUpdateProduct }) => {
     const [localProduct, setLocalProduct] = React.useState(product)
@@ -10,6 +11,24 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
     const [newComment, setNewComment] = React.useState('')
     const [replyingTo, setReplyingTo] = React.useState(null)
     const [replyText, setReplyText] = React.useState('')
+    const [isSaving, setIsSaving] = React.useState(false)
+
+    // Check if product is already bookmarked on mount
+    React.useEffect(() => {
+        const checkBookmarkStatus = async () => {
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                if (userData && userData.studentId && product.id) {
+                    const isBookmarked = await bookmarkService.isBookmarked(userData.studentId, product.id);
+                    setPostSaved(isBookmarked);
+                }
+            } catch (error) {
+                console.error('Error checking bookmark status:', error);
+            }
+        };
+
+        checkBookmarkStatus();
+    }, [product.id]);
 
     // Initialize comments if they don't exist in product
     React.useEffect(() => {
@@ -49,7 +68,6 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         if (!localProduct.imageList || localProduct.imageList.length === 0) return;
         setProductImageIndex(prev => {
             const newIndex = prev <= 0 ? 0 : prev - 1;
-            console.log('Prev clicked, new index:', newIndex);
             return newIndex;
         });
     }
@@ -58,7 +76,6 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         if (!localProduct.imageList || localProduct.imageList.length === 0) return;
         setProductImageIndex(prev => {
             const newIndex = prev >= localProduct.imageList.length - 1 ? localProduct.imageList.length - 1 : prev + 1;
-            console.log('Next clicked, new index:', newIndex, 'of', localProduct.imageList.length);
             return newIndex;
         });
     }
@@ -71,8 +88,39 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         return localProduct.imageList[productImageIndex] || 'https://via.placeholder.com/600x400?text=Image+Not+Found';
     };
 
-    function handleSave(){
-        setPostSaved(!isPostSaved)
+    // Handle save/unsave bookmark
+    async function handleSave(){
+        if (isSaving) return;
+
+        try {
+            setIsSaving(true);
+            const userData = JSON.parse(localStorage.getItem('userData'));
+
+            if (!userData || !userData.studentId) {
+                alert('Please log in to save products');
+                return;
+            }
+
+            if (!product.id) {
+                alert('Invalid product');
+                return;
+            }
+
+            if (isPostSaved) {
+                // Remove bookmark
+                await bookmarkService.removeBookmark(userData.studentId, product.id);
+                setPostSaved(false);
+            } else {
+                // Add bookmark
+                await bookmarkService.addBookmark(userData.studentId, product.id);
+                setPostSaved(true);
+            }
+        } catch (error) {
+            console.error('Error toggling bookmark:', error);
+            alert(`Failed to ${isPostSaved ? 'remove' : 'save'} bookmark: ${error.message}`);
+        } finally {
+            setIsSaving(false);
+        }
     }
 
     const handleReportSubmit = (ReportData) => {
@@ -221,8 +269,17 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                 </h3>
                             </div>
                             <div className='flex justify-between items-center gap-1'>
-                                <div onClick={handleSave} className='flex justify-center items-center p-1 rounded-lg cursor-pointer'>
-                                    <input type="image" className="w-5 h-5" src={isPostSaved ? assets.save_icon : assets.save_icon_saved} alt="Save"/>
+                                <div
+                                    onClick={handleSave}
+                                    className={`flex justify-center items-center p-1 rounded-lg ${isSaving ? 'cursor-wait opacity-50' : 'cursor-pointer hover:scale-110'}`}
+                                    title={isPostSaved ? 'Remove bookmark' : 'Save product'}
+                                >
+                                    <input
+                                        type="image"
+                                        className="w-5 h-5"
+                                        src={isPostSaved ? assets.save_icon_saved : assets.save_icon}
+                                        alt="Save"
+                                    />
                                 </div>
                                 <div onClick={() => setShowReportModal(true)} className='flex justify-center items-center p-1 rounded-lg cursor-pointer'>
                                     <input type="image" className="w-5 h-5" src={assets.report_icon} alt="Report"/>
