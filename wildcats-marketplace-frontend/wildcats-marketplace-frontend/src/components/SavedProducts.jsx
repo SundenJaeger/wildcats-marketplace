@@ -3,7 +3,7 @@ import assets from '../assets/assets';
 import {bookmarkService} from '../services/bookmarkService';
 import {Camera} from 'lucide-react';
 
-const SavedProducts = ({onProductClick, filters}) => {
+const SavedProducts = ({onProductClick, filters, searchQuery}) => {
     const [savedProducts, setSavedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -50,75 +50,91 @@ const SavedProducts = ({onProductClick, filters}) => {
     };
 
     useEffect(() => {
-        if (!filters || (!filters.category && !filters.condition && !filters.priceRange &&
-            (!filters.subFilters || filters.subFilters.length === 0))) {
-            // No filters applied, show all saved products
-            setSavedProducts(rawSavedProducts);
-            return;
+        let filtered = rawSavedProducts;
+
+        // Apply search filter first
+        if (searchQuery && searchQuery.trim()) {
+            const query = searchQuery.toLowerCase();
+            filtered = filtered.filter(product => {
+                const name = product.name?.toLowerCase() || '';
+                const description = product.description?.toLowerCase() || '';
+                const category = product.category?.toLowerCase() || '';
+                const seller = product.seller?.toLowerCase() || '';
+
+                return name.includes(query) ||
+                    description.includes(query) ||
+                    category.includes(query) ||
+                    seller.includes(query);
+            });
         }
 
-        const filtered = rawSavedProducts.filter(product => {
-            if (filters.priceRange) {
-                const price = product.priceValue || 0;
-                switch (filters.priceRange) {
-                    case '-100':
-                        if (price >= 100) return false;
-                        break;
-                    case '100-499':
-                        if (price < 100 || price >= 500) return false;
-                        break;
-                    case '500-999':
-                        if (price < 500 || price >= 1000) return false;
-                        break;
-                    case '999+':
-                        if (price < 1000) return false;
-                        break;
+        // Apply other filters if they exist
+        if (filters && (filters.category || filters.condition || filters.priceRange ||
+            (filters.subFilters && filters.subFilters.length > 0))) {
+
+            filtered = filtered.filter(product => {
+                if (filters.priceRange) {
+                    const price = product.priceValue || 0;
+                    switch (filters.priceRange) {
+                        case '-100':
+                            if (price >= 100) return false;
+                            break;
+                        case '100-499':
+                            if (price < 100 || price >= 500) return false;
+                            break;
+                        case '500-999':
+                            if (price < 500 || price >= 1000) return false;
+                            break;
+                        case '999+':
+                            if (price < 1000) return false;
+                            break;
+                    }
                 }
-            }
 
-            if (filters.condition) {
-                const conditionMap = {
-                    'bnew': 'NEW',
-                    'excellent': 'LIKE_NEW',
-                    'good': 'GOOD',
-                    'used': 'FAIR',
-                    'poor': 'POOR'
-                };
+                if (filters.condition) {
+                    const conditionMap = {
+                        'bnew': 'NEW',
+                        'excellent': 'LIKE_NEW',
+                        'good': 'GOOD',
+                        'used': 'FAIR',
+                        'poor': 'POOR'
+                    };
 
-                if (product.condition !== conditionMap[filters.condition]) {
-                    return false;
-                }
-            }
-
-            if (filters.categoryName) {
-                if (product.category !== filters.categoryName) {
-                    const matchesSubcategory = filters.subFilters &&
-                        filters.subFilters.some(subFilter =>
-                            product.category === subFilter
-                        );
-
-                    if (!matchesSubcategory) {
+                    if (product.condition !== conditionMap[filters.condition]) {
                         return false;
                     }
                 }
-            }
 
-            if (filters.subFilters && filters.subFilters.length > 0) {
-                const hasMatchingSubfilter = filters.subFilters.some(subfilter => {
-                    return product.category === subfilter ||
-                        (product.category && product.category.includes(subfilter));
-                });
+                if (filters.categoryName) {
+                    if (product.category !== filters.categoryName) {
+                        const matchesSubcategory = filters.subFilters &&
+                            filters.subFilters.some(subFilter =>
+                                product.category === subFilter
+                            );
 
-                if (!hasMatchingSubfilter) {
-                    return false;
+                        if (!matchesSubcategory) {
+                            return false;
+                        }
+                    }
                 }
-            }
 
-            return true;
-        });
+                if (filters.subFilters && filters.subFilters.length > 0) {
+                    const hasMatchingSubfilter = filters.subFilters.some(subfilter => {
+                        return product.category === subfilter ||
+                            (product.category && product.category.includes(subfilter));
+                    });
+
+                    if (!hasMatchingSubfilter) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
 
         setSavedProducts(filtered);
-    }, [filters, rawSavedProducts]);
+    }, [filters, rawSavedProducts, searchQuery]);
 
     if (loading) {
         return (
@@ -144,19 +160,25 @@ const SavedProducts = ({onProductClick, filters}) => {
             filters.category || filters.condition || filters.priceRange ||
             (filters.subFilters && filters.subFilters.length > 0)
         );
+        const hasSearch = searchQuery && searchQuery.trim();
+
         return (
             <div className="flex flex-col items-center justify-center h-96 bg-[#FFF7DA] rounded-lg border-2 border-[#A31800]">
                 <img className='w-20 h-20 mb-4' src={assets.warning_icon} alt="No saved items" />
                 <h3 className="text-red-900 font-bold text-xl mb-2">
-                    {hasActiveFilters ? 'No Matching Saved Items' : 'No Saved Items'}
+                    {hasSearch ? `No results for "${searchQuery}"` :
+                        hasActiveFilters ? 'No Matching Saved Items' : 'No Saved Items'}
                 </h3>
                 <p className="text-red-900 text-sm">
-                    {hasActiveFilters
-                        ? 'No saved products match your current filters.'
-                        : 'You haven\'t saved any products yet.'}
+                    {hasSearch ? 'Try a different search term' :
+                        hasActiveFilters
+                            ? 'No saved products match your current filters.'
+                            : 'You haven\'t saved any products yet.'}
                 </p>
-                {hasActiveFilters && (
-                    <p className="text-red-900 text-sm mt-2">Try adjusting your filter criteria</p>
+                {(hasActiveFilters || hasSearch) && (
+                    <p className="text-red-900 text-sm mt-2">
+                        {hasSearch ? 'or adjust your search' : 'Try adjusting your filter criteria'}
+                    </p>
                 )}
             </div>
         );

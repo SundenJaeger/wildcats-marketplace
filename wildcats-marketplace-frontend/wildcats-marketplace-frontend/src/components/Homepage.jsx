@@ -29,6 +29,7 @@ const Homepage = () => {
     const [showVerificationModal, setShowVerificationModal] = React.useState(isNewUser);
     const [adminView, setAdminView] = React.useState('reports');
     const [showSavedProducts, setShowSavedProducts] = React.useState(false);
+    const [searchQuery, setSearchQuery] = React.useState('');
 
     // Filter states
     const [appliedFilters, setAppliedFilters] = React.useState({
@@ -62,6 +63,10 @@ const Homepage = () => {
         });
     };
 
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+    };
+
     return (
         <div className="flex flex-col justify-top min-h-screen flex-1 max-w-[1000px] min-w-[300px] mx-2">
             <Navbar
@@ -83,6 +88,9 @@ const Homepage = () => {
                     setShowProfile(true);
                     console.log("showProfile after setState called");
                 }}
+                onSearch={handleSearch}
+                searchQuery={searchQuery}
+                onSearchQueryChange={setSearchQuery}
             />
             {isAdmin ? (
                 <>
@@ -153,7 +161,9 @@ const Homepage = () => {
                                     <div>
                                         <div className='flex justify-between items-center'>
                                             <h3 className='text-black font-bold text-2xl '>
-                                                {showSavedProducts ? 'Saved Products' : "Today's Picks"}
+                                                {showSavedProducts ? 'Saved Products' :
+                                                    searchQuery ? `Search Results for "${searchQuery}"` :
+                                                        "Today's Picks"}
                                             </h3>
                                             <div className='flex gap-2'>
                                                 <button
@@ -223,11 +233,13 @@ const Homepage = () => {
                                         {showSavedProducts ? (
                                             <SavedProducts onProductClick={setSelectedProduct}
                                                            filters={appliedFilters}
+                                                           searchQuery={searchQuery}
                                             />
                                         ) : (
                                             <Products
                                                 onProductClick={setSelectedProduct}
                                                 filters={appliedFilters}
+                                                searchQuery={searchQuery}
                                             />
                                         )}
                                     </div>
@@ -237,7 +249,7 @@ const Homepage = () => {
                             {!(isMarketplaceView) && (
                                 <>
                                     <div className='flex flex-col justify-top h-screen w-full'>
-                                        <SellerDashboard/>
+                                        <SellerDashboard searchQuery={searchQuery}/>
                                     </div>
                                 </>
                             )}

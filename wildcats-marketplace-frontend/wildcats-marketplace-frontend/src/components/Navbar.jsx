@@ -2,11 +2,19 @@ import React, {useState, useEffect} from 'react';
 import assets from '../assets/assets';
 import {useLocation} from 'react-router-dom';
 
-const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, onProfileClick}) => {
+const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, onProfileClick, onSearch, searchQuery: externalSearchQuery, onSearchQueryChange}) => {
     const location = useLocation();
-    const [username, setUsername] = useState('username'); // Default fallback
+    const [username, setUsername] = useState('username');
+    const [searchQuery, setSearchQuery] = useState('');
 
     const isHomepage = location.pathname === '/home';
+
+    // Sync with external search query if provided
+    React.useEffect(() => {
+        if (externalSearchQuery !== undefined) {
+            setSearchQuery(externalSearchQuery);
+        }
+    }, [externalSearchQuery]);
 
     useEffect(() => {
         if (isHomepage) {
@@ -21,6 +29,35 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
             }
         }
     }, [isHomepage]);
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchQuery(value);
+        // Call both handlers if provided
+        if (onSearchQueryChange) {
+            onSearchQueryChange(value);
+        }
+        if (onSearch) {
+            onSearch(value);
+        }
+    };
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (onSearch && searchQuery.trim()) {
+            onSearch(searchQuery);
+        }
+    };
+
+    const handleClearSearch = () => {
+        setSearchQuery('');
+        if (onSearchQueryChange) {
+            onSearchQueryChange('');
+        }
+        if (onSearch) {
+            onSearch('');
+        }
+    };
 
     return (
         <div className='flex items-center justify-center absolute top-0 left-0 w-full h-15 z-50 bg-[#A31800]'>
@@ -68,22 +105,37 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
                             </div>
 
                             {/* Search bar */}
-                            <div
-                                className="relative flex items-center justify-end duration-150 focus-within:scale-[1.025] bg-white p-1 rounded-md h-5 w-50.6">
-                                <input
-                                    className="peer outline-0 w-full caret-transparent bg-transparent"
-                                    type="text"
-                                />
-                                <span
-                                    className="absolute left-2 text-gray-400 text-xs opacity-0 peer-focus:opacity-100 transition-opacity duration-150 pointer-event-none">
-                Search here...
-              </span>
-                                <img
-                                    className="duration-150 w-3.5 h-3.5 absolute right-1.5 pointer-events-none"
-                                    src={assets.red_search_icon}
-                                    alt="Search Icon"
-                                />
-                            </div>
+                            <form onSubmit={handleSearchSubmit}>
+                                <div
+                                    className="relative flex items-center justify-end duration-150 focus-within:scale-[1.025] bg-white p-1 rounded-md h-5 w-50.6">
+                                    <input
+                                        className="peer outline-0 w-full bg-transparent text-xs px-2"
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                        placeholder=""
+                                    />
+                                    <span
+                                        className="absolute left-2 text-gray-400 text-xs opacity-0 peer-placeholder-shown:opacity-100 peer-focus:opacity-0 transition-opacity duration-150 pointer-events-none">
+                                        Search here...
+                                    </span>
+                                    {searchQuery && (
+                                        <button
+                                            type="button"
+                                            onClick={handleClearSearch}
+                                            className="bg-transparent border-0 p-0 mr-4 text-gray-400 hover:text-gray-600">
+                                            ×
+                                        </button>
+                                    )}
+                                    <button type="submit" className="bg-transparent border-0 p-0">
+                                        <img
+                                            className="duration-150 w-3.5 h-3.5 absolute right-1.5"
+                                            src={assets.red_search_icon}
+                                            alt="Search Icon"
+                                        />
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     )}
                 </div>

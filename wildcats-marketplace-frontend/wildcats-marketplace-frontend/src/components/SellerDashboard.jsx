@@ -3,13 +3,14 @@ import assets from '../assets/assets'
 import CreateListingModal from './CreateListingModal'
 import {listingService} from '../services/listingService';
 
-const SellerDashboard = () => {
+const SellerDashboard = ({searchQuery}) => {
     const [isActiveListing, setIsActiveListing] = useState(false)
     const [createNewListing, setCreateNewListing] = useState(false)
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [userData, setUserData] = useState(null)
     const [loading, setLoading] = useState(true)
     const [userListings, setUserListings] = useState([])
+    const [filteredListings, setFilteredListings] = useState([])
     const [listingsLoading, setListingsLoading] = useState(false)
 
     useEffect(() => {
@@ -40,6 +41,7 @@ const SellerDashboard = () => {
             // Use the new function that includes images
             const listings = await listingService.getUserListingsWithImages(studentId)
             setUserListings(listings)
+            setFilteredListings(listings)
             setIsActiveListing(listings.length > 0)
         } catch (error) {
             console.error('Error fetching user listings:', error)
@@ -47,6 +49,7 @@ const SellerDashboard = () => {
             try {
                 const oldListings = await listingService.getUserListings(studentId)
                 setUserListings(oldListings)
+                setFilteredListings(oldListings)
                 setIsActiveListing(oldListings.length > 0)
             } catch (fallbackError) {
                 console.error('Fallback also failed:', fallbackError)
@@ -55,6 +58,29 @@ const SellerDashboard = () => {
             setListingsLoading(false)
         }
     }
+
+    // Filter listings based on search query
+    useEffect(() => {
+        if (!searchQuery || !searchQuery.trim()) {
+            setFilteredListings(userListings);
+            return;
+        }
+
+        const query = searchQuery.toLowerCase();
+        const filtered = userListings.filter(listing => {
+            const title = listing.title?.toLowerCase() || '';
+            const description = listing.description?.toLowerCase() || '';
+            const status = listing.status?.toLowerCase() || '';
+            const condition = listing.condition?.toLowerCase() || '';
+
+            return title.includes(query) ||
+                description.includes(query) ||
+                status.includes(query) ||
+                condition.includes(query);
+        });
+
+        setFilteredListings(filtered);
+    }, [searchQuery, userListings]);
 
     const handleSuccess = () => {
         setShowSuccessAlert(true);
@@ -150,7 +176,9 @@ const SellerDashboard = () => {
             {/* Your Listings */}
             <div className='flex flex-col gap-2 my-2'>
                 <div className='flex justify-between items-center '>
-                    <h1 className="!text-3xl text-red-950 font-bold">Your Listings</h1>
+                    <h1 className="!text-3xl text-red-950 font-bold">
+                        {searchQuery ? `Search Results (${filteredListings.length})` : 'Your Listings'}
+                    </h1>
                     <button
                         onClick={() => setCreateNewListing(true)}
                         className='bg-[#8B0000] rounded-md text-[10px] p-2 px-4 font-bold hover:scale-102'>
@@ -164,18 +192,22 @@ const SellerDashboard = () => {
                         <div className='flex max-h-full w-full justify-center items-center'>
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A31800] mb-4"></div>
                         </div>
-                    ) : userListings.length === 0 ? (
+                    ) : filteredListings.length === 0 ? (
                         <div className='flex max-h-full w-full justify-center items-center'>
                             <div
                                 className='w-full h-full flex flex-col justify-center items-center pb-15 box-border gap-2'>
                                 <img className='w-15 h-15' src={assets.empty_space_icon}></img>
-                                <h3 className='text-red-900 font-bold'>Poof! Its empty...</h3>
-                                <p className='text-gray-600 text-sm'>Create your first listing!</p>
+                                <h3 className='text-red-900 font-bold'>
+                                    {searchQuery ? `No listings found for "${searchQuery}"` : 'Poof! Its empty...'}
+                                </h3>
+                                <p className='text-gray-600 text-sm'>
+                                    {searchQuery ? 'Try a different search term' : 'Create your first listing!'}
+                                </p>
                             </div>
                         </div>
                     ) : (
                         <div className="grid grid-cols-3 gap-4 w-full">
-                            {userListings.map(listing => (
+                            {filteredListings.map(listing => (
                                 <div key={listing.resourceId}
                                      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
                                     {/* Updated image display */}

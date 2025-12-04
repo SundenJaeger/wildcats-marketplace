@@ -31,7 +31,7 @@ const PhotoCard = ({ image, name, price, category, seller, onClick }) => {
     );
 };
 
-const Products = ({onProductClick, filters}) => {
+const Products = ({onProductClick, filters, searchQuery}) => {
     const [productList, setProductList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -40,7 +40,13 @@ const Products = ({onProductClick, filters}) => {
         const fetchResources = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:8080/api/resources/available');
+
+                // Use search endpoint if searchQuery exists, otherwise use available endpoint
+                const url = searchQuery && searchQuery.trim()
+                    ? `http://localhost:8080/api/resources/search?keyword=${encodeURIComponent(searchQuery)}`
+                    : 'http://localhost:8080/api/resources/available';
+
+                const response = await fetch(url);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch resources');
@@ -125,7 +131,7 @@ const Products = ({onProductClick, filters}) => {
         };
 
         fetchResources();
-    }, []);
+    }, [searchQuery]); // Re-fetch when search query changes
 
     // Filter products based on applied filters
     const filteredProducts = React.useMemo(() => {
@@ -220,8 +226,12 @@ const Products = ({onProductClick, filters}) => {
     if (filteredProducts.length === 0) {
         return (
             <div className='flex flex-col justify-center items-center py-10'>
-                <div className='text-gray-600 font-semibold mb-2'>No products match your filters</div>
-                <div className='text-sm text-gray-500'>Try adjusting your filter criteria</div>
+                <div className='text-gray-600 font-semibold mb-2'>
+                    {searchQuery ? `No products found for "${searchQuery}"` : 'No products match your filters'}
+                </div>
+                <div className='text-sm text-gray-500'>
+                    {searchQuery ? 'Try a different search term' : 'Try adjusting your filter criteria'}
+                </div>
             </div>
         );
     }
