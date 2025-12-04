@@ -192,41 +192,41 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                         </div>
                     </div>
 
-                    {/* Subcategories Section */}
-                    {chosenCategory && (
-                        <div className='relative w-full h-auto'>
-                            <div className="items-center text-start gap-2 my-2 bg-white rounded-lg w-full h-full p-2 pl-3">
-                                {loadingSubcategories ? (
-                                    <div className='text-gray-500 font-semibold p-2'>
-                                        Loading subcategories...
-                                    </div>
-                                ) : subcategories.length > 0 ? (
-                                    <div>
-                                        <h3 className="text-black font-bold mb-2">Subcategories:</h3>
-                                        <div className="flex flex-col gap-1 ml-3">
-                                            {subcategories.map((subcategory) => (
-                                                <button
-                                                    key={subcategory.categoryId}
-                                                    onClick={() => toggleFilter(subcategory.categoryName)}
-                                                    className="flex items-center gap-2 text-black font-semibold"
-                                                >
-                          <span
-                              className={`border-2 border-gray-400 w-3 h-3 rounded-full
-                            ${chosenFilters.includes(subcategory.categoryName) ? "bg-gray-500" : "bg-[#FFF4CB]"}`}
-                          ></span>
-                                                    <label className='text-left'>{subcategory.categoryName}</label>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className='text-gray-500 font-semibold p-2'>
-                                        No subcategories available
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
+                    {/*/!* Subcategories Section *!/*/}
+                    {/*{chosenCategory && (*/}
+                    {/*    <div className='relative w-full h-auto'>*/}
+                    {/*        <div className="items-center text-start gap-2 my-2 bg-white rounded-lg w-full h-full p-2 pl-3">*/}
+                    {/*            {loadingSubcategories ? (*/}
+                    {/*                <div className='text-gray-500 font-semibold p-2'>*/}
+                    {/*                    Loading subcategories...*/}
+                    {/*                </div>*/}
+                    {/*            ) : subcategories.length > 0 ? (*/}
+                    {/*                <div>*/}
+                    {/*                    <h3 className="text-black font-bold mb-2">Subcategories:</h3>*/}
+                    {/*                    <div className="flex flex-col gap-1 ml-3">*/}
+                    {/*                        {subcategories.map((subcategory) => (*/}
+                    {/*                            <button*/}
+                    {/*                                key={subcategory.categoryId}*/}
+                    {/*                                onClick={() => toggleFilter(subcategory.categoryName)}*/}
+                    {/*                                className="flex items-center gap-2 text-black font-semibold"*/}
+                    {/*                            >*/}
+                    {/*      <span*/}
+                    {/*          className={`border-2 border-gray-400 w-3 h-3 rounded-full*/}
+                    {/*        ${chosenFilters.includes(subcategory.categoryName) ? "bg-gray-500" : "bg-[#FFF4CB]"}`}*/}
+                    {/*      ></span>*/}
+                    {/*                                <label className='text-left'>{subcategory.categoryName}</label>*/}
+                    {/*                            </button>*/}
+                    {/*                        ))}*/}
+                    {/*                    </div>*/}
+                    {/*                </div>*/}
+                    {/*            ) : (*/}
+                    {/*                <div className='text-gray-500 font-semibold p-2'>*/}
+                    {/*                    No subcategories available*/}
+                    {/*                </div>*/}
+                    {/*            )}*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                 </div>
 
