@@ -2,6 +2,7 @@ import React from 'react'
 import assets from '../assets/assets'
 import ReportModal from './ReportModal'
 import { bookmarkService } from '../services/bookmarkService'
+import { reportService } from '../services/reportService'
 
 const ProductPost = ({ product, onBack, onUpdateProduct }) => {
     const [localProduct, setLocalProduct] = React.useState(product)
@@ -123,9 +124,41 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         }
     }
 
-    const handleReportSubmit = (ReportData) => {
-        alert('Report submitted successfully')
-        setShowReportModal(false)
+    const handleReportSubmit = async (reportPayload) => {
+        try {
+            // 1. Retrieve the logged-in user's student ID
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (!userData || !userData.studentId) {
+                alert('Please log in to report a product');
+                return;
+            }
+
+            // 2. Prepare the full report object for the backend,
+            //    using the nested structure required by CreateReportRequest.java
+            const fullReportData = {
+                reason: reportPayload.reason,
+                description: reportPayload.description,
+                // The backend expects nested objects for student and resource
+                student: {
+                    studentId: userData.studentId // ID of the student making the report
+                },
+                resource: {
+                    resourceId: product.id        // ID of the product/resource being reported
+                }
+            };
+
+            // 3. Call the report service to create the report
+            const response = await reportService.createReport(fullReportData);
+
+            alert(`Report submitted successfully! Report ID: ${response.reportId}`);
+            setShowReportModal(false);
+
+        } catch (error) {
+            console.error('Report submission failed:', error);
+            // Handle error response from the backend
+            const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred.';
+            alert(`Failed to submit report: ${errorMessage}`);
+        }
     }
 
     const handleAddComment = () => {
