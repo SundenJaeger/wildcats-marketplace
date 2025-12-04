@@ -131,11 +131,12 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         </div>
       </div>
       
-      <div className="flex flex-col p-3 px-3 bg-[#FFF7D7] h-150">
-        <div className='flex justify-between h-[100%] b-2'>
+      <div className="flex flex-col p-3 px-3 bg-[#FFF7D7] min-h-150">
+        <div className='flex flex-col h-full'>
+          <div className='flex justify-between b-2 h-full'>
           {/* Product Images or Left Side */}
-          <div className='flex flex-col justify-center w-1/2 h-[90h] m-2 box-content'>
-            <div className='w-full h-full flex justify-between items-center bg-cover bg-center rounded-lg'
+          <div className='flex flex-col justify-center w-6/10 h-[90h] m-2 box-content'>
+            <div className='w-full h-130 flex justify-between items-center bg-cover bg-center rounded-lg'
               style={{backgroundImage: `url(${localProduct.imageList[productImageIndex]})`}}>
               <div className='flex justify-between w-full'>
                 <div className='flex justify-start items-center m-1'>
@@ -149,11 +150,11 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
           </div>
           
           {/*Product Details or Right Side*/}
-          <div className='flex flex-col py-3 h-auto w-1/2 p-3'>
+          <div className='flex flex-col py-3 h-auto w-4/10 p-3'>
             <div className='flex items-start justify-between'>
               {/* Name, Price, Date Listed */}
-              <div className='flex flex-col justify-start mb-2 gap-2'>
-                <h2 className="text-4xl text-black font-extrabold">{localProduct.name}</h2>
+              <div className='flex flex-col justify-start mb-2 gap-3'>
+                <h2 className="text-3xl text-black font-extrabold">{localProduct.name}</h2>
                 <h3 className="text-2xl text-black leading-2 font-semibold">{localProduct.price}</h3>
                 <h3 className='text-xs leading-7 text-[#5B5B5B] font-semibold'>Listed by Michael - 22-4444-123</h3>
               </div>
@@ -182,6 +183,10 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
               <p className='text-[#6c6c6c] text-sm font-semibold leading-6 text-justify'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat cupiditate aspernatur autem officia perspiciatis unde aliquid in doloribus, libero voluptate, vitae consequuntur, necessitatibus adipisci nesciunt facilis quos similique fuga aperiam.</p>
             </div>
             
+            
+          </div>
+
+        </div>
             {/* Thread */}
             <div className='flex flex-col justify-start items-start'>
               <div className='flex gap-1 mb-1 mt-3'>
@@ -276,7 +281,7 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                 </button>
               </div>
             </div>
-          </div>
+
         </div>
         
         {showReportModal && (
