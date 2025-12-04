@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import assets from '../assets/assets';
-import { bookmarkService } from '../services/bookmarkService';
-import { Camera } from 'lucide-react';
+import {bookmarkService} from '../services/bookmarkService';
+import {Camera} from 'lucide-react';
 
-const SavedProducts = ({ onProductClick }) => {
+const SavedProducts = ({onProductClick, filters}) => {
     const [savedProducts, setSavedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [rawSavedProducts, setRawSavedProducts] = useState([]);
 
     useEffect(() => {
         fetchSavedProducts();
@@ -24,6 +25,20 @@ const SavedProducts = ({ onProductClick }) => {
             }
 
             const bookmarks = await bookmarkService.getStudentBookmarks(userData.studentId);
+
+            const transformedBookmarks = bookmarks.map(bookmark => {
+                const priceValue = bookmark.price ?
+                    parseFloat(bookmark.price.replace(/[^0-9.-]+/g, "")) : 0;
+
+                return {
+                    ...bookmark,
+                    priceValue: priceValue,
+                    condition: bookmark.condition || 'GOOD',
+                    category: bookmark.category || 'Uncategorized'
+                };
+            });
+
+            setRawSavedProducts(transformedBookmarks);
             setSavedProducts(bookmarks);
             setError(null);
         } catch (err) {
@@ -33,6 +48,77 @@ const SavedProducts = ({ onProductClick }) => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (!filters || (!filters.category && !filters.condition && !filters.priceRange &&
+            (!filters.subFilters || filters.subFilters.length === 0))) {
+            // No filters applied, show all saved products
+            setSavedProducts(rawSavedProducts);
+            return;
+        }
+
+        const filtered = rawSavedProducts.filter(product => {
+            if (filters.priceRange) {
+                const price = product.priceValue || 0;
+                switch (filters.priceRange) {
+                    case '-100':
+                        if (price >= 100) return false;
+                        break;
+                    case '100-499':
+                        if (price < 100 || price >= 500) return false;
+                        break;
+                    case '500-999':
+                        if (price < 500 || price >= 1000) return false;
+                        break;
+                    case '999+':
+                        if (price < 1000) return false;
+                        break;
+                }
+            }
+
+            if (filters.condition) {
+                const conditionMap = {
+                    'bnew': 'NEW',
+                    'excellent': 'LIKE_NEW',
+                    'good': 'GOOD',
+                    'used': 'FAIR',
+                    'poor': 'POOR'
+                };
+
+                if (product.condition !== conditionMap[filters.condition]) {
+                    return false;
+                }
+            }
+
+            if (filters.categoryName) {
+                if (product.category !== filters.categoryName) {
+                    const matchesSubcategory = filters.subFilters &&
+                        filters.subFilters.some(subFilter =>
+                            product.category === subFilter
+                        );
+
+                    if (!matchesSubcategory) {
+                        return false;
+                    }
+                }
+            }
+
+            if (filters.subFilters && filters.subFilters.length > 0) {
+                const hasMatchingSubfilter = filters.subFilters.some(subfilter => {
+                    return product.category === subfilter ||
+                        (product.category && product.category.includes(subfilter));
+                });
+
+                if (!hasMatchingSubfilter) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        setSavedProducts(filtered);
+    }, [filters, rawSavedProducts]);
 
     if (loading) {
         return (
@@ -44,8 +130,9 @@ const SavedProducts = ({ onProductClick }) => {
 
     if (error) {
         return (
-            <div className="flex flex-col items-center justify-center h-96 bg-[#FFF7DA] rounded-lg border-2 border-[#A31800]">
-                <img className='w-20 h-20 mb-4' src={assets.warning_icon} alt="Error" />
+            <div
+                className="flex flex-col items-center justify-center h-96 bg-[#FFF7DA] rounded-lg border-2 border-[#A31800]">
+                <img className='w-20 h-20 mb-4' src={assets.warning_icon} alt="Error"/>
                 <h3 className="text-red-900 font-bold text-xl mb-2">Error</h3>
                 <p className="text-red-900 text-sm">{error}</p>
             </div>
@@ -53,12 +140,24 @@ const SavedProducts = ({ onProductClick }) => {
     }
 
     if (savedProducts.length === 0) {
+        const hasActiveFilters = filters && (
+            filters.category || filters.condition || filters.priceRange ||
+            (filters.subFilters && filters.subFilters.length > 0)
+        );
         return (
             <div className="flex flex-col items-center justify-center h-96 bg-[#FFF7DA] rounded-lg border-2 border-[#A31800]">
                 <img className='w-20 h-20 mb-4' src={assets.warning_icon} alt="No saved items" />
-                <h3 className="text-red-900 font-bold text-xl mb-2">No Saved Items</h3>
-                <p className="text-red-900 text-sm">You haven't saved any products yet.</p>
-                <p className="text-red-900 text-sm">Click the bookmark icon on products to save them here!</p>
+                <h3 className="text-red-900 font-bold text-xl mb-2">
+                    {hasActiveFilters ? 'No Matching Saved Items' : 'No Saved Items'}
+                </h3>
+                <p className="text-red-900 text-sm">
+                    {hasActiveFilters
+                        ? 'No saved products match your current filters.'
+                        : 'You haven\'t saved any products yet.'}
+                </p>
+                {hasActiveFilters && (
+                    <p className="text-red-900 text-sm mt-2">Try adjusting your filter criteria</p>
+                )}
             </div>
         );
     }
@@ -84,10 +183,12 @@ const SavedProducts = ({ onProductClick }) => {
                                 }}
                             />
                         ) : null}
-                        <div style={{ display: product.imageList && product.imageList.length > 0 ? 'none' : 'flex' }} className="w-full h-full items-center justify-center">
-                            <Camera className='w-12 h-12 text-gray-400' />
+                        <div style={{display: product.imageList && product.imageList.length > 0 ? 'none' : 'flex'}}
+                             className="w-full h-full items-center justify-center">
+                            <Camera className='w-12 h-12 text-gray-400'/>
                         </div>
-                        <div className="absolute top-2 right-2 bg-[#A31800] text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        <div
+                            className="absolute top-2 right-2 bg-[#A31800] text-white px-2 py-1 rounded-full text-xs font-semibold">
                             Saved
                         </div>
                     </div>

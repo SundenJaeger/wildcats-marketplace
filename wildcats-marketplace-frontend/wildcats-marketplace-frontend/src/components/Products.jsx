@@ -31,7 +31,7 @@ const PhotoCard = ({ image, name, price, category, seller, onClick }) => {
     );
 };
 
-const Products = ({onProductClick}) => {
+const Products = ({onProductClick, filters}) => {
     const [productList, setProductList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -68,27 +68,22 @@ const Products = ({onProductClick}) => {
 
                     const sellerName = `${firstName} ${lastName}`.trim();
 
-                    // Handle ALL images - THIS IS THE FIX
+                    // Handle ALL images
                     let imageUrls = [];
 
                     if (resource.images && resource.images.length > 0) {
-                        // Map ALL images, not just the first one
                         imageUrls = resource.images
-                            .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)) // Sort by display order
+                            .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
                             .map(img => {
-                                // Check if image has imageUrl property
                                 if (img.imageUrl) {
                                     return img.imageUrl;
                                 }
-                                // Check if image has imagePath property
                                 else if (img.imagePath) {
-                                    // Handle full URLs vs relative paths
                                     if (img.imagePath.startsWith('http')) {
                                         return img.imagePath;
                                     }
                                     return `http://localhost:8080/uploads/${img.imagePath}`;
                                 }
-                                // Check if it's just a string
                                 else if (typeof img === 'string') {
                                     return img.startsWith('http')
                                         ? img
@@ -96,25 +91,26 @@ const Products = ({onProductClick}) => {
                                 }
                                 return null;
                             })
-                            .filter(url => url !== null); // Remove any null values
+                            .filter(url => url !== null);
                     }
 
                     const transformed = {
                         id: resource.resourceId,
                         name: resource.title,
                         price: `₱${Number(resource.price).toFixed(2)}`,
+                        priceValue: Number(resource.price), // Keep numeric value for filtering
                         category: resource.category?.categoryName || 'Uncategorized',
                         seller: sellerName || 'Unknown Seller',
                         description: resource.description || 'No description available',
                         condition: resource.condition,
                         status: resource.status,
                         datePosted: resource.datePosted,
-                        imageList: imageUrls, // Now contains ALL images
-                        sellerId: resource.student?.studentId || resource.student?.user?.userId || 'N/A'
+                        imageList: imageUrls,
+                        sellerId: resource.student?.studentId || resource.student?.user?.userId || 'N/A',
+                        // Store original category info for filtering
+                        categoryInfo: resource.category
                     };
 
-                    console.log('Transformed product:', transformed);
-                    console.log('Number of images:', imageUrls.length);
                     return transformed;
                 });
 
@@ -130,6 +126,80 @@ const Products = ({onProductClick}) => {
 
         fetchResources();
     }, []);
+
+    // Filter products based on applied filters
+    const filteredProducts = React.useMemo(() => {
+        if (!filters || (!filters.category && !filters.condition && !filters.priceRange && filters.subFilters.length === 0)) {
+            return productList;
+        }
+
+        return productList.filter(product => {
+            // Price filter
+            if (filters.priceRange) {
+                const price = product.priceValue;
+                switch(filters.priceRange) {
+                    case '-100':
+                        if (price >= 100) return false;
+                        break;
+                    case '100-499':
+                        if (price < 100 || price >= 500) return false;
+                        break;
+                    case '500-999':
+                        if (price < 500 || price >= 1000) return false;
+                        break;
+                    case '999+':
+                        if (price < 1000) return false;
+                        break;
+                }
+            }
+
+            // Condition filter
+            if (filters.condition) {
+                const conditionMap = {
+                    'bnew': 'NEW',
+                    'excellent': 'LIKE_NEW',
+                    'good': 'GOOD',
+                    'used': 'FAIR',
+                    'poor': 'POOR'
+                };
+                if (product.condition !== conditionMap[filters.condition]) {
+                    return false;
+                }
+            }
+
+            // Category filter - now using category ID
+            if (filters.category) {
+                // Check if product's category ID matches the selected category
+                // or if the product's parent category matches
+                const productCategoryId = product.categoryInfo?.categoryId;
+                const productParentCategoryId = product.categoryInfo?.parentCategory?.categoryId;
+                const selectedCategoryId = parseInt(filters.category);
+
+                // Match if either the category itself matches OR its parent category matches
+                const categoryMatches = productCategoryId === selectedCategoryId ||
+                    productParentCategoryId === selectedCategoryId;
+
+                if (!categoryMatches) {
+                    return false;
+                }
+            }
+
+            // Subcategory filters
+            if (filters.subFilters && filters.subFilters.length > 0) {
+                // Check if the product's category name matches any of the selected subcategories
+                const hasMatchingSubfilter = filters.subFilters.some(subfilter => {
+                    return product.category === subfilter ||
+                        product.category.includes(subfilter);
+                });
+
+                if (!hasMatchingSubfilter) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+    }, [productList, filters]);
 
     if (loading) {
         return (
@@ -147,17 +217,18 @@ const Products = ({onProductClick}) => {
         );
     }
 
-    if (productList.length === 0) {
+    if (filteredProducts.length === 0) {
         return (
-            <div className='flex justify-center items-center py-10'>
-                <div className='text-gray-600 font-semibold'>No products available</div>
+            <div className='flex flex-col justify-center items-center py-10'>
+                <div className='text-gray-600 font-semibold mb-2'>No products match your filters</div>
+                <div className='text-sm text-gray-500'>Try adjusting your filter criteria</div>
             </div>
         );
     }
 
     return (
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2'>
-            {productList.map((product) => (
+            {filteredProducts.map((product) => (
                 <PhotoCard
                     key={product.id}
                     image={product.imageList[0]}
