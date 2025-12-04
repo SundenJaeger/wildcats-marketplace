@@ -47,21 +47,19 @@ const Products = ({onProductClick}) => {
                 }
 
                 const data = await response.json();
-                console.log('Raw backend data:', data); // Debug log
+                console.log('Raw backend data:', data);
 
                 // Transform backend data to match frontend structure
                 const transformedData = data.map(resource => {
-                    // Handle student name - check multiple possible structures
+                    // Handle student name
                     let firstName = 'Unknown';
                     let lastName = '';
 
                     if (resource.student) {
-                        // Try direct properties first
                         if (resource.student.firstName) {
                             firstName = resource.student.firstName;
                             lastName = resource.student.lastName || '';
                         }
-                        // Try nested user object
                         else if (resource.student.user) {
                             firstName = resource.student.user.firstName || 'Unknown';
                             lastName = resource.student.user.lastName || '';
@@ -70,44 +68,53 @@ const Products = ({onProductClick}) => {
 
                     const sellerName = `${firstName} ${lastName}`.trim();
 
-                    // Handle images - check multiple possible structures
-                    let imageUrl = null;
+                    // Handle ALL images - THIS IS THE FIX
+                    let imageUrls = [];
 
                     if (resource.images && resource.images.length > 0) {
-                        const firstImage = resource.images[0];
-
-                        // Check if image has imageUrl property
-                        if (firstImage.imageUrl) {
-                            imageUrl = firstImage.imageUrl;
-                        }
-                        // Check if image has imagePath property
-                        else if (firstImage.imagePath) {
-                            imageUrl = `http://localhost:8080/uploads/${firstImage.imagePath}`;
-                        }
-                        // Check if it's just a string
-                        else if (typeof firstImage === 'string') {
-                            imageUrl = firstImage.startsWith('http')
-                                ? firstImage
-                                : `http://localhost:8080/uploads/${firstImage}`;
-                        }
+                        // Map ALL images, not just the first one
+                        imageUrls = resource.images
+                            .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)) // Sort by display order
+                            .map(img => {
+                                // Check if image has imageUrl property
+                                if (img.imageUrl) {
+                                    return img.imageUrl;
+                                }
+                                // Check if image has imagePath property
+                                else if (img.imagePath) {
+                                    // Handle full URLs vs relative paths
+                                    if (img.imagePath.startsWith('http')) {
+                                        return img.imagePath;
+                                    }
+                                    return `http://localhost:8080/uploads/${img.imagePath}`;
+                                }
+                                // Check if it's just a string
+                                else if (typeof img === 'string') {
+                                    return img.startsWith('http')
+                                        ? img
+                                        : `http://localhost:8080/uploads/${img}`;
+                                }
+                                return null;
+                            })
+                            .filter(url => url !== null); // Remove any null values
                     }
 
                     const transformed = {
                         id: resource.resourceId,
                         name: resource.title,
-                        price: `${Number(resource.price).toFixed(2)}`,
+                        price: `₱${Number(resource.price).toFixed(2)}`,
                         category: resource.category?.categoryName || 'Uncategorized',
                         seller: sellerName || 'Unknown Seller',
                         description: resource.description || 'No description available',
                         condition: resource.condition,
                         status: resource.status,
                         datePosted: resource.datePosted,
-                        imageList: imageUrl ? [imageUrl] : [],
-                        // Add seller ID for display
+                        imageList: imageUrls, // Now contains ALL images
                         sellerId: resource.student?.studentId || resource.student?.user?.userId || 'N/A'
                     };
 
-                    console.log('Transformed product:', transformed); // Debug log
+                    console.log('Transformed product:', transformed);
+                    console.log('Number of images:', imageUrls.length);
                     return transformed;
                 });
 

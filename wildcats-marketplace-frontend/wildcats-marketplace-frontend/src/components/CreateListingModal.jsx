@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import assets from '../assets/assets'
 import {Upload, X} from 'lucide-react';
-import {listingService} from '../services/listingService'; // Add this import
+import {listingService} from '../services/listingService';
 
 const CreateListingModal = ({onClose, onSuccess}) => {
     const [chosenCategory, setChosenCategory] = useState('academics');
@@ -47,17 +47,33 @@ const CreateListingModal = ({onClose, onSuccess}) => {
         const remainingSlots = maxImages - images.length;
         const filesToAdd = files.slice(0, remainingSlots);
 
-        filesToAdd.forEach((file) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImages((prev) => {
-                    if (prev.length < maxImages) {
-                        return [...prev, {id: Date.now() + Math.random(), url: reader.result, file: file}];
-                    }
-                    return prev;
-                });
-            };
-            reader.readAsDataURL(file);
+        console.log('Files selected:', files.length);
+        console.log('Current images:', images.length);
+        console.log('Files to add:', filesToAdd.length);
+
+        // Process all files
+        const filePromises = filesToAdd.map((file) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve({
+                        id: Date.now() + Math.random(),
+                        url: reader.result,
+                        file: file
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Wait for all files to be read, then update state once
+        Promise.all(filePromises).then((newImages) => {
+            setImages((prev) => {
+                const combined = [...prev, ...newImages];
+                const limited = combined.slice(0, maxImages);
+                console.log('Updated images array:', limited.length);
+                return limited;
+            });
         });
 
         e.target.value = '';
@@ -131,13 +147,15 @@ const CreateListingModal = ({onClose, onSuccess}) => {
             };
 
             console.log('Creating listing with data:', listingData);
+            console.log('Number of images to upload:', images.length);
 
             const createdListing = await listingService.createListing(listingData);
             console.log('Listing created:', createdListing);
 
             if (createdListing && createdListing.resourceId) {
-                console.log('Uploading images...');
+                console.log('Uploading', images.length, 'images...');
                 await listingService.uploadImages(createdListing.resourceId, images);
+                console.log('All images uploaded successfully');
             }
 
             onClose();
@@ -283,16 +301,21 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                                 be primary)</p>
 
                             <div className="flex flex-wrap justify-around gap-4">
-                                {images.map((image) => (
+                                {images.map((image, idx) => (
                                     <div
                                         key={image.id}
                                         className="relative w-30 h-30 rounded-lg overflow-hidden shadow-md group"
                                     >
                                         <img
                                             src={image.url}
-                                            alt="Preview"
+                                            alt={`Preview ${idx + 1}`}
                                             className="w-full h-full object-cover"
                                         />
+                                        {idx === 0 && (
+                                            <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                                                Primary
+                                            </div>
+                                        )}
                                         <button
                                             onClick={() => !isSubmitting && removeImage(image.id)}
                                             disabled={isSubmitting}
