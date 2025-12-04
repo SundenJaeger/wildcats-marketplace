@@ -3,6 +3,7 @@ import assets from '../assets/assets'
 import ReportModal from './ReportModal'
 import { bookmarkService } from '../services/bookmarkService'
 import { reportService } from '../services/reportService'
+import { commentService } from '../services/commentService';
 
 const ProductPost = ({ product, onBack, onUpdateProduct }) => {
     const [localProduct, setLocalProduct] = React.useState(product)
@@ -29,6 +30,24 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         };
 
         checkBookmarkStatus();
+    }, [product.id]);
+
+    React.useEffect(() => {
+        const loadComments = async () => {
+            try {
+                if (product.id) {
+                    const comments = await commentService.getCommentsByResource(product.id);
+                    setLocalProduct(prev => ({
+                        ...prev,
+                        comments: comments
+                    }));
+                }
+            } catch (error) {
+                console.error('Error loading comments:', error);
+            }
+        };
+
+        loadComments();
     }, [product.id]);
 
     // Initialize comments if they don't exist in product
@@ -161,81 +180,91 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         }
     }
 
-    const handleAddComment = () => {
+    const handleAddComment = async () => {
         if (newComment.trim()) {
-            const newCommentObj = {
-                id: Date.now(),
-                user_id: "current_user_id",
-                name: "John Doe",
-                profile: assets.blank_profile_icon,
-                comment: newComment,
-                timestamp: new Date().toISOString(),
-                replies: []
-            }
-
-            const updatedProduct = {
-                ...localProduct,
-                comments: [...(localProduct.comments || []), newCommentObj]
-            }
-
-            setLocalProduct(updatedProduct)
-            setNewComment('')
-
-            if (onUpdateProduct) {
-                onUpdateProduct(updatedProduct)
-            }
-        }
-    }
-
-    const handleAddReply = (commentId) => {
-        if (replyText.trim()) {
-            const newReply = {
-                id: Date.now(),
-                user_id: "current_user_id",
-                name: "John Doe",
-                profile: assets.blank_profile_icon,
-                comment: replyText,
-                timestamp: new Date().toISOString()
-            }
-
-            const updatedComments = localProduct.comments.map(comment => {
-                if (comment.id === commentId) {
-                    return {
-                        ...comment,
-                        replies: [...comment.replies, newReply]
-                    }
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                if (!userData || !userData.studentId) {
+                    alert('Please log in to comment');
+                    return;
                 }
-                return comment
-            })
 
-            const updatedProduct = {
-                ...localProduct,
-                comments: updatedComments
-            }
+                await commentService.addComment(
+                    userData.studentId,
+                    product.id,
+                    newComment,
+                    null
+                );
 
-            setLocalProduct(updatedProduct)
-            setReplyText('')
-            setReplyingTo(null)
-
-            if (onUpdateProduct) {
-                onUpdateProduct(updatedProduct)
+                // Refresh comments
+                const updatedComments = await commentService.getCommentsByResource(product.id);
+                setLocalProduct({
+                    ...localProduct,
+                    comments: updatedComments
+                });
+                setNewComment('');
+            } catch (error) {
+                console.error('Error adding comment:', error);
+                alert('Failed to add comment');
             }
         }
-    }
+    };
+
+    const handleAddReply = async (commentId) => {
+        if (replyText.trim()) {
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                if (!userData || !userData.studentId) {
+                    alert('Please log in to reply');
+                    return;
+                }
+
+                await commentService.addComment(
+                    userData.studentId,
+                    product.id,
+                    replyText,
+                    commentId
+                );
+
+                // Refresh comments
+                const updatedComments = await commentService.getCommentsByResource(product.id);
+                setLocalProduct({
+                    ...localProduct,
+                    comments: updatedComments
+                });
+                setReplyText('');
+                setReplyingTo(null);
+            } catch (error) {
+                console.error('Error adding reply:', error);
+                alert('Failed to add reply');
+            }
+        }
+    };
 
     const formatTimestamp = (timestamp) => {
-        const date = new Date(timestamp)
-        const now = new Date()
-        const diffMs = now - date
-        const diffMins = Math.floor(diffMs / 60000)
-        const diffHours = Math.floor(diffMs / 3600000)
-        const diffDays = Math.floor(diffMs / 86400000)
+        if (!timestamp) return "Unknown time";
 
-        if (diffMins < 1) return "Just now"
-        if (diffMins < 60) return `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`
-        if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`
-        if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`
-        return date.toLocaleDateString()
+        // Handle both ISO string and array format from backend
+        let date;
+        if (Array.isArray(timestamp)) {
+            // Backend sends [year, month, day, hour, minute, second, nano]
+            date = new Date(timestamp[0], timestamp[1] - 1, timestamp[2],
+                timestamp[3] || 0, timestamp[4] || 0, timestamp[5] || 0);
+        } else {
+            date = new Date(timestamp);
+        }
+
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return "Just now";
+        if (diffMins < 60) return `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`;
+        if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+        if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+        return date.toLocaleDateString();
     }
 
     const totalComments = (localProduct.comments || []).reduce((total, comment) => {
@@ -350,17 +379,19 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                         {/* Comments Section */}
                         <div className='py-3 flex flex-col gap-3 overflow-y-auto max-h-64'>
                             {(localProduct.comments || []).map((comment) => (
-                                <div key={comment.id} className='flex flex-col gap-2'>
+                                <div key={comment.commentId} className='flex flex-col gap-2'>
                                     <div className='flex items-start gap-1.5'>
-                                        <img className='w-10 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200' src={comment.profile} alt={comment.name}/>
+                                        <img className='w-10 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200'
+                                             src={assets.blank_profile_icon}
+                                             alt={comment.studentUsername}/>
                                         <div className='flex flex-col w-full'>
                                             <div className='bg-[#fffcf2] rounded-xl p-2.5'>
-                                                <p className='text-gray-700 font-bold text-sm'>{comment.name}</p>
-                                                <p className='text-gray-500 font-semibold text-sm'>{comment.comment}</p>
+                                                <p className='text-gray-700 font-bold text-sm'>{comment.studentUsername}</p>
+                                                <p className='text-gray-500 font-semibold text-sm'>{comment.commentText}</p>
                                             </div>
                                             <div className='flex gap-3 px-2 mt-1'>
                                                 <button
-                                                    onClick={() => setReplyingTo(comment.id)}
+                                                    onClick={() => setReplyingTo(comment.commentId)}
                                                     className='text-xs text-gray-500 font-semibold hover:text-gray-700'>
                                                     Reply
                                                 </button>
@@ -372,12 +403,14 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                     {comment.replies && comment.replies.length > 0 && (
                                         <div className='ml-12 flex flex-col gap-2'>
                                             {comment.replies.map((reply) => (
-                                                <div key={reply.id} className='flex items-start gap-1.5'>
-                                                    <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border-1 border-gray-200' src={reply.profile} alt={reply.name}/>
+                                                <div key={reply.commentId} className='flex items-start gap-1.5'>
+                                                    <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border-1 border-gray-200'
+                                                         src={assets.blank_profile_icon}
+                                                         alt={reply.studentUsername}/>
                                                     <div className='flex flex-col w-full'>
                                                         <div className='bg-[#f5f5f5] rounded-xl p-2'>
-                                                            <p className='text-gray-700 font-bold text-xs'>{reply.name}</p>
-                                                            <p className='text-gray-500 font-semibold text-xs'>{reply.comment}</p>
+                                                            <p className='text-gray-700 font-bold text-xs'>{reply.studentUsername}</p>
+                                                            <p className='text-gray-500 font-semibold text-xs'>{reply.commentText}</p>
                                                         </div>
                                                         <p className='text-xs text-gray-400 font-semibold px-2 mt-1'>{formatTimestamp(reply.timestamp)}</p>
                                                     </div>
@@ -386,19 +419,21 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                         </div>
                                     )}
 
-                                    {replyingTo === comment.id && (
+                                    {replyingTo === comment.commentId && (
                                         <div className='ml-12 flex items-center gap-2'>
-                                            <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border-1 border-gray-200' src={assets.blank_profile_icon} alt="Your profile"/>
+                                            <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border-1 border-gray-200'
+                                                 src={assets.blank_profile_icon}
+                                                 alt="Your profile"/>
                                             <div className='flex items-center justify-between bg-[#f5f5f5] w-full h-10 rounded-xl border-2 border-gray-200 px-2'>
                                                 <input
                                                     type='text'
                                                     value={replyText}
                                                     onChange={(e) => setReplyText(e.target.value)}
-                                                    onKeyPress={(e) => e.key === 'Enter' && handleAddReply(comment.id)}
+                                                    onKeyPress={(e) => e.key === 'Enter' && handleAddReply(comment.commentId)}
                                                     className='w-full focus:outline-none bg-transparent text-black placeholder-gray-400 text-xs font-semibold'
-                                                    placeholder={`Reply to ${comment.name}...`}
+                                                    placeholder={`Reply to ${comment.studentUsername}...`}
                                                 />
-                                                <button onClick={() => handleAddReply(comment.id)} className='p-1'>
+                                                <button onClick={() => handleAddReply(comment.commentId)} className='p-1'>
                                                     <img className='w-3 h-3 opacity-50 hover:opacity-100' src={assets.enter_icon} alt="Send"/>
                                                 </button>
                                             </div>
@@ -411,7 +446,9 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                         {/* New Comment Input */}
                         <div className='flex justify-center items-center mt-4'>
                             <div className='p-1 rounded-md border-gray-400'>
-                                <img className='w-11 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200' src={assets.blank_profile_icon} alt="Your profile"/>
+                                <img className='w-11 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200'
+                                     src={assets.blank_profile_icon}
+                                     alt="Your profile"/>
                             </div>
                             <div className='flex px-2 items-center justify-between bg-[#fffcf2] w-full h-12 rounded-xl border-2 border-gray-200'>
                                 <input
@@ -420,7 +457,7 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                     onChange={(e) => setNewComment(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
                                     className='w-full focus:outline-none bg-transparent text-black placeholder-gray-400 text-xs font-semibold'
-                                    placeholder='Comment as John Doe'
+                                    placeholder={`Comment as ${JSON.parse(localStorage.getItem('userData') || '{}').username || 'User'}`}
                                 />
                                 <button onClick={handleAddComment} className='p-1 rounded-md border-gray-400'>
                                     <img className='w-3 h-3 opacity-50 hover:opacity-100' src={assets.enter_icon} alt="Send"/>
