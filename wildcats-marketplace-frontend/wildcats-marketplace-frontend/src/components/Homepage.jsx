@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react' // Added useEffect
 import assets from '../assets/assets'
 import Products from './Products'
 import SavedProducts from './SavedProducts'
@@ -18,13 +18,18 @@ import CategoriesManagement from './CategoriesManagement';
 
 const Homepage = () => {
     const location = useLocation();
-    const {isNewUser, username} = location.state || {};
+    // 1. Extract isAdmin from location state (passed from Login)
+    const {isNewUser, username, isAdmin: isAdminState} = location.state || {};
+
     const [isMarketplaceView, setIsMarketplaceView] = React.useState(true);
     const [selectedProduct, setSelectedProduct] = React.useState(null);
     const [showSettings, setShowSettings] = React.useState(false);
     const [showNotifications, setShowNotifications] = React.useState(false);
     const [showProfile, setShowProfile] = React.useState(false);
-    const [isAdmin, setIsAdmin] = React.useState(false)
+
+    // 2. Initialize isAdmin from state, defaulting to false
+    const [isAdmin, setIsAdmin] = React.useState(isAdminState || false);
+
     const [showProductFilter, setShowProductFilter] = React.useState(false);
     const [showProductPost, setShowProductPost] = useState(false)
     const [showVerificationModal, setShowVerificationModal] = React.useState(isNewUser);
@@ -41,8 +46,26 @@ const Homepage = () => {
     });
 
     const navigate = useNavigate();
+
+    // 3. Persist Admin Mode on Refresh
+    useEffect(() => {
+        // If we didn't get state from navigation (e.g. page refresh), check localStorage
+        if (!isAdminState) {
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            const role = userData.userType || userData.type || (userData.user && userData.user.type);
+
+            if (role === 'A') {
+                setIsAdmin(true);
+            }
+        }
+    }, [isAdminState]);
+
     const handleLogout = () => {
         setShowSettings(false);
+        // Clear admin state on logout
+        setIsAdmin(false);
+        localStorage.removeItem('userData');
+        localStorage.removeItem('authToken');
         navigate('/', {state: {hasLoggedOut: true}});
     };
 
@@ -50,11 +73,9 @@ const Homepage = () => {
         setShowSavedProducts(!showSavedProducts);
     };
 
-// Handle notification click - navigate to product
+    // Handle notification click - navigate to product
     const handleNotificationProductClick = (resource) => {
         // Transform notification resource to match your product structure
-
-        // Handle ALL images with proper URL formatting
         let imageUrls = [];
         if (resource.images && resource.images.length > 0) {
             imageUrls = resource.images
@@ -97,11 +118,9 @@ const Homepage = () => {
             categoryInfo: resource.category
         };
 
-        // First clear selected product, then switch view and set new product
         setSelectedProduct(null);
         setIsMarketplaceView(true);
 
-        // Use setTimeout to ensure state updates properly
         setTimeout(() => {
             setSelectedProduct(productData);
         }, 0);
@@ -134,32 +153,21 @@ const Homepage = () => {
         <div className="flex flex-col justify-top min-h-screen flex-1 max-w-[1000px] min-w-[300px] mx-2">
             <Navbar
                 isAdmin={isAdmin}
-                onAdminClick={() => {
-                    console.log("Admin clicked in Homepage!");
-                    setIsAdmin(true);
-                }}
-                onSettingsClick={() => {
-                    console.log("Settings clicked in Homepage!");
-                    setShowSettings(true);
-                }}
-                onNotificationsClick={() => {
-                    console.log("Notifications clicked in Homepage!");
-                    setShowNotifications(true);
-                }}
-                onProfileClick={() => {
-                    console.log("Profile clicked in Homepage!");
-                    setShowProfile(true);
-                    console.log("showProfile after setState called");
-                }}
+                onAdminClick={() => setIsAdmin(true)} // Dev helper (optional)
+                onSettingsClick={() => setShowSettings(true)}
+                onNotificationsClick={() => setShowNotifications(true)}
+                onProfileClick={() => setShowProfile(true)}
                 onSearch={handleSearch}
                 searchQuery={searchQuery}
                 onSearchQueryChange={setSearchQuery}
             />
+
+            {/* ADMIN DASHBOARD VIEW */}
             {isAdmin ? (
                 <>
                     <div className='p-2 w-full h-full flex flex-col gap-4'>
                         <div className='flex justify-between'>
-                            <div className='flex justify-evenly mb-2 mt-1'>
+                            <div className='flex justify-evenly mb-2 mt-1 w-full'>
                                 <button
                                     className={`w-1/3 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
                                 ${adminView === 'reports' ? 'border-red-950' : 'border-transparent'}`}
@@ -179,21 +187,26 @@ const Homepage = () => {
                                     Categories
                                 </button>
                             </div>
-                            <div className='flex justify-end h-fit my-2'>
-                                <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800 text-white'
-                                        onClick={() => setIsAdmin(false)}>Go Back
-                                </button>
-                            </div>
                         </div>
-                        {/* REPORTS VIEW */}
-                        {adminView === 'reports' && <ReportsDashboard/>}
-                        {/* VERIFICATION REQUESTS VIEW */}
-                        {adminView === 'verification' && <VerificationRequest/>}
-                        {/* CATEGORIES MANAGEMENT VIEW */}
-                        {adminView === 'categories' && <CategoriesManagement/>}
+
+                        {/* Dynamic Component Rendering */}
+                        <div className="bg-white rounded-lg shadow-sm min-h-[500px]">
+                            {adminView === 'reports' && <ReportsDashboard/>}
+                            {adminView === 'verification' && <VerificationRequest/>}
+                            {adminView === 'categories' && <CategoriesManagement/>}
+                        </div>
+
+                        {/* Exit Admin Mode Button */}
+                        <div className='flex justify-end h-fit my-2'>
+                            <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800 text-white hover:bg-red-900 transition'
+                                    onClick={handleLogout}>
+                                Logout
+                            </button>
+                        </div>
                     </div>
                 </>
             ) : (
+                /* STUDENT / PUBLIC VIEW */
                 <>
                     {!selectedProduct ? (
                         <>
@@ -251,40 +264,14 @@ const Homepage = () => {
                                             </div>
                                         </div>
 
-                                        {/* Active Filters Display */}
                                         {(appliedFilters.category || appliedFilters.condition || appliedFilters.priceRange || appliedFilters.subFilters.length > 0) && (
                                             <div className='flex flex-wrap gap-2 my-3 items-center'>
-                                                <span
-                                                    className='text-sm font-semibold text-gray-700'>Active Filters:</span>
+                                                <span className='text-sm font-semibold text-gray-700'>Active Filters:</span>
                                                 {appliedFilters.categoryName && (
-                                                    <span
-                                                        className='bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold'>
-                                                {appliedFilters.categoryName}
-                                            </span>
+                                                    <span className='bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold'>
+                                                        {appliedFilters.categoryName}
+                                                    </span>
                                                 )}
-                                                {appliedFilters.condition && (
-                                                    <span
-                                                        className='bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold'>
-                                                {appliedFilters.condition === 'bnew' ? 'Brand New' :
-                                                    appliedFilters.condition === 'excellent' ? 'Excellent' :
-                                                        appliedFilters.condition === 'good' ? 'Good' :
-                                                            appliedFilters.condition === 'used' ? 'Used' : 'Poor'}
-                                            </span>
-                                                )}
-                                                {appliedFilters.priceRange && (
-                                                    <span
-                                                        className='bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold'>
-                                                {appliedFilters.priceRange === '-100' ? '< ₱100' :
-                                                    appliedFilters.priceRange === '100-499' ? '₱100 - ₱499' :
-                                                        appliedFilters.priceRange === '500-999' ? '₱500 - ₱999' : '> ₱999'}
-                                            </span>
-                                                )}
-                                                {appliedFilters.subFilters.map((filter, index) => (
-                                                    <span key={index}
-                                                          className='bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold'>
-                                                {filter}
-                                            </span>
-                                                ))}
                                                 <button
                                                     onClick={clearFilters}
                                                     className='text-red-600 text-xs font-semibold underline hover:text-red-800'>
@@ -322,6 +309,8 @@ const Homepage = () => {
                     )}
                 </>
             )}
+
+            {/* Modals */}
             {showSettings && (
                 <SettingsModal
                     onClose={() => setShowSettings(false)}
@@ -358,4 +347,5 @@ const Homepage = () => {
         </div>
     )
 }
+
 export default Homepage

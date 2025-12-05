@@ -133,45 +133,45 @@ const LoginSignup = () => {
         return true;
     };
 
+// In LoginSignup.jsx
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isSubmitting) return;
 
-        console.log('🚀 Validating form before submission...');
-
         const isValid = validateForm();
         if (!isValid) return;
-
-        console.log('✅ Form is valid, proceeding with submission');
 
         setIsSubmitting(true);
 
         try {
             if (isSignupMode) {
+                // ... (Registration logic remains the same)
                 const response = await authService.register(formData);
-                console.log('Registration successful:', response);
-
                 if (response.token) {
                     localStorage.setItem('authToken', response.token);
                 }
-
                 alert('Registration successful! Your account is pending verification.');
             } else {
+                // LOGIN LOGIC
                 const response = await authService.login({
                     userName: formData.userName,
                     password: formData.password
                 });
 
-                console.log('Login successful:', response);
+                console.log('Login Response:', response);
 
                 localStorage.setItem('authToken', response.token);
                 localStorage.setItem('userData', JSON.stringify(response));
 
+                const role = response.userType;
+
                 navigate('/home', {
                     state: {
                         isNewUser: false,
-                        username: formData.userName
+                        username: formData.userName,
+                        isAdmin: role === 'A'
                     }
                 });
             }
