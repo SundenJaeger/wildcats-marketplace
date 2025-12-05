@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import assets from '../assets/assets'
 import Products from './Products'
 import SavedProducts from './SavedProducts'
@@ -26,6 +26,7 @@ const Homepage = () => {
     const [showProfile, setShowProfile] = React.useState(false);
     const [isAdmin, setIsAdmin] = React.useState(false)
     const [showProductFilter, setShowProductFilter] = React.useState(false);
+    const [showProductPost, setShowProductPost] = useState(false)
     const [showVerificationModal, setShowVerificationModal] = React.useState(isNewUser);
     const [adminView, setAdminView] = React.useState('reports');
     const [showSavedProducts, setShowSavedProducts] = React.useState(false);
@@ -49,10 +50,72 @@ const Homepage = () => {
         setShowSavedProducts(!showSavedProducts);
     };
 
+// Handle notification click - navigate to product
+    const handleNotificationProductClick = (resource) => {
+        // Transform notification resource to match your product structure
+
+        // Handle ALL images with proper URL formatting
+        let imageUrls = [];
+        if (resource.images && resource.images.length > 0) {
+            imageUrls = resource.images
+                .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+                .map(img => {
+                    if (img.imageUrl) {
+                        return img.imageUrl;
+                    }
+                    else if (img.imagePath) {
+                        if (img.imagePath.startsWith('http')) {
+                            return img.imagePath;
+                        }
+                        return `http://localhost:8080/uploads/${img.imagePath}`;
+                    }
+                    else if (typeof img === 'string') {
+                        return img.startsWith('http')
+                            ? img
+                            : `http://localhost:8080/uploads/${img}`;
+                    }
+                    return null;
+                })
+                .filter(url => url !== null);
+        }
+
+        const productData = {
+            id: resource.resourceId,
+            name: resource.title,
+            price: `₱${Number(resource.price).toFixed(2)}`,
+            priceValue: Number(resource.price),
+            category: resource.category?.categoryName || 'Uncategorized',
+            seller: resource.student?.user
+                ? `${resource.student.user.firstName || ''} ${resource.student.user.lastName || ''}`.trim()
+                : 'Unknown Seller',
+            description: resource.description || 'No description available',
+            condition: resource.condition,
+            status: resource.status,
+            datePosted: resource.datePosted,
+            imageList: imageUrls,
+            sellerId: resource.student?.studentId || 'N/A',
+            categoryInfo: resource.category
+        };
+
+        // First clear selected product, then switch view and set new product
+        setSelectedProduct(null);
+        setIsMarketplaceView(true);
+
+        // Use setTimeout to ensure state updates properly
+        setTimeout(() => {
+            setSelectedProduct(productData);
+        }, 0);
+    };
+
     const handleApplyFilters = (filters) => {
         setAppliedFilters(filters);
         setShowProductFilter(false);
     };
+
+    const handleCloseProductPost = () => {
+        setShowProductPost(false)
+        setSelectedProduct(null)
+    }
 
     const clearFilters = () => {
         setAppliedFilters({
@@ -265,7 +328,19 @@ const Homepage = () => {
                     onLogout={handleLogout}
                 />
             )}
-            {showNotifications && (<NotificationsModal onClose={() => setShowNotifications(false)}/>)}
+            {showNotifications && (
+                <NotificationsModal
+                    onClose={() => setShowNotifications(false)}
+                    onProductClick={handleNotificationProductClick}
+                />
+            )}
+            {showProductPost && selectedProduct && (
+                <ProductPost
+                    product={selectedProduct}
+                    onBack={handleCloseProductPost}
+                    onUpdateProduct={(updated) => setSelectedProduct(updated)}
+                />
+            )}
             {showProfile && (<ProfileModal onClose={() => setShowProfile(false)}/>)}
             {showProductFilter && (
                 <ProductFilterModal

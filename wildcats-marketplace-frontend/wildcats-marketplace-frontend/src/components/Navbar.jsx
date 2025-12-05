@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import assets from '../assets/assets';
 import {useLocation} from 'react-router-dom';
+import { notificationService } from '../services/notificationService';
 
 const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, onProfileClick, onSearch, searchQuery: externalSearchQuery, onSearchQueryChange}) => {
     const location = useLocation();
     const [username, setUsername] = useState('username');
     const [searchQuery, setSearchQuery] = useState('');
+    const [unreadCount, setUnreadCount] = useState(0);
 
     const isHomepage = location.pathname === '/home';
 
@@ -23,9 +25,37 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
                 try {
                     const parsedData = JSON.parse(userData);
                     setUsername(parsedData.username || 'Guest');
+
+                    // Fetch unread notification count
+                    fetchUnreadCount(parsedData.studentId);
                 } catch (error) {
                     console.error('Error parsing user data:', error);
                 }
+            }
+        }
+    }, [isHomepage]);
+
+    // Fetch unread notification count
+    const fetchUnreadCount = async (studentId) => {
+        try {
+            const count = await notificationService.getUnreadCount(studentId);
+            setUnreadCount(count);
+        } catch (error) {
+            console.error('Error fetching unread count:', error);
+        }
+    };
+
+    // Poll for new notifications every 30 seconds
+    useEffect(() => {
+        if (isHomepage) {
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                const parsedData = JSON.parse(userData);
+                const interval = setInterval(() => {
+                    fetchUnreadCount(parsedData.studentId);
+                }, 30000); // 30 seconds
+
+                return () => clearInterval(interval);
             }
         }
     }, [isHomepage]);
@@ -92,9 +122,14 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
                                     <img className='w-4 h-4 mx-1' src={assets.white_settings_icon} alt="Settings"/>
                                 </button>
 
-                                <button onClick={onNotificationsClick} className='p-0 bg-transparent border-0'>
+                                <button onClick={onNotificationsClick} className='p-0 bg-transparent border-0 relative'>
                                     <img className='w-4 h-4 mx-1' src={assets.white_notification_icon}
                                          alt="Notifications"/>
+                                    {unreadCount > 0 && (
+                                        <span className='absolute -top-1 -right-0.5 bg-yellow-400 text-red-800 text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center'>
+                                            {unreadCount > 9 ? '9+' : unreadCount}
+                                        </span>
+                                    )}
                                 </button>
 
                                 <button onClick={onProfileClick}
