@@ -203,12 +203,12 @@ const LoginSignup = () => {
                 {isSignupMode && (
                     <div className="w-full flex items-center justify-center mb-2.5">
                         <div className="relative w-[90%]">
-                            <div className='flex items-center relative'>
+                            <div className='relative flex items-center'>
                                 {/* Icon */}
                                 <img
                                     src={assets.user_icon}
                                     alt="user icon"
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                    className="absolute w-4 h-4 -translate-y-1/2 pointer-events-none left-3 top-1/2"
                                 />
 
                                 {/* Input */}
@@ -227,7 +227,7 @@ const LoginSignup = () => {
                             </div>
                             {/* Error message */}
                             {errors.fullName && touched.fullName && (
-                                <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
+                                <p className="mt-1 text-xs text-red-500">{errors.fullName}</p>
                             )}
                         </div>
                     </div>
@@ -236,12 +236,12 @@ const LoginSignup = () => {
                 {/* Username field - always visible */}
                 <div className="w-full flex items-center justify-center mb-2.5">
                     <div className="relative w-[90%]">
-                        <div className='flex items-center relative'>
+                        <div className='relative flex items-center'>
                             {/* Icon */}
                             <img
                                 src={assets.user_icon}
                                 alt="user icon"
-                                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                className="absolute w-4 h-4 -translate-y-1/2 pointer-events-none left-3 top-1/2"
                             />
 
                             {/* Input */}
@@ -259,7 +259,7 @@ const LoginSignup = () => {
                         </div>
                         {/* Error message */}
                         {errors.userName && touched.userName && (
-                            <p className="text-red-500 text-xs mt-1">{errors.userName}</p>
+                            <p className="mt-1 text-xs text-red-500">{errors.userName}</p>
                         )}
                     </div>
                 </div>
@@ -268,12 +268,12 @@ const LoginSignup = () => {
                 {isSignupMode && (
                     <div className="w-full flex items-center justify-center mb-2.5">
                         <div className="relative w-[90%]">
-                            <div className='flex items-center relative'>
+                            <div className='relative flex items-center'>
                                 {/* Icon */}
                                 <img
                                     src={assets.email_icon}
                                     alt="email icon"
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                    className="absolute w-4 h-4 -translate-y-1/2 pointer-events-none left-3 top-1/2"
                                 />
 
                                 {/* Input */}
@@ -291,7 +291,7 @@ const LoginSignup = () => {
                             </div>
                             {/* Error message */}
                             {errors.email && touched.email && (
-                                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                                <p className="mt-1 text-xs text-red-500">{errors.email}</p>
                             )}
                         </div>
                     </div>
@@ -300,12 +300,12 @@ const LoginSignup = () => {
                 {/* Password field - always visible */}
                 <div className="w-full flex items-center justify-center mb-2.5">
                     <div className="relative w-[90%]">
-                        <div className='flex items-center relative'>
+                        <div className='relative flex items-center'>
                             {/* Icon */}
                             <img
                                 src={assets.lock_icon}
                                 alt="lock icon"
-                                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                className="absolute w-4 h-4 -translate-y-1/2 pointer-events-none left-3 top-1/2"
                             />
 
                             <input
@@ -325,12 +325,12 @@ const LoginSignup = () => {
                                 src={showPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
                                 alt="toggle password visibility"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                                className="absolute w-4 h-4 -translate-y-1/2 cursor-pointer right-3 top-1/2"
                             />
                         </div>
                         {/* Error message */}
                         {errors.password && touched.password && (
-                            <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                            <p className="mt-1 text-xs text-red-500">{errors.password}</p>
                         )}
 
                     </div>
@@ -340,12 +340,12 @@ const LoginSignup = () => {
                 {isSignupMode && (
                     <div className="w-full flex items-center justify-center mb-2.5">
                         <div className={`relative w-[90%]`}>
-                            <div className='flex items-center relative'>
+                            <div className='relative flex items-center'>
                                 {/* Icon */}
                                 <img
                                     src={assets.lock_icon}
                                     alt="lock icon"
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+                                    className="absolute w-4 h-4 -translate-y-1/2 pointer-events-none left-3 top-1/2"
                                 />
 
                                 <input
@@ -355,7 +355,7 @@ const LoginSignup = () => {
                                     onKeyDown={handleKeyDown}
                                     placeholder="Confirm Password"
                                     className={`text-sm font-semibold font-mono w-full p-2.5 pl-10 rounded-md bg-white border border-gray-300 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A31800] focus:border-transparent
-                    ${errors.confirmPassword && touched.confirmPassword ? 'border-red-500 focus:ring-red-500'
+                    {errors.confirmPassword && touched.confirmPassword ? 'border-red-500 focus:ring-red-500'
                                         : 'focus:ring-blue-500'}
                   `}
                                 />
@@ -365,7 +365,7 @@ const LoginSignup = () => {
                                     src={showConfirmPassword ? assets.pw_visible_icon : assets.pw_hidden_icon}
                                     alt="toggle confirm password visibility"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer"
+                                    className="absolute w-4 h-4 -translate-y-1/2 cursor-pointer right-3 top-1/2"
                                 />
                             </div>
                             {/* Error message */}
@@ -385,7 +385,7 @@ const LoginSignup = () => {
                         className={`w-[40%] ml-1/2 mb-4 ${isSignupMode ? "!bg-[#A31800] hover:!bg-[#801300]" : "!bg-[#BFB58F]"} text-white p-2 rounded-md transition duration-300 font-medium flex items-center justify-center`}>
                         {isSubmitting && isSignupMode ? (
                             <>
-                                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                <svg className="w-5 h-5 mr-2 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
                                      fill="none" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                             strokeWidth="4"></circle>
@@ -402,7 +402,7 @@ const LoginSignup = () => {
                         className={`w-[40%] mr-1/2 mb-4 ${isSignupMode ? "!bg-[#BFB58F]" : "!bg-[#A31800] hover:!bg-[#801300]"} text-white p-2 rounded-md transition duration-300 font-medium flex items-center justify-center`}>
                         {isSubmitting && !isSignupMode ? (
                             <>
-                                <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                <svg className="w-5 h-5 mr-2 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
                                      fill="none" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                             strokeWidth="4"></circle>
