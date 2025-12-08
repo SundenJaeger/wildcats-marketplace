@@ -17,7 +17,7 @@ export default function VerificationRequestScreen() {
     const [rejectionReason, setRejectionReason] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const filters = ['All Requests', 'PENDING', 'APPROVED', 'REJECTED'];
+    const filters = ['All Requests', 'Pending', 'Approved', 'Rejected'];
 
     // 1. Fetch Data on Mount
     const fetchRequests = async () => {
@@ -99,33 +99,64 @@ export default function VerificationRequestScreen() {
     if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-800">Student Verification Requests</h1>
-                <p className="text-gray-500">Manage and review student account verifications</p>
+        <div className="p-6 ">
+            <div className='flex items-center gap-2 mb-8'>
+                <img src={assets.white_student_icon} className='p-2 bg-red-800 rounded-sm w-13 h-13·'></img>
+                <div className="">
+                    <h2 className="text-3xl font-bold text-gray-800">Student Verification Requests</h2>
+                    <p className="text-gray-500 text-md">Manage and review student account verifications</p>
+                </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <StatCard title="Total Requests" value={stats.total} icon={<FileText />} color="blue" />
-                <StatCard title="Pending" value={stats.pending} icon={<Clock />} color="yellow" />
-                <StatCard title="Approved" value={stats.approved} icon={<CheckCircle />} color="green" />
-                <StatCard title="Rejected" value={stats.rejected} icon={<X />} color="red" />
+
+             {/* Stats Cards */}
+            <div className="grid grid-cols-1 gap-2 mb-8 md:grid-cols-4">
+                <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800 text-white'>
+                    <div className='flex flex-col'>
+                        <h6>Total Requests</h6>
+                        <h4 className='text-3xl font-bold'>{stats.total}</h4>
+                    </div>
+                    <FileText className="w-11 h-11" />
+                </div>
+
+                <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-orange-600 to-amber-700 text-white'>
+                    <div className='flex flex-col'>
+                        <h6>Pending</h6>
+                        <h4 className='text-3xl font-bold'>{stats.pending}</h4>
+                    </div>
+                    <Clock className="w-9 h-9" />
+                </div>
+
+                <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-blue-700 to-indigo-800 text-white'>
+                    <div className='flex flex-col'>
+                        <h6>Approved</h6>
+                        <h4 className='text-3xl font-bold'>{stats.underReview}</h4>
+                    </div>
+                    <CheckCircle className="w-9 h-9" />
+                </div>
+
+                <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800 text-white'>
+                    <div className='flex flex-col'>
+                        <h6>Rejected</h6>
+                        <h4 className='text-3xl font-bold'>{stats.resolved}</h4>
+                    </div>
+                    <X className="w-9 h-9" />
+                </div>
             </div>
 
             {/* Main Content Area */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="bg-[#fffbee] rounded-md shadow-md border-2 border-[#530c00]/70  overflow-hidden">
                 {/* Toolbar */}
-                <div className="p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-4 justify-between items-center bg-gray-50">
-                    <div className="flex gap-2 p-1 bg-gray-200 rounded-lg">
+                <div className="flex flex-col items-center justify-between gap-4 p-4 border-b-2 border-[#A31800] bg-[#A31800] sm:flex-row">
+                    <div className="flex gap-2 p-1 bg-red-900 border-2 border-red-900 rounded-lg">
                         {filters.map(filter => (
                             <button
                                 key={filter}
                                 onClick={() => setSelectedFilter(filter)}
                                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                                     selectedFilter === filter
-                                        ? 'bg-white text-gray-800 shadow-sm'
-                                        : 'text-gray-600 hover:text-gray-900'
+                                        ? 'bg-[#b90600] text-white shadow-sm font-bold'
+                                        : 'text-gray-200 hover:text-white'
                                 }`}
                             >
                                 {filter}
@@ -137,7 +168,7 @@ export default function VerificationRequestScreen() {
                 {/* Table List */}
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead className="bg-gray-50 text-gray-500 text-xs uppercase font-semibold">
+                        <thead className="text-xs font-semibold uppercase bg-red-900 text-white-500">
                         <tr>
                             <th className="px-6 py-4">Request ID</th>
                             <th className="px-6 py-4">Student Name</th>
@@ -146,9 +177,9 @@ export default function VerificationRequestScreen() {
                             <th className="px-6 py-4 text-right">Action</th>
                         </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody className="divide-y divide-white">
                         {filteredRequests.map((req) => (
-                            <tr key={req.verificationId} className="hover:bg-gray-50 transition-colors">
+                            <tr key={req.verificationId} className="transition-colors hover:bg-amber-50">
                                 <td className="px-6 py-4 font-medium text-gray-900">#{req.verificationId}</td>
                                 <td className="px-6 py-4">
                                     <div className="flex flex-col">
@@ -173,7 +204,7 @@ export default function VerificationRequestScreen() {
                                             setAdminNotes(req.adminNotes || '');
                                             setRejectionReason(req.rejectionReason || '');
                                         }}
-                                        className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                                        className="text-sm font-medium text-red-800 hover:text-red-900"
                                     >
                                         View Details
                                     </button>
@@ -194,90 +225,104 @@ export default function VerificationRequestScreen() {
 
             {/* Detail Modal */}
             {selectedRequest && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-                    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+                <div className='fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm'>
+                    <div className="flex flex-col p-3 px-4 bg-[#FFF7D7] h-auto w-[650px] rounded-lg max-h-[90vh]">
                         {/* Modal Header */}
-                        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                            <div>
-                                <h2 className="text-xl font-bold text-gray-800">Request Details</h2>
-                                <p className="text-sm text-gray-500">ID: #{selectedRequest.verificationId}</p>
+                        <div className='flex items-center justify-between pl-3 mb-2'>
+                            <div className='flex flex-col mt-3'>
+                                <h2 className='text-xl font-bold text-black'>Request Details</h2>
+                                <p className="text-sm text-gray-600">ID: #{selectedRequest.verificationId}</p>
                             </div>
-                            <button
-                                onClick={() => setSelectedRequest(null)}
-                                className="p-2 hover:bg-gray-200 rounded-full transition-colors"
-                            >
-                                <X className="w-5 h-5 text-gray-500" />
-                            </button>
+                            <div onClick={() => setSelectedRequest(null)}
+                                 className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full cursor-pointer hover:bg-[#8B0000] transition-colors'>
+                                <X className="w-2.5 h-2.5 text-white" />
+                            </div>
                         </div>
 
                         {/* Modal Body */}
-                        <div className="p-6 overflow-y-auto">
-                            <div className="grid grid-cols-2 gap-6 mb-6">
-                                <div>
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Student Name</label>
-                                    <p className="text-gray-800 font-medium">{selectedRequest.student?.user?.firstName} {selectedRequest.student?.user?.lastName}</p>
-                                </div>
-                                <div>
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Email</label>
-                                    <p className="text-gray-800">{selectedRequest.student?.user?.email}</p>
-                                </div>
-                                <div>
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Enrollment Status</label>
-                                    <p className="text-gray-800">{selectedRequest.student?.enrollmentStatus || 'N/A'}</p>
-                                </div>
-                                <div>
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Current Status</label>
-                                    <span className={`inline-block px-2 py-1 mt-1 rounded text-xs font-bold ${getStatusColor(selectedRequest.status)}`}>
-                                        {selectedRequest.status}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Action Section - Only show if PENDING or for reviewing notes */}
-                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Admin Notes</label>
-                                    <textarea
-                                        value={adminNotes}
-                                        onChange={(e) => setAdminNotes(e.target.value)}
-                                        className="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                                        placeholder="Internal notes about this request..."
-                                        rows="3"
-                                        disabled={selectedRequest.status !== 'PENDING'}
-                                    />
+                        <div className='box-border flex justify-between h-full min-w-full p-2 overflow-y-auto'>
+                            <div className='flex flex-col w-full gap-4 p-4 bg-white rounded-2xl'>
+                                {/* Student Info Grid */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className='block mb-1 text-xs font-bold text-gray-500 uppercase'>Student Name</label>
+                                        <p className="font-medium text-gray-900">
+                                            {selectedRequest.student?.user?.firstName} {selectedRequest.student?.user?.lastName}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label className='block mb-1 text-xs font-bold text-gray-500 uppercase'>Email</label>
+                                        <p className="text-gray-900">{selectedRequest.student?.user?.email}</p>
+                                    </div>
+                                    <div>
+                                        <label className='block mb-1 text-xs font-bold text-gray-500 uppercase'>Enrollment Status</label>
+                                        <p className="text-gray-900">{selectedRequest.student?.enrollmentStatus || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <label className='block mb-1 text-xs font-bold text-gray-500 uppercase'>Current Status</label>
+                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(selectedRequest.status)}`}>
+                                            {selectedRequest.status}
+                                        </span>
+                                    </div>
                                 </div>
 
+                                {/* Divider */}
+                                <div className="border-t border-gray-200"></div>
+
+                                {/* Admin Notes */}
+                                <div>
+                                    <label className='block mb-1 font-bold text-black'>
+                                        Admin Notes
+                                    </label>
+                                    <div className='bg-gray-100 rounded-md'>
+                                        <textarea
+                                            value={adminNotes}
+                                            onChange={(e) => setAdminNotes(e.target.value)}
+                                            rows={3}
+                                            className='w-full p-2 text-black bg-gray-100 rounded-md resize-none focus:outline-none'
+                                            placeholder='Internal notes about this request...'
+                                            disabled={selectedRequest.status !== 'PENDING'}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Rejection Reason Input (only for pending) */}
                                 {selectedRequest.status === 'PENDING' && (
                                     <div>
-                                        <label className="block text-sm font-semibold text-red-700 mb-1">Rejection Reason (Required if rejecting)</label>
-                                        <input
-                                            type="text"
-                                            value={rejectionReason}
-                                            onChange={(e) => setRejectionReason(e.target.value)}
-                                            className="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-red-500 outline-none"
-                                            placeholder="Reason for rejection..."
-                                        />
+                                        <label className='block mb-1 font-bold text-red-700'>
+                                            Rejection Reason (Required if rejecting)
+                                        </label>
+                                        <div className='bg-gray-100 rounded-md'>
+                                            <input
+                                                type="text"
+                                                value={rejectionReason}
+                                                onChange={(e) => setRejectionReason(e.target.value)}
+                                                className="w-full p-2 text-black bg-gray-100 rounded-md focus:outline-none"
+                                                placeholder="Reason for rejection..."
+                                            />
+                                        </div>
                                     </div>
                                 )}
 
-                                {/* Read-only display for handled requests */}
+                                {/* Rejection Reason Display (for rejected requests) */}
                                 {selectedRequest.status === 'REJECTED' && selectedRequest.rejectionReason && (
                                     <div>
-                                        <label className="text-xs font-bold text-red-700 uppercase">Rejection Reason Provided</label>
-                                        <p className="text-sm text-red-800 bg-red-50 p-2 rounded mt-1 border border-red-100">
-                                            {selectedRequest.rejectionReason}
-                                        </p>
+                                        <label className='block mb-1 text-xs font-bold text-red-700 uppercase'>
+                                            Rejection Reason Provided
+                                        </label>
+                                        <div className='p-3 border border-red-200 rounded-md bg-red-50'>
+                                            <p className="text-sm text-red-800">{selectedRequest.rejectionReason}</p>
+                                        </div>
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         {/* Modal Footer */}
-                        <div className="p-6 border-t border-gray-100 flex justify-end gap-3 bg-gray-50">
+                        <div className='flex items-center justify-end gap-2 p-2'>
                             <button
                                 onClick={() => setSelectedRequest(null)}
-                                className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg transition-colors"
-                            >
+                                className='p-2 px-5 text-xs font-extrabold transition-all bg-gray-400 rounded-lg hover:scale-101 hover:bg-gray-500'>
                                 Close
                             </button>
 
@@ -286,15 +331,13 @@ export default function VerificationRequestScreen() {
                                     <button
                                         onClick={() => handleUpdateStatus('REJECTED')}
                                         disabled={isProcessing}
-                                        className="px-4 py-2 bg-white text-red-600 border border-red-200 font-medium hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-                                    >
+                                        className='p-2 px-5 text-xs font-extrabold text-white transition-all bg-red-600 rounded-lg hover:scale-101 hover:bg-red-700 disabled:opacity-50'>
                                         {isProcessing ? 'Processing...' : 'Reject'}
                                     </button>
                                     <button
                                         onClick={() => handleUpdateStatus('APPROVED')}
                                         disabled={isProcessing}
-                                        className="px-6 py-2 bg-green-600 text-white font-medium hover:bg-green-700 rounded-lg shadow-sm transition-colors disabled:opacity-50"
-                                    >
+                                        className='p-2 px-5 text-xs font-extrabold text-white transition-all bg-green-600 rounded-lg hover:scale-101 hover:bg-green-700 disabled:opacity-50'>
                                         {isProcessing ? 'Processing...' : 'Approve Request'}
                                     </button>
                                 </>
@@ -320,7 +363,7 @@ const StatCard = ({ title, value, icon, color }) => {
         <div className={`p-4 rounded-xl border ${colors[color]} flex items-center justify-between`}>
             <div>
                 <p className="text-sm font-medium opacity-80">{title}</p>
-                <p className="text-2xl font-bold mt-1">{value}</p>
+                <p className="mt-1 text-2xl font-bold">{value}</p>
             </div>
             <div className={`p-2 rounded-lg bg-white/50`}>
                 {icon}

@@ -38,6 +38,10 @@ import listing_icon from './listing_icon.png'
 import sad_icon from './sad_icon.png'
 import white_filter_icon from './white_filter_icon.png'
 import white_save_icon from "./white_save_icon.png"
+import white_student_icon from "./white_student_icon.png"
+import white_category_icon from "./white_category_icon.png"
+import white_report_icon from './white_report_icon.png'
+
 const assets = {
   wildcats_logo,
   wildcats_marketplace_bg_image,
@@ -78,7 +82,10 @@ const assets = {
   listing_icon,
   sad_icon,
   white_filter_icon,
-  white_save_icon
+  white_save_icon,
+  white_student_icon,
+  white_category_icon,
+  white_report_icon
 };
 
 export default assets;

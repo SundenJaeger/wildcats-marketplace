@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, AlertCircle, Clock, X, Trash2, Eye, UserCheck } from 'lucide-react';
+import assets from '../assets/assets';
 
 const API_URL = 'http://localhost:8080/api/reports';
 
@@ -20,8 +21,8 @@ const ReportsDashboard = () => {
         'DISMISSED': 'Dismissed'
     };
 
-    const baseClasses = 'p-2 text-xs font-semibold border-2 rounded-md transition duration-200';
-    const inactiveClasses = 'border-[#ffce1f] bg-[#fff3c7] text-amber-950 hover:bg-[#ffe380]';
+    const baseClasses = 'p-2 text-sm font-semibold border-2 rounded-md transition duration-200';
+    const inactiveClasses = 'border-[#ffce1f] bg-[#fff3c7] text-black hover:bg-[#ffe380]';
     const activeClasses = 'border-[#A31800] bg-[#A31800] text-white shadow-md';
 
     // Fetch all reports
@@ -204,9 +205,17 @@ const ReportsDashboard = () => {
     };
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="p-6">
+
+            <div className='flex items-center gap-2 mb-8'>
+                <img src={assets.white_report_icon} className='p-2 bg-red-800 rounded-sm w-13 h-13·'></img>
+                <div className="">
+                    <h2 className="text-3xl font-bold text-gray-800">Reports Dashboard</h2>
+                    <p className="text-gray-500 text-md">Manage and review reports</p>
+                </div>
+            </div>
             {/* Statistics Cards */}
-            <div className='flex justify-between gap-4'>
+            <div className='flex justify-between gap-2 mb-8'>
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800 text-white'>
                     <div className='flex flex-col'>
                         <h6>Total Reports</h6>
@@ -240,107 +249,100 @@ const ReportsDashboard = () => {
                 </div>
             </div>
 
-            {/* Filter Section */}
-            <div className='p-4 px-6 bg-[#FFF7DA] rounded-md shadow-md border-2 border-[#A31800]'>
-                <div className='flex items-center py-3 gap-2'>
-                    <AlertCircle className='w-4 h-4 text-red-900' />
-                    <h4 className='text-red-900 font-bold'>Filter Reports</h4>
-                </div>
-                <div className='flex gap-2 mb-3 flex-wrap'>
-                    {filters.map((filter) => (
-                        <button
-                            key={filter}
-                            onClick={() => setSelectedFilter(filter)}
-                            className={`${baseClasses} ${
-                                selectedFilter === filter ? activeClasses : inactiveClasses
-                            }`}
-                        >
-                            {filterLabels[filter]}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Reports List */}
-            <div>
-                <div className='flex justify-between items-center py-3'>
-                    <h2 className='text-red-900 text-xl font-bold'>{filterLabels[selectedFilter]}</h2>
-                    <h6 className='text-red-900 text-xs font-bold'>{reports.length} reports</h6>
+            {/* Main Content Area */}
+            <div className='bg-[#fffbee] rounded-md shadow-md border-2 border-[#530c00]/70  overflow-hidden'>
+                {/* Toolbar with Filter */}
+                <div className='flex flex-col items-center justify-between gap-4 p-4 border-b-2 border-[#A31800] bg-[#A31800] sm:flex-row'>
+                    <div className='flex gap-2 p-1 bg-red-900 border-2 border-red-900 rounded-lg'>
+                        {filters.map((filter) => (
+                            <button
+                                key={filter}
+                                onClick={() => setSelectedFilter(filter)}
+                                className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                                    selectedFilter === filter
+                                        ? 'bg-[#b90600] text-white shadow-sm font-bold'
+                                        : 'text-gray-200 hover:text-white'
+                                }`}
+                            >
+                                {filterLabels[filter]}
+                            </button>
+                        ))}
+                    </div>
+                    <h6 className='text-xs font-bold text-white'>{reports.length} Reports</h6>
                 </div>
 
+
+
+                {/* Table or Empty State */}
                 {loading ? (
-                    <div className='w-full h-64 bg-[#FFF7DA] flex items-center justify-center rounded-md shadow-md border-2 border-[#A31800]'>
-                        <p className='text-red-900 font-semibold'>Loading reports...</p>
+                    <div className='flex items-center justify-center h-64 px-6'>
+                        <p className='font-semibold text-red-900'>Loading reports...</p>
                     </div>
                 ) : reports.length === 0 ? (
-                    <div className='w-full h-64 bg-[#FFF7DA] flex rounded-md shadow-md border-2 border-[#A31800]'>
-                        <div className='w-full h-full flex flex-col justify-center items-center'>
-                            <AlertCircle className='w-16 h-16 text-red-900 mb-3' />
-                            <h3 className='text-red-900 font-bold'>No reports found</h3>
-                            <p className='text-red-900'>There are no reports in this category yet.</p>
-                        </div>
+                    <div className='flex flex-col items-center justify-center h-64 px-6'>
+                        <AlertCircle className='w-16 h-16 mb-3 text-red-900' />
+                        <h3 className='font-bold text-red-900'>No reports found</h3>
+                        <p className='text-red-900'>There are no reports in this category yet.</p>
                     </div>
                 ) : (
-                    <div className='bg-[#FFF7DA] rounded-md shadow-md border-2 border-[#A31800] overflow-hidden'>
-                        <div className='overflow-x-auto'>
-                            <table className='w-full'>
-                                <thead className='bg-[#A31800] text-white'>
-                                <tr>
-                                    <th className='p-3 text-left text-sm font-semibold'>ID</th>
-                                    <th className='p-3 text-left text-sm font-semibold'>Reason</th>
-                                    <th className='p-3 text-left text-sm font-semibold'>Resource</th>
-                                    <th className='p-3 text-left text-sm font-semibold'>Reporter</th>
-                                    <th className='p-3 text-left text-sm font-semibold'>Status</th>
-                                    <th className='p-3 text-left text-sm font-semibold'>Date</th>
-                                    <th className='p-3 text-left text-sm font-semibold'>Actions</th>
+                    <div className='overflow-x-auto'>
+                        <table className='w-full'>
+                            <thead className='bg-[#A31800] text-white'>
+                            <tr>
+                                <th className='p-3 text-sm font-semibold text-left'>ID</th>
+                                <th className='p-3 text-sm font-semibold text-left'>Reason</th>
+                                <th className='p-3 text-sm font-semibold text-left'>Resource</th>
+                                <th className='p-3 text-sm font-semibold text-left'>Reporter</th>
+                                <th className='p-3 text-sm font-semibold text-left'>Status</th>
+                                <th className='p-3 text-sm font-semibold text-left'>Date</th>
+                                <th className='p-3 text-sm font-semibold text-left'>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {reports.map((report, index) => (
+                                <tr key={report.reportId} className={index % 2 === 0 ? 'bg-white' : 'bg-[#FFF9E5]'}>
+                                    <td className='p-3 text-sm text-red-900'>#{report.reportId}</td>
+                                    <td className='p-3 text-sm font-semibold text-red-900'>{report.reason}</td>
+                                    <td className='p-3 text-sm text-red-900'>
+                                        {report.resource?.title || `ID: ${report.resourceId || 'N/A'}`}
+                                    </td>
+                                    <td className='p-3 text-sm text-red-900'>{getReporterName(report)}</td>
+                                    <td className='p-3'>
+                                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold border ${getStatusBadgeColor(report.status)}`}>
+                                            {getStatusIcon(report.status)}
+                                            {report.status.replace('_', ' ')}
+                                        </span>
+                                    </td>
+                                    <td className='p-3 text-sm text-red-900'>
+                                        {formatDate(report.dateReported)}
+                                    </td>
+                                    <td className='p-3'>
+                                        <button
+                                            onClick={() => {
+                                                setSelectedReport(report);
+                                                setShowModal(true);
+                                            }}
+                                            className='flex items-center gap-1 px-3 py-1 text-xs font-semibold text-white transition bg-blue-600 rounded hover:bg-blue-700'
+                                        >
+                                            <Eye className='w-3 h-3' />
+                                            View
+                                        </button>
+                                    </td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                {reports.map((report, index) => (
-                                    <tr key={report.reportId} className={index % 2 === 0 ? 'bg-white' : 'bg-[#FFF9E5]'}>
-                                        <td className='p-3 text-sm text-red-900'>#{report.reportId}</td>
-                                        <td className='p-3 text-sm text-red-900 font-semibold'>{report.reason}</td>
-                                        <td className='p-3 text-sm text-red-900'>
-                                            {report.resource?.title || `ID: ${report.resourceId || 'N/A'}`}
-                                        </td>
-                                        <td className='p-3 text-sm text-red-900'>{getReporterName(report)}</td>
-                                        <td className='p-3'>
-                                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold border ${getStatusBadgeColor(report.status)}`}>
-                                                {getStatusIcon(report.status)}
-                                                {report.status.replace('_', ' ')}
-                                            </span>
-                                        </td>
-                                        <td className='p-3 text-sm text-red-900'>
-                                            {formatDate(report.dateReported)}
-                                        </td>
-                                        <td className='p-3'>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedReport(report);
-                                                    setShowModal(true);
-                                                }}
-                                                className='bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold transition flex items-center gap-1'
-                                            >
-                                                <Eye className='w-3 h-3' />
-                                                View
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
+                            ))}
+                            </tbody>
+                        </table>
                     </div>
                 )}
             </div>
 
             {/* Modal for Report Details */}
             {showModal && selectedReport && (
-                <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
+                <div className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50'>
                     <div className='bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
                         <div className='bg-[#A31800] text-white p-4 flex justify-between items-center sticky top-0'>
                             <h3 className='text-xl font-bold'>Report Details #{selectedReport.reportId}</h3>
-                            <button onClick={() => setShowModal(false)} className='hover:bg-red-800 p-1 rounded'>
+                            <button onClick={() => setShowModal(false)} className='p-1 rounded hover:bg-red-800'>
                                 <X className='w-6 h-6' />
                             </button>
                         </div>
@@ -369,12 +371,12 @@ const ReportsDashboard = () => {
 
                             <div>
                                 <label className='text-sm font-semibold text-gray-700'>Description</label>
-                                <p className='mt-1 text-sm bg-gray-50 p-3 rounded border'>{selectedReport.description || 'No description provided'}</p>
+                                <p className='p-3 mt-1 text-sm border rounded bg-gray-50'>{selectedReport.description || 'No description provided'}</p>
                             </div>
 
                             <div>
                                 <label className='text-sm font-semibold text-gray-700'>Reporter Information</label>
-                                <div className='mt-1 bg-gray-50 p-3 rounded border'>
+                                <div className='p-3 mt-1 border rounded bg-gray-50'>
                                     {selectedReport.student ? (
                                         <>
                                             <p className='text-sm'><strong>Name:</strong> {selectedReport.student.firstName} {selectedReport.student.lastName}</p>
@@ -389,7 +391,7 @@ const ReportsDashboard = () => {
 
                             <div>
                                 <label className='text-sm font-semibold text-gray-700'>Reported Resource</label>
-                                <div className='mt-1 bg-gray-50 p-3 rounded border'>
+                                <div className='p-3 mt-1 border rounded bg-gray-50'>
                                     {selectedReport.resource ? (
                                         <>
                                             <p className='text-sm'><strong>Resource ID:</strong> {selectedReport.resource.resourceId}</p>
@@ -408,13 +410,13 @@ const ReportsDashboard = () => {
                                 </div>
                             )}
 
-                            <div className='border-t pt-4 mt-4'>
-                                <label className='text-sm font-semibold text-gray-700 block mb-3'>Admin Actions</label>
+                            <div className='pt-4 mt-4 border-t'>
+                                <label className='block mb-3 text-sm font-semibold text-gray-700'>Admin Actions</label>
                                 <div className='grid grid-cols-2 gap-3'>
                                     <button
                                         onClick={() => updateReportStatus(selectedReport.reportId, 'UNDER_REVIEW')}
                                         disabled={deleteLoading}
-                                        className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
                                     >
                                         <UserCheck className='w-4 h-4' />
                                         Mark Under Review
@@ -422,7 +424,7 @@ const ReportsDashboard = () => {
                                     <button
                                         onClick={() => updateReportStatus(selectedReport.reportId, 'RESOLVED')}
                                         disabled={deleteLoading}
-                                        className='bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-green-600 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed'
                                     >
                                         <CheckCircle className='w-4 h-4' />
                                         Mark Resolved
@@ -430,7 +432,7 @@ const ReportsDashboard = () => {
                                     <button
                                         onClick={() => updateReportStatus(selectedReport.reportId, 'DISMISSED')}
                                         disabled={deleteLoading}
-                                        className='bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-gray-600 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed'
                                     >
                                         <X className='w-4 h-4' />
                                         Dismiss Report
@@ -438,12 +440,12 @@ const ReportsDashboard = () => {
                                     <button
                                         onClick={() => deleteResource(selectedReport.resourceId)}
                                         disabled={!selectedReport.resourceId || deleteLoading}
-                                        className='bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-red-600 rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed'
                                         title={!selectedReport.resourceId ? 'No resource ID available' : deleteLoading ? 'Deleting...' : 'Delete the reported resource'}
                                     >
                                         {deleteLoading ? (
                                             <>
-                                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
                                                 Deleting...
                                             </>
                                         ) : (
@@ -457,7 +459,7 @@ const ReportsDashboard = () => {
                                 <button
                                     onClick={() => deleteReport(selectedReport.reportId)}
                                     disabled={deleteLoading}
-                                    className='w-full mt-3 bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed'
+                                    className='flex items-center justify-center w-full gap-2 px-4 py-2 mt-3 font-semibold text-white transition bg-red-700 rounded hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed'
                                 >
                                     <Trash2 className='w-4 h-4' />
                                     Delete Report

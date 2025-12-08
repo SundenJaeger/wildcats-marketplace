@@ -107,7 +107,7 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
                     {/* Left Side of Navbar */}
                     <div className='flex items-center gap-1'>
                         <img src={assets.wildcats_logo} alt="Logo" className="w-10 h-10"/>
-                        <h2 className='text-2xl font-extrabold font-sans text-white '>Wildcat's Marketplace</h2>
+                        <h2 className='font-sans text-2xl font-extrabold text-white '>Wildcat's Marketplace</h2>
                     </div>
 
                     {/* Right Side of Navbar */}
@@ -122,7 +122,7 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
                                     <img className='w-4 h-4 mx-1' src={assets.white_settings_icon} alt="Settings"/>
                                 </button>
 
-                                <button onClick={onNotificationsClick} className='p-0 bg-transparent border-0 relative'>
+                                <button onClick={onNotificationsClick} className='relative p-0 bg-transparent border-0'>
                                     <img className='w-4 h-4 mx-1' src={assets.white_notification_icon}
                                          alt="Notifications"/>
                                     {unreadCount > 0 && (
@@ -144,25 +144,25 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
                                 <div
                                     className="relative flex items-center justify-end duration-150 focus-within:scale-[1.025] bg-white p-1 rounded-md h-5 w-50.6">
                                     <input
-                                        className="peer outline-0 w-full bg-transparent text-xs px-2"
+                                        className="w-full px-2 text-xs bg-transparent peer outline-0"
                                         type="text"
                                         value={searchQuery}
                                         onChange={handleSearchChange}
                                         placeholder=""
                                     />
                                     <span
-                                        className="absolute left-2 text-gray-400 text-xs opacity-0 peer-placeholder-shown:opacity-100 peer-focus:opacity-0 transition-opacity duration-150 pointer-events-none">
+                                        className="absolute text-xs text-gray-400 transition-opacity duration-150 opacity-0 pointer-events-none left-2 peer-placeholder-shown:opacity-100 peer-focus:opacity-0">
                                         Search here...
                                     </span>
                                     {searchQuery && (
                                         <button
                                             type="button"
                                             onClick={handleClearSearch}
-                                            className="bg-transparent border-0 p-0 mr-4 text-gray-400 hover:text-gray-600">
+                                            className="p-0 mr-4 text-gray-400 bg-transparent border-0 hover:text-gray-600">
                                             ×
                                         </button>
                                     )}
-                                    <button type="submit" className="bg-transparent border-0 p-0">
+                                    <button type="submit" className="p-0 bg-transparent border-0">
                                         <img
                                             className="duration-150 w-3.5 h-3.5 absolute right-1.5"
                                             src={assets.red_search_icon}

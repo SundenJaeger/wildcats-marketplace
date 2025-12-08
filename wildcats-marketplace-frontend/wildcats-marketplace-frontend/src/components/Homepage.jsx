@@ -150,7 +150,7 @@ const Homepage = () => {
     };
 
     return (
-        <div className="flex flex-col justify-top min-h-screen flex-1 max-w-[1000px] min-w-[300px] mx-2">
+        <div className="flex flex-col justify-top min-h-screen flex-1 max-w-[1000px] min-w-[300px] mx-5">
             <Navbar
                 isAdmin={isAdmin}
                 onAdminClick={() => setIsAdmin(true)} // Dev helper (optional)
@@ -165,43 +165,45 @@ const Homepage = () => {
             {/* ADMIN DASHBOARD VIEW */}
             {isAdmin ? (
                 <>
-                    <div className='p-2 w-full h-full flex flex-col gap-4'>
+                    <div className='flex flex-col w-full h-full p-2'>
                         <div className='flex justify-between'>
-                            <div className='flex justify-evenly mb-2 mt-1 w-full'>
-                                <button
-                                    className={`w-1/3 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
-                                ${adminView === 'reports' ? 'border-red-950' : 'border-transparent'}`}
-                                    onClick={() => setAdminView('reports')}>
-                                    Listing Reports
-                                </button>
-                                <button
-                                    className={`w-1/3 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
-                                ${adminView === 'verification' ? 'border-red-950' : 'border-transparent'}`}
-                                    onClick={() => setAdminView('verification')}>
-                                    Verification Requests
-                                </button>
-                                <button
-                                    className={`w-1/3 px-3 border-b-4 whitespace-nowrap pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
-                                ${adminView === 'categories' ? 'border-red-950' : 'border-transparent'}`}
-                                    onClick={() => setAdminView('categories')}>
-                                    Categories
-                                </button>
+                            <div className='flex justify-between w-full mt-1'>
+                                <div className='flex w-2/3 ml-10 justify-evenly'>
+                                    <button
+                                        className={`w-70 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
+                                    ${adminView === 'reports' ? 'bg-[#FFF7DA] ' : 'bg-gray'}`}
+                                        onClick={() => setAdminView('reports')}>
+                                        Reports
+                                    </button>
+                                    <button
+                                        className={`w-70 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
+                                    ${adminView === 'verification' ? 'bg-[#FFF7DA] ' : 'bg-gray'}`}
+                                        onClick={() => setAdminView('verification')}>
+                                        Verification
+                                    </button>
+                                    <button
+                                        className={`w-70 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
+                                    ${adminView === 'categories' ? 'bg-[#FFF7DA] ' : 'bg-gray'}`}
+                                        onClick={() => setAdminView('categories')}>
+                                        Categories
+                                    </button>
+                                </div>
+
+                                {/* Exit Admin Mode Button */}
+                                <div className='flex justify-end my-2 h-fit'>
+                                    <button className='p-2 px-4 text-sm font-bold text-white transition bg-red-800 rounded-lg hover:bg-red-900'
+                                            onClick={handleLogout}>
+                                        Logout
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         {/* Dynamic Component Rendering */}
-                        <div className="bg-white rounded-lg shadow-sm min-h-[500px]">
+                        <div className="bg-linear-to-b from-[#FFF7DA] to-transparent  rounded-lg  min-h-[500px] px-8 pt-3">
                             {adminView === 'reports' && <ReportsDashboard/>}
                             {adminView === 'verification' && <VerificationRequest/>}
                             {adminView === 'categories' && <CategoriesManagement/>}
-                        </div>
-
-                        {/* Exit Admin Mode Button */}
-                        <div className='flex justify-end h-fit my-2'>
-                            <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800 text-white hover:bg-red-900 transition'
-                                    onClick={handleLogout}>
-                                Logout
-                            </button>
                         </div>
                     </div>
                 </>
@@ -235,8 +237,8 @@ const Homepage = () => {
                                     </div>
                                     <br></br>
                                     <div>
-                                        <div className='flex justify-between items-center'>
-                                            <h3 className='text-black font-bold text-2xl '>
+                                        <div className='flex items-center justify-between'>
+                                            <h3 className='text-2xl font-bold text-black '>
                                                 {showSavedProducts ? 'Saved Products' :
                                                     searchQuery ? `Search Results for "${searchQuery}"` :
                                                         "Today's Picks"}
@@ -265,16 +267,16 @@ const Homepage = () => {
                                         </div>
 
                                         {(appliedFilters.category || appliedFilters.condition || appliedFilters.priceRange || appliedFilters.subFilters.length > 0) && (
-                                            <div className='flex flex-wrap gap-2 my-3 items-center'>
+                                            <div className='flex flex-wrap items-center gap-2 my-3'>
                                                 <span className='text-sm font-semibold text-gray-700'>Active Filters:</span>
                                                 {appliedFilters.categoryName && (
-                                                    <span className='bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold'>
+                                                    <span className='px-3 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full'>
                                                         {appliedFilters.categoryName}
                                                     </span>
                                                 )}
                                                 <button
                                                     onClick={clearFilters}
-                                                    className='text-red-600 text-xs font-semibold underline hover:text-red-800'>
+                                                    className='text-xs font-semibold text-red-600 underline hover:text-red-800'>
                                                     Clear All
                                                 </button>
                                             </div>
@@ -298,7 +300,7 @@ const Homepage = () => {
                             {/* Seller Dashboard */}
                             {!(isMarketplaceView) && (
                                 <>
-                                    <div className='flex flex-col justify-top h-screen w-full'>
+                                    <div className='flex flex-col w-full h-screen justify-top'>
                                         <SellerDashboard searchQuery={searchQuery}/>
                                     </div>
                                 </>
