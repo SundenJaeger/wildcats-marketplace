@@ -17,9 +17,9 @@ const SettingsModal = ({onClose, onLogout}) => {
         return (
           <>
             <div className='flex flex-col items-center justify-center h-full'>
-              <img className='w-20 h-20 rounded-xl m-2' src={assets.empty_space_icon}>
+              <img className='w-20 h-20 m-2 rounded-xl' src={assets.empty_space_icon}>
               </img>
-              <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
+              <p className='p-1 font-semibold text-black'>Poof! It's empty...</p>
             </div>
           </>
         )
@@ -27,9 +27,9 @@ const SettingsModal = ({onClose, onLogout}) => {
         return (
           <>
             <div className='flex flex-col items-center justify-center h-full'>
-              <img className='w-20 h-20 rounded-xl m-2' src={assets.empty_space_icon}>
+              <img className='w-20 h-20 m-2 rounded-xl' src={assets.empty_space_icon}>
               </img>
-              <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
+              <p className='p-1 font-semibold text-black'>Poof! It's empty...</p>
             </div>
           </>
         )
@@ -38,11 +38,11 @@ const SettingsModal = ({onClose, onLogout}) => {
           <>
             <div className='flex flex-col items-center justify-center h-full gap-2'>
               <img className='w-20 h-20' src={assets.sad_icon}></img>
-              <h3 className='text-black font-bold'>Are you sure you want to log out?</h3>
+              <h3 className='font-bold text-black'>Are you sure you want to log out?</h3>
               <div className='my-10'>
                 <button
                 onClick={handleLogout}
-                className='p-3 bg-red-700 font-bold rounded-lg px-5 hover:scale-102'>Log out?</button>
+                className='p-3 px-5 font-bold bg-red-700 rounded-lg hover:scale-102'>Log out?</button>
               </div>
             </div>
           </>       
@@ -53,52 +53,51 @@ const SettingsModal = ({onClose, onLogout}) => {
   }
 
   return (
-    <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-      <div className='flex flex-col justify-start bg-[#fff1bd] border-2 border-[#726948] rounded-lg p-4 w-230 h-150'>
+    <div className='fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/40'>
+      <div className='flex flex-col p-3 px-4 bg-[#FFF7D7] h-auto w-[800px] rounded-lg'>
 
-        <div className='flex justify-end items-start'>
-                <div onClick={onClose}
-                className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full'>
-                <input type="image" className="w-2.5  h-2.5" src={assets.white_close_icon}></input>
-            </div>
+        <div className='flex items-center justify-between pl-3 mb-2'>
+          <div className='flex flex-col mt-3'>
+            <h2 className='text-xl font-bold text-black'>Settings</h2>
+          </div>
         </div>
 
-        <div className='flex flex-col px-5 h-full'>
+        {/* Main Body */}
+        <div className='box-border flex justify-between h-full min-w-full p-2'>
+          <div className='flex items-start justify-between w-full gap-4 p-4 bg-white rounded-2xl'>
 
-          {/* Settings title */}
-          <div className='flex flex-col'>
-            <h2 className='text-black font-bold text-3xl'>Settings</h2>
-          </div>
-
-          {/* Line Break */}
-          <div className='flex justify-center items-center w-auto h-[1px] bg-transparent my-2'></div>
-
-          {/* Main Body */}
-          <div className='flex justify-between items-start pb-5 h-full gap-3'>
-
-            {/* Left Side */}
-            <div className='flex flex-col items-start justify-center w-[25%] gap-1'>
+            {/* Left Side - Navigation */}
+            <div className='flex flex-col items-start justify-start w-[35%] gap-2'>
                 <button type='button' onClick={() => setSettingsOption('notifs')}
-                className={`w-full text-black text-center font-bold text-sm p-3 px-3 rounded-md ${settingsOption === 'notifs' ? 'bg-[#FFFAE4]' : 'bg-[#fff1bd]' }`}>
+                className={`w-full text-black text-left font-bold text-sm p-3 px-4 rounded-lg transition-colors ${settingsOption === 'notifs' ? 'bg-gray-200' : 'bg-gray-50 hover:bg-gray-100' }`}>
                 Notification Settings
                 </button>
                 <button type='button' onClick={() => setSettingsOption('transacts')}
-                className={`w-full text-black font-bold text-sm text-center p-3 px-5 rounded-md  ${settingsOption === 'transacts' ? 'bg-[#FFFAE4]' : 'bg-[#fff1bd]' }`}>
+                className={`w-full text-black font-bold text-sm text-left p-3 px-4 rounded-lg transition-colors ${settingsOption === 'transacts' ? 'bg-gray-200' : 'bg-gray-50 hover:bg-gray-100' }`}>
                 My transactions
                 </button>
                 <button type='button' onClick={() => setSettingsOption('logout')}
-                className={`w-full text-black font-bold text-sm text-center p-3 px-5 rounded-md ${settingsOption === 'logout' ? 'bg-[#FFFAE4]' : 'bg-[#fff1bd]' }`}>
+                className={`w-full text-black font-bold text-sm text-left p-3 px-4 rounded-lg transition-colors ${settingsOption === 'logout' ? 'bg-gray-200' : 'bg-gray-50 hover:bg-gray-100' }`}>
                 Logout
                 </button>
             </div>
 
-            {/* Idk what we should put here so its just a placeholder fn */}
-            <div className='bg-[#FFFAE4] w-full h-full rounded-lg'>
+            {/* Right Side - Content */}
+            <div className='bg-gray-50 w-full h-full rounded-lg p-4 min-h-[400px]'>
               {renderContent()}
             </div>
 
           </div>
         </div>
+
+        <div className='flex items-center justify-end gap-2 p-2'>
+          <button
+              onClick={onClose}
+              className='p-2 px-5 text-xs font-extrabold bg-[#B20000] rounded-lg hover:scale-101 hover:bg-[#8B0000]'>
+              Close
+          </button>
+        </div>
+
       </div>
     </div>
   )

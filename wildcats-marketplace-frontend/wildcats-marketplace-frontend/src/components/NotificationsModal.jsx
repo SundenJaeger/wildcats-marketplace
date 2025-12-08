@@ -90,68 +90,73 @@ const NotificationsModal = ({onClose, onProductClick}) => {
     }
 
     return (
-        <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-            <div className='flex flex-col justify-between bg-[#fff1bd] rounded-md p-4 w-190 h-auto max-h-[80vh] border-2 border-[#726948] gap-2'>
-
-                <div className='flex justify-between items-start px-2'>
-                    <div className='flex flex-col mt-3 mb-2'>
-                        <h2 className='text-black font-bold text-2xl'>My Notifications</h2>
+        <div className='fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/40'>
+            <div className="flex flex-col p-3 px-4 bg-[#FFF7D7] h-auto w-[800px] min-h-[40vh] rounded-lg">
+                <div className='flex items-center justify-between pl-3 mb-2'>
+                    <div className='flex flex-col mt-3'>
+                        <h2 className='text-xl font-bold text-black'>My Notifications</h2>
                         {notifications.length > 0 && (
                             <button
                                 onClick={handleMarkAllRead}
-                                className='text-xs text-blue-600 hover:text-blue-800 font-semibold mt-1 text-left'>
+                                className='mt-1 text-xs font-semibold text-left text-blue-600 hover:text-blue-800'>
                                 Mark all as read
                             </button>
                         )}
                     </div>
-                    <div onClick={onClose}
-                         className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full cursor-pointer hover:bg-[#900000]'>
-                        <input type="image" className="w-2.5 h-2.5" src={assets.white_close_icon} alt="Close"/>
-                    </div>
                 </div>
 
                 {/* Main Body */}
-                <div className='flex flex-col items-start pb-3 overflow-y-auto max-h-96 gap-2 px-2'>
-                    {loading ? (
-                        <div className='bg-[#FFFAE4] flex flex-col items-center justify-center w-full h-40'>
-                            <p className='text-black font-semibold p-1'>Loading notifications...</p>
-                        </div>
-                    ) : notifications.length === 0 ? (
-                        <div className='bg-[#FFFAE4] flex flex-col items-center justify-center w-full h-40'>
-                            <img className='w-20 h-20 rounded-xl m-2' src={assets.empty_space_icon} alt="Empty"/>
-                            <p className='text-black font-semibold p-1'>Poof! It's empty...</p>
-                        </div>
-                    ) : (
-                        notifications.map((notification) => (
-                            <div
-                                key={notification.notificationId}
-                                onClick={() => handleNotificationClick(notification)}
-                                className={`flex items-start gap-3 p-3 rounded-lg w-full cursor-pointer transition-colors ${
-                                    notification.isRead
-                                        ? 'bg-[#FFFAE4] hover:bg-[#FFF9D9]'
-                                        : 'bg-[#FFF5CC] hover:bg-[#FFEFB8]'
-                                }`}>
-                                <img
-                                    className='w-10 h-10 rounded-full p-2 bg-white border-1 border-gray-300'
-                                    src={assets.blank_profile_icon}
-                                    alt={notification.sender?.user?.username || 'User'}
-                                />
-                                <div className='flex-1'>
-                                    <p className={`text-sm ${notification.isRead ? 'font-semibold' : 'font-bold'} text-gray-800`}>
-                                        {notification.message}
-                                    </p>
-                                    <p className='text-xs text-gray-500 mt-1'>
-                                        {formatTimestamp(notification.createdAt)}
-                                    </p>
-                                </div>
-                                <button
-                                    onClick={(e) => handleDelete(notification.notificationId, e)}
-                                    className='text-gray-400 hover:text-red-600 text-sm font-bold px-2'>
-                                    ×
-                                </button>
+                <div className='box-border flex justify-between h-full min-w-full p-2'>
+                    <div className='flex flex-col w-full gap-2 p-4 overflow-y-auto bg-white rounded-2xl max-h-96'>
+                        {loading ? (
+                            <div className='flex flex-col items-center justify-center w-full h-40'>
+                                <p className='p-1 font-semibold text-black'>Loading notifications...</p>
                             </div>
-                        ))
-                    )}
+                        ) : notifications.length === 0 ? (
+                            <div className='flex flex-col items-center justify-center w-full h-40'>
+                                <img className='w-20 h-20 m-2 rounded-xl' src={assets.empty_space_icon} alt="Empty"/>
+                                <p className='p-1 font-semibold text-black'>Poof! It's empty...</p>
+                            </div>
+                        ) : (
+                            notifications.map((notification) => (
+                                <div
+                                    key={notification.notificationId}
+                                    onClick={() => handleNotificationClick(notification)}
+                                    className={`flex items-start gap-3 p-3 rounded-lg w-full cursor-pointer transition-colors ${
+                                        notification.isRead
+                                            ? 'bg-gray-50 hover:bg-gray-100'
+                                            : 'bg-gray-100 hover:bg-gray-200'
+                                    }`}>
+                                    <img
+                                        className='w-10 h-10 p-2 bg-white border border-gray-300 rounded-full'
+                                        src={assets.blank_profile_icon}
+                                        alt={notification.sender?.user?.username || 'User'}
+                                    />
+                                    <div className='flex-1'>
+                                        <p className={`text-sm ${notification.isRead ? 'font-semibold' : 'font-bold'} text-gray-800`}>
+                                            {notification.message}
+                                        </p>
+                                        <p className='mt-1 text-xs text-gray-500'>
+                                            {formatTimestamp(notification.createdAt)}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={(e) => handleDelete(notification.notificationId, e)}
+                                        className='px-2 text-sm font-bold text-gray-400 hover:text-red-600'>
+                                        ×
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+
+                <div className='flex items-center justify-end gap-2 p-2'>
+                    <button
+                        onClick={onClose}
+                        className='p-2 px-5 text-xs font-extrabold bg-[#B20000] rounded-lg hover:scale-101 hover:bg-[#8B0000]'>
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
