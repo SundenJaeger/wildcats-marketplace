@@ -90,7 +90,7 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
     };
 
     return (
-        <div className='flex items-center justify-center absolute top-0 left-0 w-full h-15 z-50 bg-[#A31800]'>
+        <div className='flex items-center justify-center absolute top-0 left-0 w-full h-17 z-100 bg-[#A31800]'>
             {/* Navbar for LoginSignup Page */}
             {!isHomepage && (
                 <div className='flex items-center gap-2 p-2 justify-center flex-1 max-w-5xl min-w-[300px] mx-2'>
@@ -112,18 +112,18 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
 
                     {/* Right Side of Navbar */}
                     {!isAdmin && (
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col gap-1'>
                             <div className='flex items-center justify-end mb-1'>
                                 <button onClick={onAdminClick} className='p-0 bg-transparent'>
-                                    <img className='w-4 h-4 mx-1' src={assets.white_admin_icon} alt="Settings"/>
+                                    <img className='w-4.5 h-4.5 mx-1' src={assets.white_admin_icon} alt="Settings"/>
                                 </button>
 
                                 <button onClick={onSettingsClick} className='p-0 bg-transparent'>
-                                    <img className='w-4 h-4 mx-1' src={assets.white_settings_icon} alt="Settings"/>
+                                    <img className='w-4.5 h-4.5 mx-1' src={assets.white_settings_icon} alt="Settings"/>
                                 </button>
 
                                 <button onClick={onNotificationsClick} className='relative p-0 bg-transparent border-0'>
-                                    <img className='w-4 h-4 mx-1' src={assets.white_notification_icon}
+                                    <img className='w-4.5 h-4.5 mx-1' src={assets.white_notification_icon}
                                          alt="Notifications"/>
                                     {unreadCount > 0 && (
                                         <span className='absolute -top-1 -right-0.5 bg-yellow-400 text-red-800 text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center'>
@@ -134,15 +134,15 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
 
                                 <button onClick={onProfileClick}
                                         className='flex items-center p-0 bg-transparent border-0'>
-                                    <img className='w-4 h-4 mx-1' src={assets.white_profile_icon} alt="Profile"/>
-                                    <p className='text-xs text-white pb-0.5'>{username}</p>
+                                    <img className='w-4.5 h-4.5 mx-1' src={assets.white_profile_icon} alt="Profile"/>
+                                    <p className='text-xs font-semibold text-white pb-0.5'>{username}</p>
                                 </button>
                             </div>
 
                             {/* Search bar */}
                             <form onSubmit={handleSearchSubmit}>
                                 <div
-                                    className="relative flex items-center justify-end duration-150 focus-within:scale-[1.025] bg-white p-1 rounded-md h-5 w-50.6">
+                                    className="relative flex items-center justify-end duration-150 focus-within:scale-[1.025] bg-white p-2 rounded-md h-6 w-50.6 text-black">
                                     <input
                                         className="w-full px-2 text-xs bg-transparent peer outline-0"
                                         type="text"
@@ -158,13 +158,13 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
                                         <button
                                             type="button"
                                             onClick={handleClearSearch}
-                                            className="p-0 mr-4 text-gray-400 bg-transparent border-0 hover:text-gray-600">
+                                            className="w-0 p-0 mr-4 text-gray-400 bg-transparent border-0 hover:text-gray-600">
                                             ×
                                         </button>
                                     )}
-                                    <button type="submit" className="p-0 bg-transparent border-0">
+                                    <button type="submit" className="items-center p-0 bg-transparent border-0">
                                         <img
-                                            className="duration-150 w-3.5 h-3.5 absolute right-1.5"
+                                            className="duration-150 w-3.5 h-3.5 right-1.5 peer-focus:opacity-0 peer-focus:invisible"
                                             src={assets.red_search_icon}
                                             alt="Search Icon"
                                         />

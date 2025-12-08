@@ -18,11 +18,11 @@ function App() {
     return (
         <Router>
             <div
-                className="App relative w-screen z-10 bg-cover bg-white bg-no-repeat bg-center min-h-screen flex flex-col justify-between"
+                className="relative z-20 flex flex-col justify-between w-screen min-h-screen bg-white bg-center bg-no-repeat bg-cover App"
                 style={{ backgroundImage: `url(${assets.wildcats_marketplace_bg_image})` }}
             >
-                <div className='flex justify-center items-center'>
-                    <nav className="w-full sticky h-16 top-0 z-50">
+                <div className='flex items-center justify-center'>
+                    <nav className="sticky top-0 w-full h-18 z-100">
                         <Navbar />
                     </nav>
                 </div>
