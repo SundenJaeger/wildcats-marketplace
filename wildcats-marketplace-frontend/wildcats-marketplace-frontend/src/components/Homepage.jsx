@@ -168,21 +168,21 @@ const Homepage = () => {
                     <div className='flex flex-col w-full h-full p-2'>
                         <div className='flex justify-between'>
                             <div className='flex justify-between w-full mt-1'>
-                                <div className='flex w-2/3 ml-10 justify-evenly'>
+                                <div className='flex ml-8 justify-evenly'>
                                     <button
-                                        className={`w-70 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
+                                        className={`w-40 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
                                     ${adminView === 'reports' ? 'bg-[#FFF7DA] ' : 'bg-gray'}`}
                                         onClick={() => setAdminView('reports')}>
                                         Reports
                                     </button>
                                     <button
-                                        className={`w-70 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
+                                        className={`w-40 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
                                     ${adminView === 'verification' ? 'bg-[#FFF7DA] ' : 'bg-gray'}`}
                                         onClick={() => setAdminView('verification')}>
                                         Verification
                                     </button>
                                     <button
-                                        className={`w-70 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
+                                        className={`w-40 px-2 whitespace-nowrap rounded-t-xl pb-[0.5%] font-bold text-lg bg-gray text-red-950 focus:outline-none
                                     ${adminView === 'categories' ? 'bg-[#FFF7DA] ' : 'bg-gray'}`}
                                         onClick={() => setAdminView('categories')}>
                                         Categories

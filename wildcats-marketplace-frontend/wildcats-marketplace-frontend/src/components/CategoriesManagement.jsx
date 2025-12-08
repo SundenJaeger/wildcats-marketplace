@@ -322,10 +322,6 @@ export default function CategoriesManagement() {
                                     {editingCategory ? 'Edit Category' : 'Create Category'}
                                 </h2>
                             </div>
-                            <div onClick={handleCloseModal}
-                                 className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full cursor-pointer'>
-                                <X className="w-2.5 h-2.5 text-white" />
-                            </div>
                         </div>
 
                         <div className='box-border flex justify-between h-full min-w-full p-2'>
@@ -339,7 +335,7 @@ export default function CategoriesManagement() {
                                             type="text"
                                             value={formData.category_name}
                                             onChange={(e) => setFormData({...formData, category_name: e.target.value})}
-                                            className="w-full p-2 text-black bg-gray-100 rounded-md focus:outline-none"
+                                            className="w-full p-2 text-sm text-black bg-gray-100 rounded-md focus:outline-none placeholder:text-sm"
                                             placeholder="Enter category name..."
                                         />
                                     </div>
@@ -353,7 +349,7 @@ export default function CategoriesManagement() {
                                         <select
                                             value={formData.parent_category}
                                             onChange={(e) => setFormData({...formData, parent_category: e.target.value})}
-                                            className='w-full px-2 font-semibold text-black bg-gray-100 rounded-md appearance-none focus:outline-none focus:ring-0'
+                                            className='w-full px-2 text-sm font-semibold text-black bg-gray-100 rounded-md appearance-none focus:outline-none focus:ring-0 placeholder:text-sm'
                                         >
                                             <option value="">None (Parent Category)</option>
                                             {categories
@@ -380,7 +376,7 @@ export default function CategoriesManagement() {
                                             value={formData.description}
                                             onChange={(e) => setFormData({...formData, description: e.target.value})}
                                             rows={3}
-                                            className='w-full p-2 text-black bg-gray-100 rounded-md resize-none focus:outline-none'
+                                            className='w-full p-2 text-sm text-black bg-gray-100 rounded-md resize-none focus:outline-none'
                                             placeholder='Enter description...'
                                         />
                                     </div>

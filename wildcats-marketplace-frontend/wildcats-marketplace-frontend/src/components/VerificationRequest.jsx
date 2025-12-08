@@ -114,7 +114,7 @@ export default function VerificationRequestScreen() {
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800 text-white'>
                     <div className='flex flex-col'>
                         <h6>Total Requests</h6>
-                        <h4 className='text-3xl font-bold'>{stats.total}</h4>
+                        <h4 className='text-3xl font-bold'>{stats.total || 0}</h4>
                     </div>
                     <FileText className="w-11 h-11" />
                 </div>
@@ -122,7 +122,7 @@ export default function VerificationRequestScreen() {
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-orange-600 to-amber-700 text-white'>
                     <div className='flex flex-col'>
                         <h6>Pending</h6>
-                        <h4 className='text-3xl font-bold'>{stats.pending}</h4>
+                        <h4 className='text-3xl font-bold'>{stats.pending || 0}</h4>
                     </div>
                     <Clock className="w-9 h-9" />
                 </div>
@@ -130,7 +130,7 @@ export default function VerificationRequestScreen() {
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-blue-700 to-indigo-800 text-white'>
                     <div className='flex flex-col'>
                         <h6>Approved</h6>
-                        <h4 className='text-3xl font-bold'>{stats.underReview}</h4>
+                        <h4 className='text-3xl font-bold'>{stats.underReview || 0}</h4>
                     </div>
                     <CheckCircle className="w-9 h-9" />
                 </div>
@@ -138,7 +138,7 @@ export default function VerificationRequestScreen() {
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800 text-white'>
                     <div className='flex flex-col'>
                         <h6>Rejected</h6>
-                        <h4 className='text-3xl font-bold'>{stats.resolved}</h4>
+                        <h4 className='text-3xl font-bold'>{stats.resolved || 0}</h4>
                     </div>
                     <X className="w-9 h-9" />
                 </div>
@@ -233,10 +233,6 @@ export default function VerificationRequestScreen() {
                                 <h2 className='text-xl font-bold text-black'>Request Details</h2>
                                 <p className="text-sm text-gray-600">ID: #{selectedRequest.verificationId}</p>
                             </div>
-                            <div onClick={() => setSelectedRequest(null)}
-                                 className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full cursor-pointer hover:bg-[#8B0000] transition-colors'>
-                                <X className="w-2.5 h-2.5 text-white" />
-                            </div>
                         </div>
 
                         {/* Modal Body */}
@@ -279,7 +275,7 @@ export default function VerificationRequestScreen() {
                                             value={adminNotes}
                                             onChange={(e) => setAdminNotes(e.target.value)}
                                             rows={3}
-                                            className='w-full p-2 text-black bg-gray-100 rounded-md resize-none focus:outline-none'
+                                            className='w-full p-2 text-sm text-black bg-gray-100 rounded-md resize-none focus:outline-none'
                                             placeholder='Internal notes about this request...'
                                             disabled={selectedRequest.status !== 'PENDING'}
                                         />
@@ -297,7 +293,7 @@ export default function VerificationRequestScreen() {
                                                 type="text"
                                                 value={rejectionReason}
                                                 onChange={(e) => setRejectionReason(e.target.value)}
-                                                className="w-full p-2 text-black bg-gray-100 rounded-md focus:outline-none"
+                                                className="w-full p-2 text-sm text-black bg-gray-100 rounded-md focus:outline-none"
                                                 placeholder="Reason for rejection..."
                                             />
                                         </div>
