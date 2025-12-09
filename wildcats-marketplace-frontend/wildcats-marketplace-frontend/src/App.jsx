@@ -22,7 +22,7 @@ function App() {
                 style={{ backgroundImage: `url(${assets.wildcats_marketplace_bg_image})` }}
             >
                 <div className='flex items-center justify-center'>
-                    <nav className="sticky top-0 w-full h-18 z-100">
+                    <nav className="sticky top-0 z-50 w-full h-18">
                         <Navbar />
                     </nav>
                 </div>
