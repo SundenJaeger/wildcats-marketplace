@@ -138,8 +138,8 @@ const SavedProducts = ({onProductClick, filters, searchQuery}) => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-96">
-                <div className="text-red-950 font-semibold">Loading saved products...</div>
+            <div className="flex items-center justify-center h-96">
+                <div className="font-semibold text-red-950">Loading saved products...</div>
             </div>
         );
     }
@@ -149,8 +149,8 @@ const SavedProducts = ({onProductClick, filters, searchQuery}) => {
             <div
                 className="flex flex-col items-center justify-center h-96 bg-[#FFF7DA] rounded-lg border-2 border-[#A31800]">
                 <img className='w-20 h-20 mb-4' src={assets.warning_icon} alt="Error"/>
-                <h3 className="text-red-900 font-bold text-xl mb-2">Error</h3>
-                <p className="text-red-900 text-sm">{error}</p>
+                <h3 className="mb-2 text-xl font-bold text-red-900">Error</h3>
+                <p className="text-sm text-red-900">{error}</p>
             </div>
         );
     }
@@ -163,20 +163,19 @@ const SavedProducts = ({onProductClick, filters, searchQuery}) => {
         const hasSearch = searchQuery && searchQuery.trim();
 
         return (
-            <div className="flex flex-col items-center justify-center h-96 bg-[#FFF7DA] rounded-lg border-2 border-[#A31800]">
-                <img className='w-20 h-20 mb-4' src={assets.warning_icon} alt="No saved items" />
-                <h3 className="text-red-900 font-bold text-xl mb-2">
+            <div className="flex flex-col items-center justify-center rounded-lg h-33">
+                <h3 className="mb-1 font-semibold text-gray-600 text-md">
                     {hasSearch ? `No results for "${searchQuery}"` :
                         hasActiveFilters ? 'No Matching Saved Items' : 'No Saved Items'}
                 </h3>
-                <p className="text-red-900 text-sm">
+                <p className="text-sm text-gray-500">
                     {hasSearch ? 'Try a different search term' :
                         hasActiveFilters
                             ? 'No saved products match your current filters.'
                             : 'You haven\'t saved any products yet.'}
                 </p>
                 {(hasActiveFilters || hasSearch) && (
-                    <p className="text-red-900 text-sm mt-2">
+                    <p className="mt-2 text-sm text-gray-950">
                         {hasSearch ? 'or adjust your search' : 'Try adjusting your filter criteria'}
                     </p>
                 )}
@@ -185,20 +184,20 @@ const SavedProducts = ({onProductClick, filters, searchQuery}) => {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2">
+        <div className="grid grid-cols-1 gap-4 py-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {savedProducts.map((product) => (
                 <div
                     key={product.bookmarkId}
                     onClick={() => onProductClick(product)}
-                    className="flex flex-col bg-[#FFF7D7] rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-100 border-1 border-[#FFF7D7] hover:border-[#A31800] my-2"
+                    className="flex flex-col bg-[#FFF7D7] rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-100 border border-[#FFF7D7] hover:border-[#A31800] my-2"
                 >
                     {/* Product Image */}
-                    <div className="relative w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <div className="relative flex items-center justify-center w-full h-48 bg-gray-200">
                         {product.imageList && product.imageList.length > 0 ? (
                             <img
                                 src={product.imageList[0]}
                                 alt={product.name}
-                                className="w-full h-full object-cover"
+                                className="object-cover w-full h-full"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                     e.target.nextSibling.style.display = 'flex';
@@ -206,7 +205,7 @@ const SavedProducts = ({onProductClick, filters, searchQuery}) => {
                             />
                         ) : null}
                         <div style={{display: product.imageList && product.imageList.length > 0 ? 'none' : 'flex'}}
-                             className="w-full h-full items-center justify-center">
+                             className="items-center justify-center w-full h-full">
                             <Camera className='w-12 h-12 text-gray-400'/>
                         </div>
                         <div
@@ -216,14 +215,14 @@ const SavedProducts = ({onProductClick, filters, searchQuery}) => {
                     </div>
 
                     {/* Product Details */}
-                    <div className="p-3 flex flex-col flex-grow">
-                        <h3 className="text-black font-bold text-sm mb-1 line-clamp-2">
+                    <div className="flex flex-col p-3 grow">
+                        <h3 className="mb-1 text-sm font-bold text-black line-clamp-2">
                             {product.name}
                         </h3>
                         <p className="text-[#A31800] font-extrabold text-lg mb-2">
                             {product.price}
                         </p>
-                        <div className="flex flex-col gap-1 text-xs text-gray-600 mb-2">
+                        <div className="flex flex-col gap-1 mb-2 text-xs text-gray-600">
                             <p className="font-semibold">
                                 <span className="text-gray-500">Category:</span> {product.category}
                             </p>

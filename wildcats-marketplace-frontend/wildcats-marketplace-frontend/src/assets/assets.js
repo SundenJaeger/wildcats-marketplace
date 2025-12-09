@@ -41,6 +41,9 @@ import white_save_icon from "./white_save_icon.png"
 import white_student_icon from "./white_student_icon.png"
 import white_category_icon from "./white_category_icon.png"
 import white_report_icon from './white_report_icon.png'
+import white_listing_icon from './white_listing_icon.png'
+import white_user from './white_user.png'
+import SD_background from './SD_background.png'
 
 const assets = {
   wildcats_logo,
@@ -85,7 +88,10 @@ const assets = {
   white_save_icon,
   white_student_icon,
   white_category_icon,
-  white_report_icon
+  white_report_icon,
+  white_listing_icon,
+  white_user,
+  SD_background
 };
 
 export default assets;

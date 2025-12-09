@@ -214,88 +214,94 @@ const Homepage = () => {
                         <>
                             <div className='flex justify-evenly'>
                                 <button
-                                    className={`w-1/2 mb-2 mt-1 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
-                            ${isMarketplaceView ? ' border-red-950' : 'border-transparent'}`}
+                                    className={`w-1/2 pb-2 pt-1 font-bold text-xl  text-red-950 focus:outline-none rounded-t-lg
+                            ${isMarketplaceView ? ' bg-[#FFF7DA] ' : 'bg-[#ffeb99]'}`}
                                     onClick={() => setIsMarketplaceView(true)}>
                                     Marketplace
                                 </button>
                                 <button
-                                    className={`w-1/2 mb-2 mt-1 border-b-4 pb-[0.5%] font-bold text-xl bg-transparent text-red-950 focus:outline-none
-                            ${!isMarketplaceView ? 'border-red-950' : 'border-transparent'}`}
+                                    className={`w-1/2 pb-2 pt-1 font-bold text-xl text-red-950 focus:outline-none rounded-t-lg
+                            ${!isMarketplaceView ? 'bg-[#FFF7DA]' : 'bg-[#ffeb99]'}`}
                                     onClick={() => setIsMarketplaceView(false)}>
                                     Seller Dashboard
                                 </button>
                             </div>
                             {/* Marketplace */}
                             {isMarketplaceView && (
-                                <>
-                                    <div className='mb-5'>
+                                <div className='bg-linear-to-b from-[#FFF7DA] to-transparent rounded-tr-lg min-h-screen'>
+                                    <div className='flex flex-col items-center justify-center mt-5 mb-2'>
                                         <img src={assets.homepage_welcome_banner}
-                                             alt="Wildcats"
-                                             className="w-full h-full object-contain rounded-lg mt-0.5"
+                                            alt="Wildcats"
+                                            className="object-contain w-[95%] h-full my-1 rounded-lg"
                                         />
                                     </div>
-                                    <br></br>
-                                    <div>
-                                        <div className='flex items-center justify-between'>
-                                            <h3 className='text-2xl font-bold text-black '>
-                                                {showSavedProducts ? 'Saved Products' :
-                                                    searchQuery ? `Search Results for "${searchQuery}"` :
-                                                        "Today's Picks"}
-                                            </h3>
-                                            <div className='flex gap-2'>
-                                                <button
-                                                    type="button"
-                                                    className={`flex justify-center items-center gap-1 w-25 p-1.5 px-4 rounded-lg text-sm font-semibold transition-all ${
-                                                        showSavedProducts
-                                                            ? 'bg-[#8b0000]'
-                                                            : 'bg-[#a50000]'
-                                                    }`}
-                                                    onClick={toggleSavedProducts}>
-                                                    <img className="w-3 h-3" src={assets.white_save_icon} alt="save"/>
-                                                    Saved
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="flex justify-center items-center gap-1 w-25 bg-[#a50000] p-1.5 px-4 rounded-lg text-sm font-semibold"
-                                                    onClick={() => setShowProductFilter(!showProductFilter)}>
-                                                    <img className="w-4 h-4" src={assets.white_filter_icon}
-                                                         alt="filter"/>
-                                                    Filter
-                                                </button>
+                                    
+                                    <div className='px-6'>
+                                        <div className="bg-[#fffbee] rounded-md shadow-md border-2 border-red-950 overflow-hidden">
+                                            {/* Header Bar */}
+                                            <div className='flex items-center justify-between px-5 py-3 border-b-2 shadow-md bg-linear-to-r from-red-900 to-red-700 border-red-950'>
+                                                <h3 className='text-lg font-bold text-white'>
+                                                    {showSavedProducts ? 'SAVED PRODUCTS' :
+                                                        searchQuery ? `SEARCH RESULTS FOR "${searchQuery.toUpperCase()}"` :
+                                                            "TODAY'S PICKS"}
+                                                </h3>
+                                                <div className='flex gap-2 p-1 bg-red-900 border-2 border-red-900 rounded-lg'>
+                                                    <button
+                                                        type="button"
+                                                        className={`flex justify-center items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all border-2 ${
+                                                            showSavedProducts
+                                                                ? 'border-[#3e0200] rounded-md bg-[#820400] text-gray-200 shadow-sm scale-99'
+                                                                : 'border-[#810400] rounded-md bg-[#ac0600] shadow-sm text-white'
+                                                        }`}
+                                                        onClick={toggleSavedProducts}>
+                                                        <img className="w-3 h-3" src={assets.white_save_icon} alt="save"/>
+                                                        Saved
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white transition-all border-2 border-[#810400] rounded-md bg-[#ac0600] shadow-sm"
+                                                        onClick={() => setShowProductFilter(!showProductFilter)}>
+                                                        <img className="w-4 h-4" src={assets.white_filter_icon} alt="filter"/>
+                                                        Filter
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Active Filters */}
+                                            {(appliedFilters.category || appliedFilters.condition || appliedFilters.priceRange || appliedFilters.subFilters.length > 0) && (
+                                                <div className='flex flex-wrap items-center gap-2 px-5 py-3 bg-red-800 border-b border-red-900'>
+                                                    <span className='text-sm font-semibold text-white'>Active Filters:</span>
+                                                    {appliedFilters.categoryName && (
+                                                        <span className='px-3 py-1 text-xs font-semibold text-red-800 rounded-full bg-amber-50'>
+                                                            {appliedFilters.categoryName}
+                                                        </span>
+                                                    )}
+                                                    <button
+                                                        onClick={clearFilters}
+                                                        className='text-xs font-semibold underline text-amber-50 hover:text-white'>
+                                                        Clear All
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {/* Products Content */}
+                                            <div className='bg-[#FFF7DA] p-4 min-h-[50vh]'>
+                                                {showSavedProducts ? (
+                                                    <SavedProducts onProductClick={setSelectedProduct}
+                                                                filters={appliedFilters}
+                                                                searchQuery={searchQuery}
+                                                    />
+                                                ) : (
+                                                    <Products
+                                                        onProductClick={setSelectedProduct}
+                                                        filters={appliedFilters}
+                                                        searchQuery={searchQuery}
+                                                    />
+                                                )}
                                             </div>
                                         </div>
-
-                                        {(appliedFilters.category || appliedFilters.condition || appliedFilters.priceRange || appliedFilters.subFilters.length > 0) && (
-                                            <div className='flex flex-wrap items-center gap-2 my-3'>
-                                                <span className='text-sm font-semibold text-gray-700'>Active Filters:</span>
-                                                {appliedFilters.categoryName && (
-                                                    <span className='px-3 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full'>
-                                                        {appliedFilters.categoryName}
-                                                    </span>
-                                                )}
-                                                <button
-                                                    onClick={clearFilters}
-                                                    className='text-xs font-semibold text-red-600 underline hover:text-red-800'>
-                                                    Clear All
-                                                </button>
-                                            </div>
-                                        )}
-
-                                        {showSavedProducts ? (
-                                            <SavedProducts onProductClick={setSelectedProduct}
-                                                           filters={appliedFilters}
-                                                           searchQuery={searchQuery}
-                                            />
-                                        ) : (
-                                            <Products
-                                                onProductClick={setSelectedProduct}
-                                                filters={appliedFilters}
-                                                searchQuery={searchQuery}
-                                            />
-                                        )}
                                     </div>
-                                </>
+                                </div>
                             )}
                             {/* Seller Dashboard */}
                             {!(isMarketplaceView) && (

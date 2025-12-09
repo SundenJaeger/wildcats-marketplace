@@ -109,12 +109,12 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
     };
 
     return (
-        <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
-            <div className='flex flex-col justify-start rounded-md p-4 border bg-[#FFF4CB] w-130 max-h-[90vh] overflow-y-auto'>
+        <div className='fixed inset-0 flex flex-col items-center justify-center bg-black/40 z-51'>
+            <div className='flex flex-col justify-start rounded-md p-4 bg-[#FFF4CB] w-130 max-h-[90vh] overflow-y-auto'>
 
-                <div className='flex justify-between items-start'>
-                    <div className='flex flex-col ml-5 mt-5 mb-2'>
-                        <h2 className='text-black font-bold text-xl'>Filter</h2>
+                <div className='flex items-start justify-between'>
+                    <div className='flex flex-col mt-5 mb-2 ml-5'>
+                        <h2 className='text-xl font-bold text-black'>Filter</h2>
                     </div>
                     <div onClick={onClose}
                          className='flex justify-center items-center w-5 h-5 bg-[#B20000] rounded-full cursor-pointer'>
@@ -126,18 +126,18 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                 <div className='flex justify-center items-center w-auto h-[1px] bg-black mt-2 mx-1'></div>
 
                 {/* Main Body */}
-                <div className='flex flex-col justify-between items-between py-5 h-auto gap-1'>
+                <div className='flex flex-col justify-between h-auto gap-1 py-5 items-between'>
 
                     {/* Main Categories */}
-                    <div className='flex items-center text-start gap-1 my-1 bg-white rounded-lg w-full min-h-16 px-3 py-2'>
-                        <h3 className='text-black font-bold mx-1 w-31'>Category:</h3>
-                        <div className='relative w-full flex'>
+                    <div className='flex items-center w-full gap-1 px-3 py-2 my-1 bg-white rounded-lg text-start min-h-16'>
+                        <h3 className='mx-1 font-bold text-black w-31'>Category:</h3>
+                        <div className='relative flex w-full'>
                             {loadingCategories ? (
-                                <div className='w-full px-2 py-1 text-gray-500 font-semibold'>
+                                <div className='w-full px-2 py-1 font-semibold text-gray-500'>
                                     Loading categories...
                                 </div>
                             ) : categories.length === 0 ? (
-                                <div className='w-full px-2 py-1 text-gray-500 font-semibold'>
+                                <div className='w-full px-2 py-1 font-semibold text-gray-500'>
                                     No categories available
                                 </div>
                             ) : (
@@ -148,7 +148,7 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                                             setChosenCategory(e.target.value);
                                             setChosenFilters([]); // Clear sub-filters when category changes
                                         }}
-                                        className='focus:outline-none focus:ring-0 appearance-none justify-between w-full bg-white px-2 rounded-md text-black font-semibold'
+                                        className='justify-between w-full px-2 font-semibold text-black bg-white rounded-md appearance-none focus:outline-none focus:ring-0'
                                     >
                                         <option value=''>All Categories</option>
                                         {categories.map((category) => (
@@ -157,58 +157,58 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                                             </option>
                                         ))}
                                     </select>
-                                    <img className='absolute w-4 h-4 right-3 transform -translate-y-1/2 top-1/2' src={assets.drop_down_icon}></img>
+                                    <img className='absolute w-4 h-4 transform -translate-y-1/2 right-3 top-1/2' src={assets.drop_down_icon}></img>
                                 </>
                             )}
                         </div>
                     </div>
 
                     {/* Condition of Products */}
-                    <div className='flex items-center text-start gap-1 my-1 bg-white rounded-lg w-full h-16 px-3'>
-                        <h3 className='text-black font-bold m-1 w-31'>Condition:</h3>
-                        <div className='relative w-full flex'>
-                            <select value={chosenCondition} onChange={(e) => setChosenCondition(e.target.value)} className='focus:outline-none focus:ring-0 appearance-none justify-between w-full bg-white px-2 rounded-md text-black font-semibold'>
+                    <div className='flex items-center w-full h-16 gap-1 px-3 my-1 bg-white rounded-lg text-start'>
+                        <h3 className='m-1 font-bold text-black w-31'>Condition:</h3>
+                        <div className='relative flex w-full'>
+                            <select value={chosenCondition} onChange={(e) => setChosenCondition(e.target.value)} className='justify-between w-full px-2 font-semibold text-black bg-white rounded-md appearance-none focus:outline-none focus:ring-0'>
                                 <option value='bnew' >Brand New</option>
                                 <option value='excellent' >Excellent</option>
                                 <option value='good' >Good</option>
                                 <option value='used' >Used</option>
                                 <option value='poor' >Poor</option>
                             </select>
-                            <img className='absolute w-4 h-4 right-3 transform -translate-y-1/2 top-1/2' src={assets.drop_down_icon}></img>
+                            <img className='absolute w-4 h-4 transform -translate-y-1/2 right-3 top-1/2' src={assets.drop_down_icon}></img>
                         </div>
                     </div>
 
                     {/* Price Range of Products */}
-                    <div className='flex items-center text-start gap-1 my-1 bg-white rounded-lg w-full h-16 px-3'>
-                        <h3 className='text-black font-bold m-1 w-31'>Price Range:</h3>
-                        <div className='relative w-full flex'>
-                            <select value={chosenPriceRange} onChange={(e) => setChosenPriceRange(e.target.value)} className='focus:outline-none focus:ring-0 appearance-none justify-between w-full bg-white px-2 rounded-md text-black font-semibold'>
+                    <div className='flex items-center w-full h-16 gap-1 px-3 my-1 bg-white rounded-lg text-start'>
+                        <h3 className='m-1 font-bold text-black w-31'>Price Range:</h3>
+                        <div className='relative flex w-full'>
+                            <select value={chosenPriceRange} onChange={(e) => setChosenPriceRange(e.target.value)} className='justify-between w-full px-2 font-semibold text-black bg-white rounded-md appearance-none focus:outline-none focus:ring-0'>
                                 <option value='-100' > {"< ₱100"}</option>
                                 <option value='100-499' >{"₱100 - ₱499"}</option>
                                 <option value='500-999' >{"₱500 - ₱999"}</option>
                                 <option value='999+' >{"> ₱999"}</option>
                             </select>
-                            <img className='absolute w-4 h-4 right-3 transform -translate-y-1/2 top-1/2' src={assets.drop_down_icon}></img>
+                            <img className='absolute w-4 h-4 transform -translate-y-1/2 right-3 top-1/2' src={assets.drop_down_icon}></img>
                         </div>
                     </div>
 
                     {/*/!* Subcategories Section *!/*/}
                     {/*{chosenCategory && (*/}
                     {/*    <div className='relative w-full h-auto'>*/}
-                    {/*        <div className="items-center text-start gap-2 my-2 bg-white rounded-lg w-full h-full p-2 pl-3">*/}
+                    {/*        <div className="items-center w-full h-full gap-2 p-2 pl-3 my-2 bg-white rounded-lg text-start">*/}
                     {/*            {loadingSubcategories ? (*/}
-                    {/*                <div className='text-gray-500 font-semibold p-2'>*/}
+                    {/*                <div className='p-2 font-semibold text-gray-500'>*/}
                     {/*                    Loading subcategories...*/}
                     {/*                </div>*/}
                     {/*            ) : subcategories.length > 0 ? (*/}
                     {/*                <div>*/}
-                    {/*                    <h3 className="text-black font-bold mb-2">Subcategories:</h3>*/}
+                    {/*                    <h3 className="mb-2 font-bold text-black">Subcategories:</h3>*/}
                     {/*                    <div className="flex flex-col gap-1 ml-3">*/}
                     {/*                        {subcategories.map((subcategory) => (*/}
                     {/*                            <button*/}
                     {/*                                key={subcategory.categoryId}*/}
                     {/*                                onClick={() => toggleFilter(subcategory.categoryName)}*/}
-                    {/*                                className="flex items-center gap-2 text-black font-semibold"*/}
+                    {/*                                className="flex items-center gap-2 font-semibold text-black"*/}
                     {/*                            >*/}
                     {/*      <span*/}
                     {/*          className={`border-2 border-gray-400 w-3 h-3 rounded-full*/}
@@ -220,7 +220,7 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                     {/*                    </div>*/}
                     {/*                </div>*/}
                     {/*            ) : (*/}
-                    {/*                <div className='text-gray-500 font-semibold p-2'>*/}
+                    {/*                <div className='p-2 font-semibold text-gray-500'>*/}
                     {/*                    No subcategories available*/}
                     {/*                </div>*/}
                     {/*            )}*/}
@@ -231,10 +231,10 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className='flex gap-3 justify-end mt-4'>
+                <div className='flex justify-end gap-3 mt-4'>
                     <button
                         onClick={handleClear}
-                        className='px-6 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition-colors'>
+                        className='px-6 py-2 font-semibold text-white transition-colors bg-gray-400 rounded-lg hover:bg-gray-500'>
                         Clear
                     </button>
                     <button

@@ -115,107 +115,123 @@ const SellerDashboard = ({searchQuery}) => {
 
     if (loading) {
         return (
-            <div className='flex flex-col justify-center items-center h-screen w-full'>
+            <div className='flex flex-col items-center justify-center w-full h-screen'>
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A31800] mb-4"></div>
-                <p className='text-red-950 font-bold'>Loading profile...</p>
+                <p className='font-bold text-red-950'>Loading profile...</p>
             </div>
         )
     }
 
     return (
-        <div className='flex flex-col justify-top h-screen w-full'>
+        <div className='flex flex-col w-full h-screen justify-top bg-linear-to-b from-[#FFF7DA] to-transparent p-6 rounded-tl-lg'>
             <br></br>
             {/* Overview */}
-            <div className='flex flex-col mb-4 gap-2'>
-                <h1 className="!text-3xl text-red-950 font-bold">Your Profile</h1>
-                <div className='flex gap-5 justify-between'>
-                    <div
-                        className='flex bg-[#FFF7DA] border-2 border-[#A31800] py-3 rounded-lg shadow-md space-x-4 px-5 w-full'>
-                        <div className='flex flex-col justify-center items-start p-2 px-4'>
-                            <img src={assets.blank_profile_icon} className='w-22'></img>
+
+            <div 
+                className='flex flex-col items-center justify-center gap-2 py-5 mb-3 bg-center border-red-900 rounded-lg bg-linear-to-t from-red-900 to-red-800'
+            >
+                <div className="flex flex-col items-center justify-center">
+                    <h2 
+                        className="font-sans text-3xl font-extrabold text-amber-400"
+                        style={{ 
+                            textShadow: `
+                                -2px -2px 0 #6e1000,
+                                2px -2px 0 #6e1000,
+                                -2px 2px 0 #6e1000,
+                                2px 2px 0 #6e1000,
+                                -2px 0 0 #6e1000,
+                                2px 0 0 #6e1000,
+                                0 -2px 0 #6e1000,
+                                0 2px 0 #6e1000,
+                                3px 3px 6px rgba(0,0,0,0.4)
+                            `
+                        }}
+                    >
+                        Seller Dashboard
+                    </h2>
+                    <p 
+                        className="font-sans font-extrabold text-amber-400 text-md"
+                        style={{ 
+                            textShadow: `
+                                -1px -1px 0 #6e1000,
+                                1px -1px 0 #6e1000,
+                                -1px 1px 0 #6e1000,
+                                1px 1px 0 #6e1000,
+                                2px 2px 4px rgba(0,0,0,0.3)
+                            `
+                        }}
+                    >
+                        Create new and manage existing categories
+                    </p>
+                </div>
+            </div>
+
+            <div className="bg-[#fffbee] rounded-md shadow-md border-2 border-[#530c00]/70  overflow-hidden">
+                {/* Toolbar */}
+                <div className="flex flex-col items-center justify-between gap-4 p-4 border-b-2 border-red-900 bg-linear-to-l from-red-900 to-red-700 sm:flex-row">
+                    <div className="flex gap-2 p-2 bg-red-900 border-2 border-red-900 rounded-lg">
+                        <div className='flex flex-col items-start justify-center px-4 bg-red-800 rounded-md h-13'>
+                            <img src={assets.white_user} className='h-6 w-9'></img>
                         </div>
 
-                        <div className='flex flex-col justify-center items-start w-full rounded-md p-2 px-4'>
-                            <div className='flex w-full mb-1'>
-                                <h2 className="text-2xl text-red-950 font-bold mr-1">
-                                    {getFullName()}
-                                </h2>
-                                {userData?.username && (
-                                    <h2 className='text-gray-500 text-2xl font-bold'>
-                                        ({userData.username})
-                                    </h2>
-                                )}
-                            </div>
-                            <h3 className="text-xs text-red-950 font-bold mb-1">
-                                {formatStudentId(userData?.studentId)}
-                            </h3>
-                            <h3 className="text-xs text-red-950 font-bold mb-1">
+                        <div className='flex flex-col items-start justify-center w-full px-4 rounded-md'>
+                             <h2 className="mr-1 text-lg font-semibold text-white">
+                                {getFullName()}
+                            </h2>
+                            <h3 className="mb-1 text-xs font-semibold text-white">
                                 {userData?.email || 'No email provided'}
                             </h3>
                         </div>
                     </div>
-
-                    <div
-                        className='flex bg-[#FFF7DA] border-2 border-[#A31800] py-3 rounded-lg shadow-md space-x-4 px-5 w-[50%]'>
-                        <div className='flex justify-center items-center w-full rounded-md p-2 px-4'>
-                            <div className='flex flex-col w-full mb-1 p-2'>
-                                <h3 className="text-md text-red-950 font-bold mr-1">
-                                    Active Listings
-                                </h3>
-                                <h2 className="text-4xl text-red-950 font-bold mb-1">
-                                    {userListings.length}
-                                </h2>
-                            </div>
-                            <img className='w-13 h-13 m-2' src={assets.listing_icon}/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <br className='h-3'></br>
-            {/* Your Listings */}
-            <div className='flex flex-col gap-2 my-2'>
-                <div className='flex justify-between items-center '>
-                    <h1 className="!text-3xl text-red-950 font-bold">
-                        {searchQuery ? `Search Results (${filteredListings.length})` : 'Your Listings'}
-                    </h1>
                     <button
                         onClick={() => setCreateNewListing(true)}
-                        className='bg-[#8B0000] rounded-md text-[10px] p-2 px-4 font-bold hover:scale-102'>
-                        + Create new Listing
+                        className='flex items-center gap-2 px-4 py-2 bg-amber-100 text-[#4d0c00] text-sm rounded-md font-semibold hover:bg-[#ffedad] hover:text-red-950 hover:scale-101 transition-colors border-2 border-amber-900/30 shadow-xs'>
+                        + Create Listing
                     </button>
                 </div>
-
+                <div className='flex bg-red-900 border-b-2 border-[#580d00] py-3 shadow-md space-x-4 px-5 items-center justify-between'>
+                     <h1 className="text-lg! text-white font-bold">
+                        {searchQuery ? `Search Results (${filteredListings.length})` : 'YOUR LISTINGS'}
+                    </h1>
+                    <div className='flex gap-2'>
+                        <h3 className="text-sm font-bold text-white">
+                            ACTIVE LISTINGS:
+                        </h3>
+                        <h2 className="text-sm font-bold text-white">
+                            {userListings.length}
+                        </h2>
+                    </div>
+                </div>
                 <div
-                    className='bg-[#FFF7DA] border-2 border-[#A31800] p-4 rounded-lg shadow-md flex space-x-4 px-5 min-h-[50vh]'>
+                    className='bg-[#FFF7DA] p-4 shadow-md flex space-x-4 px-5 min-h-[50vh]'>
                     {listingsLoading ? (
-                        <div className='flex max-h-full w-full justify-center items-center'>
+                        <div className='flex items-center justify-center w-full max-h-full'>
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A31800] mb-4"></div>
                         </div>
                     ) : filteredListings.length === 0 ? (
-                        <div className='flex max-h-full w-full justify-center items-center'>
+                        <div className='flex items-center justify-center w-full max-h-full'>
                             <div
-                                className='w-full h-full flex flex-col justify-center items-center pb-15 box-border gap-2'>
+                                className='box-border flex flex-col items-center justify-center w-full h-full gap-2 pb-15'>
                                 <img className='w-15 h-15' src={assets.empty_space_icon}></img>
-                                <h3 className='text-red-900 font-bold'>
+                                <h3 className='font-bold text-red-900'>
                                     {searchQuery ? `No listings found for "${searchQuery}"` : 'Poof! Its empty...'}
                                 </h3>
-                                <p className='text-gray-600 text-sm'>
+                                <p className='text-sm text-gray-600'>
                                     {searchQuery ? 'Try a different search term' : 'Create your first listing!'}
                                 </p>
                             </div>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-3 gap-4 w-full">
+                        <div className="grid w-full grid-cols-3 gap-4">
                             {filteredListings.map(listing => (
                                 <div key={listing.resourceId}
-                                     className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                                     className="overflow-hidden bg-white border border-gray-200 rounded-lg shadow-md">
                                     {/* Updated image display */}
                                     {listing.primaryImage ? (
                                         <img
                                             src={listing.primaryImage}
                                             alt={listing.title}
-                                            className="w-full h-48 object-cover"
+                                            className="object-cover w-full h-48"
                                             onError={(e) => {
                                                 e.target.onerror = null;
                                                 e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
@@ -225,21 +241,21 @@ const SellerDashboard = ({searchQuery}) => {
                                         <img
                                             src={listingService.getImageUrl(listing.images[0].imagePath)}
                                             alt={listing.title}
-                                            className="w-full h-48 object-cover"
+                                            className="object-cover w-full h-48"
                                             onError={(e) => {
                                                 e.target.onerror = null;
                                                 e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
                                             }}
                                         />
                                     ) : (
-                                        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                        <div className="flex items-center justify-center w-full h-48 bg-gray-200">
                                             <span className="text-gray-500">No image</span>
                                         </div>
                                     )}
                                     <div className="p-4">
-                                        <h3 className="font-bold text-lg text-red-900 mb-2 truncate">{listing.title}</h3>
-                                        <p className="text-gray-600 text-sm mb-2 line-clamp-2">{listing.description}</p>
-                                        <div className="flex justify-between items-center">
+                                        <h3 className="mb-2 text-lg font-bold text-red-900 truncate">{listing.title}</h3>
+                                        <p className="mb-2 text-sm text-gray-600 line-clamp-2">{listing.description}</p>
+                                        <div className="flex items-center justify-between">
                                             <span className="font-bold text-red-700">{formatPrice(listing.price)}</span>
                                             <span
                                                 className={`text-xs px-2 py-1 rounded-full ${listing.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
