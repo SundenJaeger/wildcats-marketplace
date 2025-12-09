@@ -68,14 +68,6 @@ const SettingsModal = ({onClose, onLogout}) => {
 
             {/* Left Side - Navigation */}
             <div className='flex flex-col items-start justify-start w-[35%] gap-2'>
-                <button type='button' onClick={() => setSettingsOption('notifs')}
-                className={`w-full text-black text-left font-bold text-sm p-3 px-4 rounded-lg transition-colors ${settingsOption === 'notifs' ? 'bg-gray-200' : 'bg-gray-50 hover:bg-gray-100' }`}>
-                Notification Settings
-                </button>
-                <button type='button' onClick={() => setSettingsOption('transacts')}
-                className={`w-full text-black font-bold text-sm text-left p-3 px-4 rounded-lg transition-colors ${settingsOption === 'transacts' ? 'bg-gray-200' : 'bg-gray-50 hover:bg-gray-100' }`}>
-                My transactions
-                </button>
                 <button type='button' onClick={() => setSettingsOption('logout')}
                 className={`w-full text-black font-bold text-sm text-left p-3 px-4 rounded-lg transition-colors ${settingsOption === 'logout' ? 'bg-gray-200' : 'bg-gray-50 hover:bg-gray-100' }`}>
                 Logout
