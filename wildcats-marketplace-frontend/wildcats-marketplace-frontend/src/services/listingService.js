@@ -179,7 +179,7 @@ export const listingService = {
             const listings = await response.json();
 
             // For each listing, fetch its images
-            const listingsWithImages = await Promise.all(
+            return await Promise.all(
                 listings.map(async (listing) => {
                     try {
                         // Fetch images for this listing
@@ -206,10 +206,246 @@ export const listingService = {
                     }
                 })
             );
-
-            return listingsWithImages;
         } catch (error) {
             console.error('Error fetching user listings:', error);
+            throw error;
+        }
+    },
+// Add these methods to your existing listingService object
+
+    async updateResource(resourceId, resourceData) {
+        try {
+            console.log('Making PUT request to:', `${API_BASE_URL}/resources/${resourceId}`);
+            console.log('Request body:', JSON.stringify(resourceData, null, 2));
+
+            const response = await fetch(`${API_BASE_URL}/resources/${resourceId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resourceData)
+            });
+
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
+
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    throw new Error(`Failed to update resource (${response.status}): ${errorText}`);
+                }
+
+                throw new Error(errorData.message || `Failed to update resource (${response.status})`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating resource:', error);
+            throw error;
+        }
+    },
+
+    async updateResourceStatus(resourceId, status) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/resources/${resourceId}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update status');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating status:', error);
+            throw error;
+        }
+    },
+
+    async updateResourceCondition(resourceId, condition) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/resources/${resourceId}/condition`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ condition })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update condition');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating condition:', error);
+            throw error;
+        }
+    },
+
+    async deleteResource(resourceId) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/resources/${resourceId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete resource');
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Error deleting resource:', error);
+            throw error;
+        }
+    },
+
+    async updatePrimaryImage(resourceId, imageId) {
+        try {
+            console.log('=== updatePrimaryImage ===');
+            console.log('resourceId:', resourceId);
+            console.log('imageId to make primary:', imageId);
+
+            // Fetch all images for the resource
+            const imagesResponse = await fetch(`${API_BASE_URL}/resource-images/resource/${resourceId}`);
+            if (!imagesResponse.ok) {
+                throw new Error('Failed to fetch images');
+            }
+
+            const images = await imagesResponse.json();
+            // Sort by current display order
+            images.sort((a, b) => a.displayOrder - b.displayOrder);
+
+            console.log('All images (sorted):', images.map(img => ({ id: img.imageId, order: img.displayOrder, path: img.imagePath })));
+
+            // Find the image we want to make primary
+            const targetImage = images.find(img => img.imageId === imageId);
+            if (!targetImage) {
+                throw new Error('Selected image not found');
+            }
+
+            console.log('Target image found:', targetImage);
+            console.log('Target current position:', images.indexOf(targetImage));
+
+            // Create new ordering: move target to position 0, shift others
+            const reorderedImages = [
+                targetImage,
+                ...images.filter(img => img.imageId !== imageId)
+            ];
+
+            console.log('New order:', reorderedImages.map((img, idx) => ({ id: img.imageId, newOrder: idx })));
+
+            // Update all images with their new display orders
+            for (let i = 0; i < reorderedImages.length; i++) {
+                const img = reorderedImages[i];
+
+                console.log(`Updating image ${img.imageId}: displayOrder ${img.displayOrder} -> ${i}`);
+
+                const imageData = {
+                    resource: {
+                        resourceId: resourceId
+                    },
+                    imagePath: img.imagePath,
+                    displayOrder: i
+                };
+
+                const response = await fetch(`${API_BASE_URL}/resource-images/${img.imageId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(imageData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Failed to update image ${img.imageId}:`, errorText);
+                    throw new Error(`Failed to update image order: ${errorText}`);
+                }
+            }
+
+            console.log('Primary image updated successfully');
+            return true;
+        } catch (error) {
+            console.error('Error updating primary image:', error);
+            throw error;
+        }
+    },
+
+    async updateImageOrder(resourceId, primaryIndex) {
+        try {
+            console.log('Updating image order - resourceId:', resourceId, 'primaryIndex:', primaryIndex);
+
+            // Fetch all images for the resource
+            const imagesResponse = await fetch(`${API_BASE_URL}/resource-images/resource/${resourceId}`);
+            if (!imagesResponse.ok) {
+                throw new Error('Failed to fetch images');
+            }
+
+            const images = await imagesResponse.json();
+            console.log('Fetched images:', images);
+
+            if (images.length === 0 || primaryIndex >= images.length) {
+                console.log('Invalid index or no images');
+                return false;
+            }
+
+            // Sort images by current display order
+            images.sort((a, b) => a.displayOrder - b.displayOrder);
+
+            // Reorder the array - move selected image to front
+            const reorderedImages = [
+                images[primaryIndex],
+                ...images.slice(0, primaryIndex),
+                ...images.slice(primaryIndex + 1)
+            ];
+
+            console.log('Reordered images:', reorderedImages.map(img => ({ id: img.imageId, order: img.displayOrder })));
+
+            // Update display orders for all images using PUT with correct request format
+            for (let i = 0; i < reorderedImages.length; i++) {
+                const imageData = {
+                    resource: {
+                        resourceId: resourceId
+                    },
+                    imagePath: reorderedImages[i].imagePath,
+                    displayOrder: i
+                };
+
+                console.log(`Updating image ${reorderedImages[i].imageId} to order ${i}`);
+
+                const response = await fetch(`${API_BASE_URL}/resource-images/${reorderedImages[i].imageId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(imageData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Failed to update image ${reorderedImages[i].imageId}:`, errorText);
+                    throw new Error(`Failed to update image order: ${errorText}`);
+                } else {
+                    console.log(`Successfully updated image ${reorderedImages[i].imageId}`);
+                }
+            }
+
+            console.log('All images updated successfully');
+            return true;
+        } catch (error) {
+            console.error('Error updating image order:', error);
             throw error;
         }
     },
