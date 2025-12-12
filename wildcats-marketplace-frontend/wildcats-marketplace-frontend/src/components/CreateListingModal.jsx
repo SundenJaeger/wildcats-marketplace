@@ -182,7 +182,7 @@ const CreateListingModal = ({onClose, onSuccess}) => {
     };
 
     return (
-        <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-51'>
+        <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-200'>
             <div className="flex flex-col p-3 px-4 bg-[#FFF7D7] h-[700px] w-200 rounded-lg">
                 <div className='flex justify-between pl-3 mb-2 items-center'>
                     <div className='flex justify-between items-center mt-3'>

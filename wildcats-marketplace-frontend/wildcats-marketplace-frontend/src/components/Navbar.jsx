@@ -90,7 +90,7 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
     };
 
     return (
-        <div className='flex items-center justify-center absolute top-0 left-0 w-full h-17 z-0 bg-[#A31800]'>
+        <div className='flex items-center justify-center absolute top-0 left-0 w-full h-17 z-100 bg-[#A31800]'>
             {/* Navbar for LoginSignup Page */}
             {!isHomepage && (
                 <div className='flex items-center gap-2 p-2 justify-center flex-1 max-w-5xl min-w-[300px] mx-2'>
