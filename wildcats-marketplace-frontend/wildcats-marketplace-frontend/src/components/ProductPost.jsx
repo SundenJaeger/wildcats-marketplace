@@ -273,34 +273,34 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
 
     return (
         <>
-            <div className='flex justify-end items-center'>
-                <div className='flex justify-end h-fit my-2'>
-                    <button className='p-2 px-3 text-xs font-bold rounded-lg bg-red-800' onClick={onBack}>Go Back</button>
+            <div className='flex items-center justify-end'>
+                <div className='flex justify-end my-2 h-fit'>
+                    <button className='p-2 px-3 text-xs font-bold bg-red-800 rounded-lg' onClick={onBack}>Go Back</button>
                 </div>
             </div>
 
-            <div className="flex flex-col p-3 px-3 bg-[#FFF7D7] h-150">
-                <div className='flex justify-between h-[100%] b-2'>
+            <div className="flex flex-col p-3 px-3 bg-[#FFF7D7] min-h-150 rounded-lg">
+                <div className='flex justify-between h-full b-2'>
                     {/* Product Images or Left Side */}
-                    <div className='flex flex-col justify-center w-1/2 h-[90h] m-2 box-content'>
-                        <div className='w-full h-full flex justify-between items-center bg-cover bg-center rounded-lg'
+                    <div className='box-content flex flex-col justify-center w-3/5 m-2 h-140'>
+                        <div className='flex items-center justify-between w-full h-full bg-center bg-cover rounded-lg'
                              style={{backgroundImage: `url(${getCurrentImage()})`}}>
                             {localProduct.imageList && localProduct.imageList.length > 1 && (
                                 <div className='flex justify-between w-full'>
-                                    <div className='flex justify-start items-center m-1'>
+                                    <div className='flex items-center justify-start m-1'>
                                         <input
                                             type="image"
                                             onClick={decIndex}
-                                            className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70 cursor-pointer'
+                                            className='w-8 h-8 cursor-pointer hover:scale-110 opacity-40 hover:opacity-70'
                                             src={assets.previous_button_icon}
                                             alt="Previous"
                                         />
                                     </div>
-                                    <div className='flex justify-start items-center m-1'>
+                                    <div className='flex items-center justify-start m-1'>
                                         <input
                                             type="image"
                                             onClick={incIndex}
-                                            className='w-8 h-8 hover:scale-110 opacity-40 hover:opacity-70 cursor-pointer'
+                                            className='w-8 h-8 cursor-pointer hover:scale-110 opacity-40 hover:opacity-70'
                                             src={assets.next_button_icon}
                                             alt="Next"
                                         />
@@ -311,7 +311,7 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                         {/* Image counter */}
                         {localProduct.imageList && localProduct.imageList.length > 1 && (
                             <div className='flex justify-center mt-2'>
-                                <span className='bg-black/50 text-white text-xs px-3 py-1 rounded-full'>
+                                <span className='px-3 py-1 text-xs text-white rounded-full bg-black/50'>
                                     {productImageIndex + 1} / {localProduct.imageList.length}
                                 </span>
                             </div>
@@ -319,18 +319,18 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                     </div>
 
                     {/*Product Details or Right Side*/}
-                    <div className='flex flex-col py-3 h-auto w-1/2 p-3'>
+                    <div className='flex flex-col w-2/5 h-auto p-3 py-3'>
                         <div className='flex items-start justify-between'>
-                            <div className='flex flex-col justify-start mb-2 gap-2'>
-                                <h2 className="text-4xl text-black font-extrabold">{localProduct.name}</h2>
-                                <h3 className="text-2xl text-black leading-2 font-semibold">{localProduct.price}</h3>
+                            <div className='flex flex-col justify-start gap-3 mb-2'>
+                                <h2 className="text-3xl font-semibold text-black">{localProduct.name}</h2>
+                                <h3 className="text-2xl text-black leading-2">{localProduct.price}</h3>
                                 <h3 className='text-xs leading-7 text-[#5B5B5B] font-semibold'>
                                     Listed by {localProduct.seller || 'Unknown'}
                                     {localProduct.sellerId && ` - ${localProduct.sellerId}`}
                                     {localProduct.datePosted && ` on ${formatListingDate(localProduct.datePosted)}`}
                                 </h3>
                             </div>
-                            <div className='flex justify-between items-center gap-1'>
+                            <div className='flex items-center justify-between gap-1'>
                                 <div
                                     onClick={handleSave}
                                     className={`flex justify-center items-center p-1 rounded-lg ${isSaving ? 'cursor-wait opacity-50' : 'cursor-pointer hover:scale-110'}`}
@@ -343,76 +343,82 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                         alt="Save"
                                     />
                                 </div>
-                                <div onClick={() => setShowReportModal(true)} className='flex justify-center items-center p-1 rounded-lg cursor-pointer'>
+                                <div onClick={() => setShowReportModal(true)} className='flex items-center justify-center p-1 rounded-lg cursor-pointer'>
                                     <input type="image" className="w-5 h-5" src={assets.report_icon} alt="Report"/>
                                 </div>
                             </div>
                         </div>
 
-                        <div className='flex justify-center items-center w-auto h-[2px] bg-gray-400 my-2'></div>
+                        <div className='flex justify-center items-center w-auto h-0.5 bg-amber-950/50 my-2'></div>
 
-                        <div className='mb-2 py-3'>
-                            <div className='grid grid-cols-[100px_1fr] mb-2 gap-2'>
+                        <div className='py-3 mb-2'>
+                            <p className='text-[#303030] text-md font-bold mb-2'>Details</p>
+                            <div className='grid grid-cols-[100px_1fr] mb-6 gap-2 ml-2'>
                                 <p className='text-[#5B5B5B] text-md font-bold'>Category</p>
-                                <p className='text-[#999999] text-sm font-bold'>
+                                <p className='text-sm font-bold text-amber-950/60'>
                                     {localProduct.category || 'Uncategorized'}
                                 </p>
                                 <p className='text-[#5B5B5B] text-md font-bold'>Condition</p>
-                                <p className='text-[#999999] text-sm font-bold'>
+                                <p className='text-sm font-bold text-amber-950/60'>
                                     {formatCondition(localProduct.condition)}
                                 </p>
                             </div>
-                            <p className='text-[#6c6c6c] text-sm font-semibold leading-6 text-justify'>
+                            <p className='text-[#303030] text-md font-bold mb-1'>Description</p>
+                            <p className='ml-3 text-sm font-semibold leading-6 text-justify text-amber-950/60'>
                                 {localProduct.description || 'No description available.'}
                             </p>
                         </div>
 
-                        <div className='flex flex-col justify-start items-start'>
-                            <div className='flex gap-1 mb-1 mt-3'>
+                    </div>
+
+                    
+                </div>
+                <div className='flex flex-col items-start justify-start'>
+                            <div className='flex gap-1 mt-3 mb-1'>
                                 <img className="w-4.5 h-4.5" src={assets.comment_icon} alt="Comments"/>
                                 <p className='text-[#999999] text-xs font-semibold leading-tight'>{totalComments}</p>
                             </div>
                         </div>
 
-                        <div className='flex justify-center items-center w-auto h-[1px] bg-gray-400 mt-1 mb-2'></div>
+                        <div className='flex items-center justify-center w-auto h-0.5 mt-1 mb-2 bg-amber-950/50'></div>
 
                         {/* Comments Section */}
-                        <div className='py-3 flex flex-col gap-3 overflow-y-auto max-h-64'>
+                        <div className='flex flex-col gap-3 px-10 py-3'>
                             {(localProduct.comments || []).map((comment) => (
                                 <div key={comment.commentId} className='flex flex-col gap-2'>
                                     <div className='flex items-start gap-1.5'>
-                                        <img className='w-10 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200'
+                                        <img className='w-10 h-10 p-2 bg-gray-100 border border-gray-200 rounded-full'
                                              src={assets.blank_profile_icon}
                                              alt={comment.studentUsername}/>
                                         <div className='flex flex-col w-full'>
                                             <div className='bg-[#fffcf2] rounded-xl p-2.5'>
-                                                <p className='text-gray-700 font-bold text-sm'>{comment.studentUsername}</p>
-                                                <p className='text-gray-500 font-semibold text-sm'>{comment.commentText}</p>
+                                                <p className='text-sm font-bold text-gray-700'>{comment.studentUsername}</p>
+                                                <p className='text-sm font-semibold text-gray-500'>{comment.commentText}</p>
                                             </div>
                                             <div className='flex gap-3 px-2 mt-1'>
                                                 <button
                                                     onClick={() => setReplyingTo(comment.commentId)}
-                                                    className='text-xs text-gray-500 font-semibold hover:text-gray-700'>
+                                                    className='text-xs font-semibold text-gray-500 hover:text-gray-700'>
                                                     Reply
                                                 </button>
-                                                <p className='text-xs text-gray-400 font-semibold'>{formatTimestamp(comment.timestamp)}</p>
+                                                <p className='text-xs font-semibold text-gray-400'>{formatTimestamp(comment.timestamp)}</p>
                                             </div>
                                         </div>
                                     </div>
 
                                     {comment.replies && comment.replies.length > 0 && (
-                                        <div className='ml-12 flex flex-col gap-2'>
+                                        <div className='flex flex-col gap-2 ml-12'>
                                             {comment.replies.map((reply) => (
                                                 <div key={reply.commentId} className='flex items-start gap-1.5'>
-                                                    <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border-1 border-gray-200'
+                                                    <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border border-gray-200'
                                                          src={assets.blank_profile_icon}
                                                          alt={reply.studentUsername}/>
-                                                    <div className='flex flex-col w-full'>
-                                                        <div className='bg-[#f5f5f5] rounded-xl p-2'>
-                                                            <p className='text-gray-700 font-bold text-xs'>{reply.studentUsername}</p>
-                                                            <p className='text-gray-500 font-semibold text-xs'>{reply.commentText}</p>
+                                                    <div className='flex flex-col w-full p-2'>
+                                                        <div className='bg-[#FFFCF2] rounded-xl p-2'>
+                                                            <p className='text-xs font-bold text-gray-700'>{reply.studentUsername}</p>
+                                                            <p className='text-xs font-semibold text-gray-500'>{reply.commentText}</p>
                                                         </div>
-                                                        <p className='text-xs text-gray-400 font-semibold px-2 mt-1'>{formatTimestamp(reply.timestamp)}</p>
+                                                        <p className='px-2 mt-1 text-xs font-semibold text-gray-400'>{formatTimestamp(reply.timestamp)}</p>
                                                     </div>
                                                 </div>
                                             ))}
@@ -420,8 +426,8 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                     )}
 
                                     {replyingTo === comment.commentId && (
-                                        <div className='ml-12 flex items-center gap-2'>
-                                            <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border-1 border-gray-200'
+                                        <div className='flex items-center gap-2 ml-12'>
+                                            <img className='w-8 h-8 rounded-full p-1.5 bg-gray-100 border border-gray-200'
                                                  src={assets.blank_profile_icon}
                                                  alt="Your profile"/>
                                             <div className='flex items-center justify-between bg-[#f5f5f5] w-full h-10 rounded-xl border-2 border-gray-200 px-2'>
@@ -430,7 +436,7 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                                     value={replyText}
                                                     onChange={(e) => setReplyText(e.target.value)}
                                                     onKeyPress={(e) => e.key === 'Enter' && handleAddReply(comment.commentId)}
-                                                    className='w-full focus:outline-none bg-transparent text-black placeholder-gray-400 text-xs font-semibold'
+                                                    className='w-full text-xs font-semibold text-black placeholder-gray-400 bg-transparent focus:outline-none'
                                                     placeholder={`Reply to ${comment.studentUsername}...`}
                                                 />
                                                 <button onClick={() => handleAddReply(comment.commentId)} className='p-1'>
@@ -444,9 +450,9 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                         </div>
 
                         {/* New Comment Input */}
-                        <div className='flex justify-center items-center mt-4'>
-                            <div className='p-1 rounded-md border-gray-400'>
-                                <img className='w-11 h-10 rounded-full p-2 bg-gray-100 border-1 border-gray-200'
+                        <div className='flex items-center justify-center px-10 mt-4'>
+                            <div className='p-1 border-gray-400 rounded-md'>
+                                <img className='h-10 p-2 bg-gray-100 border border-gray-200 rounded-full w-11'
                                      src={assets.blank_profile_icon}
                                      alt="Your profile"/>
                             </div>
@@ -456,16 +462,14 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                                     value={newComment}
                                     onChange={(e) => setNewComment(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
-                                    className='w-full focus:outline-none bg-transparent text-black placeholder-gray-400 text-xs font-semibold'
+                                    className='w-full text-xs font-semibold text-black placeholder-gray-400 bg-transparent focus:outline-none'
                                     placeholder={`Comment as ${JSON.parse(localStorage.getItem('userData') || '{}').username || 'User'}`}
                                 />
-                                <button onClick={handleAddComment} className='p-1 rounded-md border-gray-400'>
+                                <button onClick={handleAddComment} className='p-1 border-gray-400 rounded-md'>
                                     <img className='w-3 h-3 opacity-50 hover:opacity-100' src={assets.enter_icon} alt="Send"/>
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </div>
 
                 {showReportModal && (
                     <ReportModal
