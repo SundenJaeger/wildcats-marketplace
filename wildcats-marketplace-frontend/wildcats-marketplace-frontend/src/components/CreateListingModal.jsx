@@ -238,7 +238,7 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                                 <label className='p-1 font-bold text-black'>Price (₱) *</label>
                                 <div className='bg-gray-100 rounded-md'>
                                     <input
-                                        className='w-full p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+                                        className='w-full p-2 text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
                                         type='number'
                                         value={formData.price}
                                         onChange={(e) => handleInputChange('price', e.target.value)}
