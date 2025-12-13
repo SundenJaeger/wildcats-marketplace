@@ -3,6 +3,7 @@ import assets from '../assets/assets'
 import CreateListingModal from './CreateListingModal'
 import {listingService} from '../services/listingService';
 import ListingDetailModal from './ListingDetailModal';
+import PhotoCard from './PhotoCard';
 
 const SellerDashboard = ({searchQuery}) => {
     const [isActiveListing, setIsActiveListing] = useState(false)
@@ -40,14 +41,12 @@ const SellerDashboard = ({searchQuery}) => {
     const fetchUserListings = async (studentId) => {
         try {
             setListingsLoading(true)
-            // Use the new function that includes images
             const listings = await listingService.getUserListingsWithImages(studentId)
             setUserListings(listings)
             setFilteredListings(listings)
             setIsActiveListing(listings.length > 0)
         } catch (error) {
             console.error('Error fetching user listings:', error)
-            // Fallback to old method if new one fails
             try {
                 const oldListings = await listingService.getUserListings(studentId)
                 setUserListings(oldListings)
@@ -61,7 +60,6 @@ const SellerDashboard = ({searchQuery}) => {
         }
     }
 
-    // Filter listings based on search query
     useEffect(() => {
         if (!searchQuery || !searchQuery.trim()) {
             setFilteredListings(userListings);
@@ -95,24 +93,13 @@ const SellerDashboard = ({searchQuery}) => {
         }, 3000);
     };
 
-    const formatStudentId = (studentId) => {
-        if (!studentId) return 'N/A';
-        if (typeof studentId === 'string' && studentId.includes('-')) {
-            return studentId;
-        }
-        return `19-${studentId}`;
-    };
-
     const getFullName = () => {
         if (!userData) return 'Loading...';
         return userData.fullName || `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 'User';
     };
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-PH', {
-            style: 'currency',
-            currency: 'PHP'
-        }).format(price);
+        return `₱${Number(price).toFixed(2)}`;
     };
 
     const handleListingClick = (listing) => {
@@ -146,9 +133,8 @@ const SellerDashboard = ({searchQuery}) => {
 
     return (
         <div
-            className='flex flex-col w-full h-screen justify-top bg-linear-to-b from-[#FFF7DA] to-transparent p-6 rounded-tl-lg'>
+            className='flex flex-col w-full pb-8 justify-top bg-linear-to-b from-[#FFF7DA] to-transparent p-6 rounded-tl-lg'>
             <br></br>
-            {/* Overview */}
 
             <div
                 className='flex flex-col items-center justify-center gap-2 py-5 mb-3 bg-center border-red-900 rounded-lg bg-linear-to-t from-red-900 to-red-800'
@@ -184,18 +170,18 @@ const SellerDashboard = ({searchQuery}) => {
                             `
                         }}
                     >
-                        Create new and manage existing categories
+                        Create new and manage existing listings
                     </p>
                 </div>
             </div>
 
-            <div className="bg-[#fffbee] rounded-md shadow-md border-2 border-[#530c00]/70  overflow-hidden">
+            <div className="bg-[#fffbee] rounded-md shadow-md border-2 border-[#530c00]/70 overflow-hidden">
                 {/* Toolbar */}
                 <div
                     className="flex flex-col items-center justify-between gap-4 p-4 border-b-2 border-red-900 bg-linear-to-l from-red-900 to-red-700 sm:flex-row">
                     <div className="flex gap-2 p-2 bg-red-900 border-2 border-red-900 rounded-lg">
                         <div className='flex flex-col items-start justify-center px-4 bg-red-800 rounded-md h-13'>
-                            <img src={assets.white_user} className='h-6 w-9'></img>
+                            <img src={assets.white_user} className='h-6 w-9' alt="user"></img>
                         </div>
 
                         <div className='flex flex-col items-start justify-center w-full px-4 rounded-md'>
@@ -213,11 +199,12 @@ const SellerDashboard = ({searchQuery}) => {
                         + Create Listing
                     </button>
                 </div>
+
                 <div
                     className='flex bg-red-900 border-b-2 border-[#580d00] py-3 shadow-md space-x-4 px-5 items-center justify-between'>
-                    <h1 className="text-lg! text-white font-bold">
+                    <h2 className="text-xl font-bold text-white">
                         {searchQuery ? `Search Results (${filteredListings.length})` : 'YOUR LISTINGS'}
-                    </h1>
+                    </h2>
                     <div className='flex gap-2'>
                         <h3 className="text-sm font-bold text-white">
                             ACTIVE LISTINGS:
@@ -227,17 +214,16 @@ const SellerDashboard = ({searchQuery}) => {
                         </h2>
                     </div>
                 </div>
-                <div
-                    className='bg-[#FFF7DA] p-4 shadow-md flex space-x-4 px-5 min-h-[50vh]'>
+
+                <div className='bg-[#FFF7DA] p-4 shadow-md'>
                     {listingsLoading ? (
-                        <div className='flex items-center justify-center w-full max-h-full'>
+                        <div className='flex items-center justify-center w-full py-20'>
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A31800] mb-4"></div>
                         </div>
                     ) : filteredListings.length === 0 ? (
-                        <div className='flex items-center justify-center w-full max-h-full'>
-                            <div
-                                className='box-border flex flex-col items-center justify-center w-full h-full gap-2 pb-15'>
-                                <img className='w-15 h-15' src={assets.empty_space_icon}></img>
+                        <div className='flex items-center justify-center w-full py-20'>
+                            <div className='flex flex-col items-center justify-center gap-2'>
+                                <img className='w-15 h-15' src={assets.empty_space_icon} alt="empty"></img>
                                 <h3 className='font-bold text-red-900'>
                                     {searchQuery ? `No listings found for "${searchQuery}"` : 'Poof! Its empty...'}
                                 </h3>
@@ -247,59 +233,26 @@ const SellerDashboard = ({searchQuery}) => {
                             </div>
                         </div>
                     ) : (
-                        <div className="grid w-full grid-cols-3 gap-4">
+                        <div className='grid grid-cols-2 gap-4 py-2 md:grid-cols-3 lg:grid-cols-4'>
                             {filteredListings.map(listing => {
-                                // Sort images by displayOrder to ensure primary image is first
                                 const sortedImages = listing.images
                                     ? [...listing.images].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
                                     : [];
 
                                 const primaryImage = sortedImages.length > 0
                                     ? listingService.getImageUrl(sortedImages[0].imagePath)
-                                    : listing.primaryImage;
+                                    : listing.primaryImage || 'https://via.placeholder.com/300x200?text=No+Image';
 
                                 return (
-                                    <div
+                                    <PhotoCard
                                         key={listing.resourceId}
+                                        image={primaryImage}
+                                        name={listing.title}
+                                        price={formatPrice(listing.price)}
+                                        category={listing.category?.categoryName || 'Uncategorized'}
+                                        status={listing.status || 'N/A'}
                                         onClick={() => handleListingClick(listing)}
-                                        className="overflow-hidden bg-white border border-gray-200 rounded-lg shadow-md cursor-pointer transition-transform hover:scale-105 hover:shadow-xl"
-                                    >
-                                        {/* Updated image display */}
-                                        {primaryImage ? (
-                                            <img
-                                                src={primaryImage}
-                                                alt={listing.title}
-                                                className="object-cover w-full h-48"
-                                                onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
-                                                }}
-                                            />
-                                        ) : (
-                                            <div className="flex items-center justify-center w-full h-48 bg-gray-200">
-                                                <span className="text-gray-500">No image</span>
-                                            </div>
-                                        )}
-                                        <div className="p-4">
-                                            <h3 className="mb-2 text-lg font-bold text-red-900 truncate">{listing.title}</h3>
-                                            <p className="mb-2 text-sm text-gray-600 line-clamp-2">{listing.description}</p>
-                                            <div className="flex items-center justify-between">
-                                                <span className="font-bold text-red-700">{formatPrice(listing.price)}</span>
-                                                <span
-                                                    className={`text-xs px-2 py-1 rounded-full ${
-                                                        listing.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' :
-                                                            listing.status === 'SOLD' ? 'bg-blue-100 text-blue-800' :
-                                                                'bg-gray-100 text-gray-800'
-                                                    }`}
-                                                >
-                                                    {listing.status}
-                                                </span>
-                                            </div>
-                                            <div className="mt-2 text-xs text-gray-500">
-                                                {new Date(listing.datePosted).toLocaleDateString()}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    />
                                 );
                             })}
                         </div>
@@ -314,7 +267,6 @@ const SellerDashboard = ({searchQuery}) => {
                 </CreateListingModal>
             )}
 
-            {/* Success Alert */}
             {showSuccessAlert && (
                 <div
                     className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-[#FFF7DA] border-2 border-rose-950 text-black px-6 py-3 rounded-lg shadow-lg z-[60] flex items-center gap-2">

@@ -21,7 +21,7 @@ function App() {
                 className="relative z-20 flex flex-col justify-between w-screen min-h-screen bg-white bg-center bg-no-repeat bg-cover App"
                 style={{ backgroundImage: `url(${assets.wildcats_marketplace_bg_image})` }}
             >
-                <div className='flex items-center justify-center'>
+                <div className='flex items-start justify-center flex-1 w-full'>
                     <nav className="sticky top-0 z-50 w-full h-18">
                         <Navbar />
                     </nav>

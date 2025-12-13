@@ -228,14 +228,14 @@ const Homepage = () => {
                             </div>
                             {/* Marketplace */}
                             {isMarketplaceView && (
-                                <div className='bg-linear-to-b from-[#FFF7DA] to-transparent rounded-tr-lg min-h-screen'>
+                                <div className='bg-linear-to-b from-[#FFF7DA] to-transparent rounded-tr-lg pb-8'>
                                     <div className='flex flex-col items-center justify-center mt-5 mb-2'>
                                         <img src={assets.homepage_welcome_banner}
                                             alt="Wildcats"
                                             className="object-contain w-[95%] h-full my-1 rounded-lg"
                                         />
                                     </div>
-                                    
+
                                     <div className='px-6'>
                                         <div className="bg-[#fffbee] rounded-md shadow-md border-2 border-red-950 overflow-hidden">
                                             {/* Header Bar */}
@@ -306,7 +306,7 @@ const Homepage = () => {
                             {/* Seller Dashboard */}
                             {!(isMarketplaceView) && (
                                 <>
-                                    <div className='flex flex-col w-full h-screen justify-top'>
+                                    <div className='flex flex-col w-full justify-top'>
                                         <SellerDashboard searchQuery={searchQuery}/>
                                     </div>
                                 </>
