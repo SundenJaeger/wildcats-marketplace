@@ -336,7 +336,7 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
                                                 src={img.fullUrl || img.url}
                                                 alt={`${editedListing.title} ${idx + 1}`}
                                                 onClick={() => setPrimaryImage(idx)}
-                                                className={`w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75 flex-shrink-0 ${
+                                                className={`w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75 shrink-0 ${
                                                     idx === primaryImageIndex ? 'ring-3 ring-blue-500' : 'ring-2 ring-gray-300'
                                                 }`}
                                             />
