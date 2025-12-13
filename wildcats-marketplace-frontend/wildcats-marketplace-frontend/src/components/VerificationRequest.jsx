@@ -17,7 +17,7 @@ export default function VerificationRequestScreen() {
     const [rejectionReason, setRejectionReason] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const filters = ['All Requests', 'Pending', 'Approved', 'Rejected'];
+    const filters = ['All Requests', 'PENDING', 'APPROVED', 'REJECTED'];
 
     // 1. Fetch Data on Mount
     const fetchRequests = async () => {
@@ -89,7 +89,7 @@ export default function VerificationRequestScreen() {
         }
     };
 
-    // Filter Logic
+    // Filter Logic - FIXED
     const filteredRequests = requests.filter(req => {
         if (selectedFilter === 'All Requests') return true;
         return req.status === selectedFilter;
@@ -109,7 +109,7 @@ export default function VerificationRequestScreen() {
             </div>
 
 
-             {/* Stats Cards */}
+             {/* Stats Cards - FIXED VALUES */}
             <div className="grid grid-cols-1 gap-2 mb-8 md:grid-cols-4">
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800 text-white'>
                     <div className='flex flex-col'>
@@ -130,7 +130,7 @@ export default function VerificationRequestScreen() {
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-blue-700 to-indigo-800 text-white'>
                     <div className='flex flex-col'>
                         <h6>Approved</h6>
-                        <h4 className='text-3xl font-bold'>{stats.underReview || 0}</h4>
+                        <h4 className='text-3xl font-bold'>{stats.approved || 0}</h4>
                     </div>
                     <CheckCircle className="w-9 h-9" />
                 </div>
@@ -138,7 +138,7 @@ export default function VerificationRequestScreen() {
                 <div className='flex justify-between items-center font-semibold p-4 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800 text-white'>
                     <div className='flex flex-col'>
                         <h6>Rejected</h6>
-                        <h4 className='text-3xl font-bold'>{stats.resolved || 0}</h4>
+                        <h4 className='text-3xl font-bold'>{stats.rejected || 0}</h4>
                     </div>
                     <X className="w-9 h-9" />
                 </div>
@@ -159,7 +159,7 @@ export default function VerificationRequestScreen() {
                                         : 'text-gray-200 hover:text-white'
                                 }`}
                             >
-                                {filter}
+                                {filter === 'All Requests' ? filter : filter.charAt(0) + filter.slice(1).toLowerCase()}
                             </button>
                         ))}
                     </div>
