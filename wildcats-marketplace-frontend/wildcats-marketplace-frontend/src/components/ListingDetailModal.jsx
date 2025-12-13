@@ -540,7 +540,7 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
 
                 {/* Delete Confirmation Modal */}
                 {showDeleteConfirm && (
-                    <div className="absolute inset-0 flex items-center justify-center p-4 bg-black bg-opacity-50 rounded-lg">
+                    <div className="absolute inset-0 flex items-center justify-center p-4 rounded-lg bg-black/50">
                         <div className="w-full max-w-md p-6 bg-white rounded-lg">
                             <h3 className="mb-4 text-xl font-bold text-gray-900">Confirm Delete</h3>
                             <p className="mb-6 text-sm text-gray-700">
