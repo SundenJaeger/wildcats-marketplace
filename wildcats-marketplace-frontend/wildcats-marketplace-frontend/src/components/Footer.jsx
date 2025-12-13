@@ -1,33 +1,34 @@
 function Footer() {
   return (
-    <footer className="flex justify-center bg-[#350800] text-white">
-      <div className="flex justify-around max-w-265">
-        {/* Left Section */}
-      <div className="text-left max-w-2/3">
-        <h3 className="font-bold text-lg mb-2">Wildcats MarketPlace</h3>
-        <p className="text-md text-justify leading-relaxed">
-            Wildcats Marketplace is a web-based application developed as a final project 
-            for CSIT321: Software Development. The platform serves as a simulation of 
-            what an online marketplace for students could look like—providing buying, 
-            selling, and sharing features within a campus-focused community.
-        </p>
-        <p className="text-sm text-gray-300 mt-4">s
-            © 2025 Wildcats Marketplace. All rights reserved.
-        </p>
-      </div>
+    <footer className="mt-auto bg-[#350800] text-white py-8">
+      <div className="container px-6 mx-auto max-w-7xl">
+        <div className="flex flex-col justify-between gap-8 md:flex-row">
+          {/* Left Section */}
+          <div className="flex-1 max-w-2xl">
+            <h3 className="mb-3 text-lg font-bold">Wildcats MarketPlace</h3>
+            <p className="text-sm leading-relaxed text-justify text-gray-300">
+              Wildcats Marketplace is a web-based application developed as a final project 
+              for CSIT321: Software Development. The platform serves as a simulation of 
+              what an online marketplace for students could look like—providing buying, 
+              selling, and sharing features within a campus-focused community.
+            </p>
+            <p className="mt-4 text-xs text-gray-400">
+              © 2025 Wildcats Marketplace. All rights reserved.
+            </p>
+          </div>
 
-
-      {/* Right Section */}
-      <div className="flex flex-col justify-center max-w-1/3">
-        <h3 className="font-bold text-lg mb-2">Team Algorhythym</h3>
-        <ul className="flex flex-col items-start justify-center pl-4 text-md list-disc">
-            <li>John Lyster Tan Arbiol</li>
-            <li>Rene John Sitoy</li>
-            <li>Amiel Joshua Peñaflor</li>
-            <li>John Clyde Perez</li>
-            <li>Sol Angelo Singson</li>
-        </ul>
-      </div>
+          {/* Right Section */}
+          <div className="shrink-0">
+            <h3 className="mb-3 text-lg font-bold">Team Algorhythym</h3>
+            <ul className="space-y-1 text-sm text-gray-300">
+              <li>John Lyster Tan Arbiol</li>
+              <li>Rene John Sitoy</li>
+              <li>Amiel Joshua Peñaflor</li>
+              <li>John Clyde Perez</li>
+              <li>Sol Angelo Singson</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </footer>
   );
