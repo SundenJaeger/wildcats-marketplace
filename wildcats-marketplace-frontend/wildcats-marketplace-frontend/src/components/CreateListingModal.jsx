@@ -182,11 +182,11 @@ const CreateListingModal = ({onClose, onSuccess}) => {
     };
 
     return (
-        <div className='fixed inset-0 flex flex-col justify-center items-center bg-black/40 z-200'>
+        <div className='fixed inset-0 flex flex-col items-center justify-center bg-black/40 z-200'>
             <div className="flex flex-col p-3 px-4 bg-[#FFF7D7] h-[700px] w-200 rounded-lg">
-                <div className='flex justify-between pl-3 mb-2 items-center'>
-                    <div className='flex justify-between items-center mt-3'>
-                        <h2 className='text-black font-bold text-xl'>Create Listing</h2>
+                <div className='flex items-center justify-between pl-3 mb-2'>
+                    <div className='flex items-center justify-between mt-3'>
+                        <h2 className='text-xl font-bold text-black'>Create Listing</h2>
                     </div>
                     <div
                         onClick={() => !isSubmitting && onClose()}
@@ -200,15 +200,15 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                     </div>
                 </div>
 
-                <div className='flex min-w-full h-full justify-between p-2 gap-5 box-border'>
+                <div className='box-border flex justify-between h-full min-w-full gap-5 p-2'>
                     {/* Left Side */}
                     <div className='flex flex-col p-2 bg-white min-w-[50%] rounded-2xl'>
                         <div className='flex flex-col'>
                             <div className='px-5 my-1'>
-                                <label className='text-black p-1 font-bold'>Title *</label>
+                                <label className='p-1 font-bold text-black'>Title *</label>
                                 <div className='bg-gray-100 rounded-md'>
                                     <input
-                                        className='w-full text-black p-2'
+                                        className='w-full p-2 text-black'
                                         type='text'
                                         value={formData.title}
                                         onChange={(e) => handleInputChange('title', e.target.value)}
@@ -220,10 +220,10 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                             </div>
 
                             <div className='px-5 my-1'>
-                                <label className='text-black p-1 font-bold'>Description *</label>
+                                <label className='p-1 font-bold text-black'>Description *</label>
                                 <div className='bg-gray-100 rounded-md'>
                   <textarea
-                      className='w-full text-black p-2 resize-none'
+                      className='w-full p-2 text-black resize-none'
                       rows={3}
                       value={formData.description}
                       onChange={(e) => handleInputChange('description', e.target.value)}
@@ -235,10 +235,10 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                             </div>
 
                             <div className='px-5 my-1'>
-                                <label className='text-black p-1 font-bold'>Price (₱) *</label>
+                                <label className='p-1 font-bold text-black'>Price (₱) *</label>
                                 <div className='bg-gray-100 rounded-md'>
                                     <input
-                                        className='w-full p-2'
+                                        className='w-full p-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
                                         type='number'
                                         value={formData.price}
                                         onChange={(e) => handleInputChange('price', e.target.value)}
@@ -252,12 +252,12 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                             </div>
 
                             <div className='px-5 my-1'>
-                                <label className='text-black p-1 font-bold'>Category</label>
-                                <div className='bg-gray-100 rounded-md p-2'>
+                                <label className='p-1 font-bold text-black'>Category</label>
+                                <div className='p-2 bg-gray-100 rounded-md'>
                                     <select
                                         value={chosenCategory}
                                         onChange={(e) => setChosenCategory(e.target.value)}
-                                        className='focus:outline-none focus:ring-0 appearance-none justify-between w-full bg-gray-100 px-2 rounded-md text-black font-semibold'
+                                        className='justify-between w-full px-2 font-semibold text-black bg-gray-100 rounded-md appearance-none focus:outline-none focus:ring-0'
                                         disabled={isSubmitting || categories.length === 0}
                                     >
                                         {categories.length === 0 ? (
@@ -274,12 +274,12 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                             </div>
 
                             <div className='px-5 my-1'>
-                                <label className='text-black p-1 font-bold'>Condition</label>
-                                <div className='bg-gray-100 rounded-md p-2'>
+                                <label className='p-1 font-bold text-black'>Condition</label>
+                                <div className='p-2 bg-gray-100 rounded-md'>
                                     <select
                                         value={chosenCondition}
                                         onChange={(e) => setChosenCondition(e.target.value)}
-                                        className='focus:outline-none focus:ring-0 appearance-none justify-between w-full bg-gray-100 px-2 rounded-md text-black font-semibold'
+                                        className='justify-between w-full px-2 font-semibold text-black bg-gray-100 rounded-md appearance-none focus:outline-none focus:ring-0'
                                         disabled={isSubmitting}
                                     >
                                         <option value='bnew'>Brand New</option>
@@ -295,24 +295,24 @@ const CreateListingModal = ({onClose, onSuccess}) => {
 
                     {/* Right Side */}
                     <div className="flex items-start w-full">
-                        <div className="bg-white rounded-2xl px-8 py-3 w-full h-full max-w-4xl">
-                            <h2 className="text-xl font-bold text-gray-800 mb-5">Upload Images *</h2>
-                            <p className="text-sm text-gray-600 mb-4">Upload up to {maxImages} images (first image will
+                        <div className="w-full h-full max-w-4xl px-8 py-3 bg-white rounded-2xl">
+                            <h2 className="mb-5 text-xl font-bold text-gray-800">Upload Images *</h2>
+                            <p className="mb-4 text-sm text-gray-600">Upload up to {maxImages} images (first image will
                                 be primary)</p>
 
                             <div className="flex flex-wrap justify-around gap-4">
                                 {images.map((image, idx) => (
                                     <div
                                         key={image.id}
-                                        className="relative w-30 h-30 rounded-lg overflow-hidden shadow-md group"
+                                        className="relative overflow-hidden rounded-lg shadow-md w-30 h-30 group"
                                     >
                                         <img
                                             src={image.url}
                                             alt={`Preview ${idx + 1}`}
-                                            className="w-full h-full object-cover"
+                                            className="object-cover w-full h-full"
                                         />
                                         {idx === 0 && (
-                                            <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                                            <div className="absolute px-2 py-1 text-xs font-bold text-white bg-blue-500 rounded-full top-2 left-2">
                                                 Primary
                                             </div>
                                         )}
@@ -335,7 +335,7 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                                             className={`text-sm font-medium ${isSubmitting ? 'text-gray-400' : 'text-gray-600'}`}>
                       Upload Image
                     </span>
-                                        <span className="text-xs text-gray-400 mt-1">
+                                        <span className="mt-1 text-xs text-gray-400">
                       {images.length}/{maxImages}
                     </span>
                                         <input
@@ -352,8 +352,8 @@ const CreateListingModal = ({onClose, onSuccess}) => {
 
                             {images.length === maxImages && (
                                 <div
-                                    className="mt-6 p-2 bg-rose-50 border border-rose-200 rounded-lg flex justify-center items-center">
-                                    <p className="text-rose-950 text-xs font-medium text-center">
+                                    className="flex items-center justify-center p-2 mt-6 border rounded-lg bg-rose-50 border-rose-200">
+                                    <p className="text-xs font-medium text-center text-rose-950">
                                         Maximum images reached
                                     </p>
                                 </div>
@@ -363,7 +363,7 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                 </div>
 
                 {/* Create Button */}
-                <div className='flex justify-end p-2 items-center'>
+                <div className='flex items-center justify-end p-2'>
                     <button
                         onClick={handleCreateListing}
                         disabled={isSubmitting}
@@ -371,7 +371,7 @@ const CreateListingModal = ({onClose, onSuccess}) => {
                     >
                         {isSubmitting ? (
                             <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                <div className="w-4 h-4 border-b-2 border-white rounded-full animate-spin"></div>
                                 Creating...
                             </>
                         ) : (
