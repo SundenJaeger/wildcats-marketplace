@@ -1,3 +1,4 @@
+//const API_BASE_URL = 'http://localhost:8000/api/auth'; 
 const API_BASE_URL = 'http://localhost:8080/api/auth'; // Adjust port if needed
 
 export const authService = {
@@ -59,11 +60,18 @@ export const authService = {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Login failed');
             }
-
-            return await response.json();
+            const data = await response.json();
+            const tokenToStore = data.token || data.access; 
+            if (tokenToStore) {
+                // authToken for a reliable key
+                localStorage.setItem('authToken', tokenToStore); 
+            }
+            
+            return data;
         } catch (error) {
             console.error('Login error:', error);
             throw error;
         }
     }
 };
+

@@ -4,7 +4,23 @@ import axios from 'axios';
 import assets from '../assets/assets';
 
 // Configure your API base URL
+
+// const API_BASE_URL = 'http://localhost:8000/categories/';
 const API_BASE_URL = 'http://localhost:8080/api/categories';
+
+
+// helper functions
+const getAuthHeaders = () => {
+    const token = localStorage.getItem('authToken');
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+    };
+};
+const authAxios = axios.create({
+    baseURL: API_BASE_URL,
+    headers: getAuthHeaders()
+});
 
 export default function CategoriesManagement() {
     const [categories, setCategories] = useState([]);
@@ -17,12 +33,13 @@ export default function CategoriesManagement() {
     // Form data state
     const [formData, setFormData] = useState({
         category_name: '',
+        parent_category: '',
         description: '',
         is_active: true
     });
 
     const [selectedFilter, setSelectedFilter] = useState('All Categories');
-    const filters = ['All Categories', 'Active', 'Inactive'];
+    const filters = ['All Categories', 'Active', 'Inactive', 'Parent Categories', 'Subcategories'];
 
     // --- API HELPER FUNCTIONS ---
 
@@ -31,6 +48,8 @@ export default function CategoriesManagement() {
         return data.map(cat => ({
             category_id: cat.categoryId,
             category_name: cat.categoryName,
+            // Handle nested parent object from Java
+            parent_category: cat.parentCategory ? cat.parentCategory.categoryId : null,
             description: cat.description,
             is_active: cat.isActive
         }));
@@ -63,6 +82,8 @@ export default function CategoriesManagement() {
         switch (selectedFilter) {
             case 'Active': return categories.filter(cat => cat.is_active);
             case 'Inactive': return categories.filter(cat => !cat.is_active);
+            case 'Parent Categories': return categories.filter(cat => cat.parent_category === null);
+            case 'Subcategories': return categories.filter(cat => cat.parent_category !== null);
             default: return categories;
         }
     };
@@ -72,7 +93,8 @@ export default function CategoriesManagement() {
     const stats = {
         total: categories.length,
         active: categories.filter(c => c.is_active).length,
-        inactive: categories.filter(c => !c.is_active).length
+        inactive: categories.filter(c => !c.is_active).length,
+        parents: categories.filter(c => c.parent_category === null).length
     };
 
     // --- HANDLERS ---
@@ -82,6 +104,7 @@ export default function CategoriesManagement() {
             setEditingCategory(category);
             setFormData({
                 category_name: category.category_name,
+                parent_category: category.parent_category || '',
                 description: category.description || '',
                 is_active: category.is_active
             });
@@ -89,6 +112,7 @@ export default function CategoriesManagement() {
             setEditingCategory(null);
             setFormData({
                 category_name: '',
+                parent_category: '',
                 description: '',
                 is_active: true
             });
@@ -99,7 +123,7 @@ export default function CategoriesManagement() {
     const handleCloseModal = () => {
         setShowModal(false);
         setEditingCategory(null);
-        setFormData({ category_name: '', description: '', is_active: true });
+        setFormData({ category_name: '', parent_category: '', description: '', is_active: true });
     };
 
     const handleSubmit = async () => {
@@ -109,16 +133,20 @@ export default function CategoriesManagement() {
         const payload = {
             categoryName: formData.category_name,
             description: formData.description,
-            isActive: formData.is_active
+            isActive: formData.is_active,
+            // Map parent ID to the Object structure Java expects: { categoryId: 1 }
+            parentCategory: formData.parent_category
+                ? { categoryId: parseInt(formData.parent_category) }
+                : null
         };
 
         try {
             if (editingCategory) {
                 // UPDATE (PUT)
-                await axios.put(`${API_BASE_URL}/${editingCategory.category_id}`, payload);
+                await authAxios.put(`/${editingCategory.category_id}/`, payload);
             } else {
                 // CREATE (POST)
-                await axios.post(API_BASE_URL, payload);
+                await authAxios.post('', payload);
             }
             // Refresh list after success
             fetchCategories();
@@ -132,14 +160,20 @@ export default function CategoriesManagement() {
     const handleDelete = async (categoryId) => {
         if (window.confirm('Are you sure you want to delete this category?')) {
             try {
-                await axios.delete(`${API_BASE_URL}/${categoryId}`);
+                await authAxios.delete(`/${categoryId}/`);
                 // Remove from local state immediately for UI responsiveness
                 setCategories(categories.filter(cat => cat.category_id !== categoryId));
             } catch (err) {
                 console.error("Error deleting category:", err);
-                alert("Failed to delete. It might be in use by Resources.");
+                alert("Failed to delete. It might be in use by Resources or Subcategories.");
             }
         }
+    };
+
+    const getParentName = (parentId) => {
+        if (!parentId) return 'None';
+        const parent = categories.find(cat => cat.category_id === parentId);
+        return parent ? parent.category_name : 'Unknown';
     };
 
     // --- RENDER ---
@@ -171,24 +205,31 @@ export default function CategoriesManagement() {
 
             {/* Stats Cards */}
             <div className="flex justify-between gap-2 mb-8">
-                <div className="flex justify-between items-center font-semibold p-3 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800 text-white">
+                <div className="flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-red-700 to-amber-800 text-white">
                     <div className="flex flex-col">
                         <h6>Total Categories</h6>
                         <h4 className="text-3xl font-bold">{stats.total}</h4>
                     </div>
                     <FolderTree className="w-9 h-9" />
                 </div>
-                <div className="flex justify-between items-center font-semibold p-3 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800 text-white">
+                <div className="flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-green-600 to-green-800 text-white">
                     <div className="flex flex-col">
                         <h6>Active</h6>
                         <h4 className="text-3xl font-bold">{stats.active}</h4>
                     </div>
                     <FolderTree className="w-9 h-9" />
                 </div>
-                <div className="flex justify-between items-center font-semibold p-3 py-6 flex-1 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-gray-600 to-gray-800 text-white">
+                <div className="flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-gray-600 to-gray-800 text-white">
                     <div className="flex flex-col">
                         <h6>Inactive</h6>
                         <h4 className="text-3xl font-bold">{stats.inactive}</h4>
+                    </div>
+                    <FolderTree className="w-9 h-9" />
+                </div>
+                <div className="flex justify-between items-center font-semibold p-3 py-6 w-60 rounded-md shadow-md border-2 border-[#A31800] bg-gradient-to-r from-blue-600 to-indigo-800 text-white">
+                    <div className="flex flex-col">
+                        <h6>Parent Categories</h6>
+                        <h4 className="text-3xl font-bold">{stats.parents}</h4>
                     </div>
                     <FolderTree className="w-9 h-9" />
                 </div>
@@ -228,6 +269,7 @@ export default function CategoriesManagement() {
                         <thead className="text-xs font-semibold text-white uppercase bg-red-900">
                         <tr>
                             <th className="px-6 py-4">Category Name</th>
+                            <th className="px-6 py-4">Parent Category</th>
                             <th className="px-6 py-4">Description</th>
                             <th className="px-6 py-4">Status</th>
                             <th className="px-6 py-4 text-right">Actions</th>
@@ -238,6 +280,9 @@ export default function CategoriesManagement() {
                             <tr key={category.category_id} className="transition-colors hover:bg-amber-50">
                                 <td className="px-6 py-4 font-medium text-gray-900">
                                     {category.category_name}
+                                </td>
+                                <td className="px-6 py-4 text-gray-600">
+                                    {getParentName(category.parent_category)}
                                 </td>
                                 <td className="px-6 py-4 text-gray-600">
                                     {category.description || 'No description'}
@@ -273,7 +318,7 @@ export default function CategoriesManagement() {
                         ))}
                         {filteredCategories.length === 0 && (
                             <tr>
-                                <td colSpan="4" className="px-6 py-12 text-center text-gray-400">
+                                <td colSpan="5" className="px-6 py-12 text-center text-gray-400">
                                     No categories found for this filter.
                                 </td>
                             </tr>
@@ -309,6 +354,32 @@ export default function CategoriesManagement() {
                                             className="w-full p-2 text-sm text-black bg-gray-100 rounded-md focus:outline-none placeholder:text-sm"
                                             placeholder="Enter category name..."
                                         />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className='block mb-1 font-bold text-black'>
+                                        Parent Category
+                                    </label>
+                                    <div className='p-2 bg-gray-100 rounded-md'>
+                                        <select
+                                            value={formData.parent_category}
+                                            onChange={(e) => setFormData({...formData, parent_category: e.target.value})}
+                                            className='w-full px-2 text-sm font-semibold text-black bg-gray-100 rounded-md appearance-none focus:outline-none focus:ring-0 placeholder:text-sm'
+                                        >
+                                            <option value="">None (Parent Category)</option>
+                                            {categories
+                                                // Filter out self if editing (can't be own parent)
+                                                .filter(cat =>
+                                                    cat.parent_category === null &&
+                                                    (!editingCategory || cat.category_id !== editingCategory.category_id)
+                                                )
+                                                .map(cat => (
+                                                    <option key={cat.category_id} value={cat.category_id}>
+                                                        {cat.category_name}
+                                                    </option>
+                                                ))}
+                                        </select>
                                     </div>
                                 </div>
 

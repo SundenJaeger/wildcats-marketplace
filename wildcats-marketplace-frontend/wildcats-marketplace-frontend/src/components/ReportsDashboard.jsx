@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, AlertCircle, Clock, X, Trash2, Eye, UserCheck } from 'lucide-react';
 import assets from '../assets/assets';
 
+// const API_URL = 'http://localhost:8000/reports/api/reports';
+
 const API_URL = 'http://localhost:8080/api/reports';
 
 const ReportsDashboard = () => {
@@ -29,12 +31,15 @@ const ReportsDashboard = () => {
     const fetchReports = async () => {
         setLoading(true);
         try {
-            const endpoint = selectedFilter === 'All Reports'
-                ? API_URL
-                : `${API_URL}/status/${selectedFilter}`;
+            let endpoint = API_URL;
+            if (selectedFilter !== 'All Reports') {
+                endpoint = `${API_URL}?status=${selectedFilter}`;
+            }
+                
             const response = await fetch(endpoint);
             const data = await response.json();
             setReports(data);
+            
         } catch (error) {
             console.error('Error fetching reports:', error);
             setReports([]);
@@ -338,153 +343,132 @@ const ReportsDashboard = () => {
 
             {/* Modal for Report Details */}
             {showModal && selectedReport && (
-                <div className='fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/40'>
-                    <div className="flex flex-col p-3 px-4 bg-[#FFF7D7] h-auto w-[600px] rounded-lg max-h-[90vh]">
-                        <div className='flex items-center justify-between pl-3 mb-2'>
-                            <div className='flex items-center justify-between mt-3'>
-                                <h2 className='text-xl font-bold text-black'>
-                                    Report Details #{selectedReport.reportId}
-                                </h2>
-                            </div>
-                            <button onClick={() => setShowModal(false)} className='flex items-center justify-center w-7 h-7 bg-[#B20000] rounded-full hover:bg-[#8B0000]'>
-                                <X className='w-4 h-4 text-white' />
+                <div className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50'>
+                    <div className='bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
+                        <div className='bg-[#A31800] text-white p-4 flex justify-between items-center sticky top-0'>
+                            <h3 className='text-xl font-bold'>Report Details #{selectedReport.reportId}</h3>
+                            <button onClick={() => setShowModal(false)} className='p-1 rounded hover:bg-red-800'>
+                                <X className='w-6 h-6' />
                             </button>
                         </div>
 
-                        <div className='box-border flex justify-between h-full min-w-full p-2 overflow-y-auto'>
-                            <div className='flex flex-col w-full gap-3 p-4 bg-white rounded-2xl'>
-                                {/* Status and Date */}
+                        <div className='p-6 space-y-4'>
+                            <div className='grid grid-cols-2 gap-4'>
+                                <div>
+                                    <label className='text-sm font-semibold text-gray-700'>Status</label>
+                                    <div className='mt-1'>
+                                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold border ${getStatusBadgeColor(selectedReport.status)}`}>
+                                            {getStatusIcon(selectedReport.status)}
+                                            {selectedReport.status.replace('_', ' ')}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className='text-sm font-semibold text-gray-700'>Date Reported</label>
+                                    <p className='mt-1 text-sm text-gray-900'>{formatDateTime(selectedReport.dateReported)}</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className='text-sm font-semibold text-gray-700'>Reason</label>
+                                <p className='mt-1 text-sm font-semibold text-red-900'>{selectedReport.reason}</p>
+                            </div>
+
+                            <div>
+                                <label className='text-sm font-semibold text-gray-700'>Description</label>
+                                <p className='p-3 mt-1 text-sm bg-gray-50 text-red-900'>{selectedReport.description || 'No description provided'}</p>
+                            </div>
+
+                            <div>
+                                <label className='text-sm font-semibold text-gray-700'>Reporter Information</label>
+                                <div className='p-3 mt-1 border rounded bg-gray-50'>
+                                    {selectedReport.student ? (
+                                        <>
+                                            <p className='text-sm text-red-900'><strong>Name:</strong> {selectedReport.student.firstName} {selectedReport.student.lastName}</p>
+                                            <p className='text-sm text-red-900'><strong>Email:</strong> {selectedReport.student.email || 'N/A'}</p>
+                                            <p className='text-sm text-red-900'><strong>Student ID:</strong> {selectedReport.student.studentId}</p>
+                                        </>
+                                    ) : (
+                                        <p className='text-sm text-red-900'><strong>Student ID:</strong> {selectedReport.studentId || 'N/A'}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className='text-sm font-semibold text-gray-700'>Reported Resource</label>
+                                <div className='p-3 mt-1 border rounded bg-gray-50'>
+                                    {selectedReport.resource ? (
+                                        <>
+                                            <p className='text-sm text-red-900'><strong>Resource ID:</strong> {selectedReport.resource.resourceId}</p>
+                                            <p className='text-sm text-red-900'><strong>Title:</strong> {selectedReport.resource.title}</p>
+                                        </>
+                                    ) : (
+                                        <p className='text-sm'><strong>Resource ID:</strong> {selectedReport.resourceId || 'N/A'}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {selectedReport.dateResolved && (
+                                <div>
+                                    <label className='text-sm font-semibold text-gray-700'>Date Resolved</label>
+                                    <p className='mt-1 text-sm text-red-900'>{formatDateTime(selectedReport.dateResolved)}</p>
+                                </div>
+                            )}
+
+                            <div className='pt-4 mt-4 border-t'>
+                                <label className='block mb-3 text-sm font-semibold text-gray-700'>Admin Actions</label>
                                 <div className='grid grid-cols-2 gap-3'>
-                                    <div>
-                                        <label className='block mb-1 font-bold text-black'>Status</label>
-                                        <div className='p-2 bg-gray-100 rounded-md'>
-                                            <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadgeColor(selectedReport.status)}`}>
-                                                {getStatusIcon(selectedReport.status)}
-                                                {selectedReport.status.replace('_', ' ')}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className='block mb-1 font-bold text-black'>Date Reported</label>
-                                        <div className='p-2 bg-gray-100 rounded-md'>
-                                            <p className='text-sm text-black'>{formatDateTime(selectedReport.dateReported)}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Reason */}
-                                <div>
-                                    <label className='block mb-1 font-bold text-black'>Reason</label>
-                                    <div className='p-2 bg-gray-100 rounded-md'>
-                                        <p className='text-sm font-semibold text-red-900'>{selectedReport.reason}</p>
-                                    </div>
-                                </div>
-
-                                {/* Description */}
-                                <div>
-                                    <label className='block mb-1 font-bold text-black'>Description</label>
-                                    <div className='p-2 bg-gray-100 rounded-md'>
-                                        <p className='text-sm text-black'>{selectedReport.description || 'No description provided'}</p>
-                                    </div>
-                                </div>
-
-                                {/* Reporter Information */}
-                                <div>
-                                    <label className='block mb-1 font-bold text-black'>Reporter Information</label>
-                                    <div className='p-3 bg-gray-100 rounded-md'>
-                                        {selectedReport.student ? (
-                                            <>
-                                                <p className='text-sm text-black'><strong>Name:</strong> {selectedReport.student.firstName} {selectedReport.student.lastName}</p>
-                                                <p className='text-sm text-black'><strong>Email:</strong> {selectedReport.student.email || 'N/A'}</p>
-                                                <p className='text-sm text-black'><strong>Student ID:</strong> {selectedReport.student.studentId}</p>
-                                            </>
-                                        ) : (
-                                            <p className='text-sm text-black'><strong>Student ID:</strong> {selectedReport.studentId || 'N/A'}</p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Reported Resource */}
-                                <div>
-                                    <label className='block mb-1 font-bold text-black'>Reported Resource</label>
-                                    <div className='p-3 bg-gray-100 rounded-md'>
-                                        {selectedReport.resource ? (
-                                            <>
-                                                <p className='text-sm text-black'><strong>Resource ID:</strong> {selectedReport.resource.resourceId}</p>
-                                                <p className='text-sm text-black'><strong>Title:</strong> {selectedReport.resource.title}</p>
-                                            </>
-                                        ) : (
-                                            <p className='text-sm text-black'><strong>Resource ID:</strong> {selectedReport.resourceId || 'N/A'}</p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Date Resolved */}
-                                {selectedReport.dateResolved && (
-                                    <div>
-                                        <label className='block mb-1 font-bold text-black'>Date Resolved</label>
-                                        <div className='p-2 bg-gray-100 rounded-md'>
-                                            <p className='text-sm text-black'>{formatDateTime(selectedReport.dateResolved)}</p>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Admin Actions */}
-                                <div className='pt-2 mt-2 border-t border-gray-200'>
-                                    <label className='block mb-3 font-bold text-black'>Admin Actions</label>
-                                    <div className='grid grid-cols-2 gap-2'>
-                                        <button
-                                            onClick={() => updateReportStatus(selectedReport.reportId, 'UNDER_REVIEW')}
-                                            disabled={deleteLoading}
-                                            className='flex items-center justify-center gap-2 px-3 py-2 text-xs font-extrabold text-white transition bg-blue-600 rounded-lg hover:scale-101 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
-                                        >
-                                            <UserCheck className='w-4 h-4' />
-                                            Under Review
-                                        </button>
-                                        <button
-                                            onClick={() => updateReportStatus(selectedReport.reportId, 'RESOLVED')}
-                                            disabled={deleteLoading}
-                                            className='flex items-center justify-center gap-2 px-3 py-2 text-xs font-extrabold text-white transition bg-green-600 rounded-lg hover:scale-101 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed'
-                                        >
-                                            <CheckCircle className='w-4 h-4' />
-                                            Resolved
-                                        </button>
-                                        <button
-                                            onClick={() => updateReportStatus(selectedReport.reportId, 'DISMISSED')}
-                                            disabled={deleteLoading}
-                                            className='flex items-center justify-center gap-2 px-3 py-2 text-xs font-extrabold text-white transition bg-gray-600 rounded-lg hover:scale-101 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed'
-                                        >
-                                            <X className='w-4 h-4' />
-                                            Dismiss
-                                        </button>
-                                        <button
-                                            onClick={() => deleteResource(selectedReport.resourceId)}
-                                            disabled={!selectedReport.resourceId || deleteLoading}
-                                            className='flex items-center justify-center gap-2 px-3 py-2 text-xs font-extrabold text-white transition bg-red-600 rounded-lg hover:scale-101 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed'
-                                            title={!selectedReport.resourceId ? 'No resource ID available' : deleteLoading ? 'Deleting...' : 'Delete the reported resource'}
-                                        >
-                                            {deleteLoading ? (
-                                                <>
-                                                    <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
-                                                    Deleting...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Trash2 className='w-4 h-4' />
-                                                    Delete Resource
-                                                </>
-                                            )}
-                                        </button>
-                                    </div>
                                     <button
-                                        onClick={() => deleteReport(selectedReport.reportId)}
+                                        onClick={() => updateReportStatus(selectedReport.reportId, 'UNDER_REVIEW')}
                                         disabled={deleteLoading}
-                                        className='flex items-center justify-center w-full gap-2 px-4 py-2 mt-2 text-xs font-extrabold text-white transition bg-red-700 rounded-lg hover:scale-101 hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed'
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
                                     >
-                                        <Trash2 className='w-4 h-4' />
-                                        Delete Report
+                                        <UserCheck className='w-4 h-4' />
+                                        Mark Under Review
+                                    </button>
+                                    <button
+                                        onClick={() => updateReportStatus(selectedReport.reportId, 'RESOLVED')}
+                                        disabled={deleteLoading}
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-green-600 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                                    >
+                                        <CheckCircle className='w-4 h-4' />
+                                        Mark Resolved
+                                    </button>
+                                    <button
+                                        onClick={() => updateReportStatus(selectedReport.reportId, 'DISMISSED')}
+                                        disabled={deleteLoading}
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-gray-600 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                                    >
+                                        <X className='w-4 h-4' />
+                                        Dismiss Report
+                                    </button>
+                                    <button
+                                        onClick={() => deleteResource(selectedReport.resourceId)}
+                                        disabled={!selectedReport.resourceId || deleteLoading}
+                                        className='flex items-center justify-center gap-2 px-4 py-2 font-semibold text-white transition bg-red-600 rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                                        title={!selectedReport.resourceId ? 'No resource ID available' : deleteLoading ? 'Deleting...' : 'Delete the reported resource'}
+                                    >
+                                        {deleteLoading ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+                                                Deleting...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Trash2 className='w-4 h-4' />
+                                                Delete Resource
+                                            </>
+                                        )}
                                     </button>
                                 </div>
+                                <button
+                                    onClick={() => deleteReport(selectedReport.reportId)}
+                                    disabled={deleteLoading}
+                                    className='flex items-center justify-center w-full gap-2 px-4 py-2 mt-3 font-semibold text-white transition bg-red-700 rounded hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed'
+                                >
+                                    <Trash2 className='w-4 h-4' />
+                                    Delete Report
+                                </button>
                             </div>
                         </div>
                     </div>
