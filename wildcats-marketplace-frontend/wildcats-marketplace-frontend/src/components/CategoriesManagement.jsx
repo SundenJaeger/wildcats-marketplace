@@ -5,8 +5,8 @@ import assets from '../assets/assets';
 
 // Configure your API base URL
 
-// const API_BASE_URL = 'http://localhost:8000/categories/';
-const API_BASE_URL = 'http://localhost:8080/api/categories';
+const API_BASE_URL = 'http://localhost:8000/categories/';
+// const API_BASE_URL = 'http://localhost:8080/api/categories';
 
 
 // helper functions
