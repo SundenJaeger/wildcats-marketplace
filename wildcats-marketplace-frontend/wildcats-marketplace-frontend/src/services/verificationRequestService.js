@@ -1,6 +1,6 @@
 // src/services/verificationRequestService.js
-const API_BASE_URL = 'http://localhost:8080/api/verification-requests';
-//const API_BASE_URL = 'http://localhost:8000/verification-requests';
+// const API_BASE_URL = 'http://localhost:8080/api/verification-requests';
+const API_BASE_URL = 'http://localhost:8000/verification-requests';
 
 
 //helper functions
