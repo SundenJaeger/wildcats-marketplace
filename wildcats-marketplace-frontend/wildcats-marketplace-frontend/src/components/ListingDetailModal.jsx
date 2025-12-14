@@ -64,7 +64,7 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
         title: listing.title,
         description: listing.description,
         price: listing.price,
-        condition: mapEnumToCondition(listing.condition),
+        condition: mapEnumToCondition(listing.condition), // Map enum to dropdown value on init
         status: listing.status
     });
     const [loading, setLoading] = useState(false);
@@ -118,14 +118,23 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
         const allImages = [...images, ...newImages];
         const selectedImage = allImages[index];
 
+        // If it's an existing image, store its ID
         if (selectedImage.imageId) {
             setSelectedImageId(selectedImage.imageId);
         }
 
+        // If not in edit mode and it's an existing image, save the change immediately
         if (!isEditing && selectedImage.imageId) {
             try {
                 setLoading(true);
+                console.log('=== Setting primary image (view mode) ===');
+                console.log('Selected index:', index);
+                console.log('Selected image ID:', selectedImage.imageId);
+                console.log('All images:', images.map(img => ({ id: img.imageId, order: img.displayOrder })));
+
                 await listingService.updatePrimaryImage(listing.resourceId, selectedImage.imageId);
+
+                // Close modal and refresh - this will re-fetch the listing with new image order
                 onUpdate();
                 onClose();
             } catch (error) {
@@ -170,6 +179,11 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
         try {
             setLoading(true);
 
+            console.log('=== SAVE PROCESS START ===');
+            console.log('Current editedListing.condition:', editedListing.condition);
+            console.log('Converting to enum:', mapConditionToEnum(editedListing.condition));
+
+            // Update basic listing info - include ALL required fields from original listing
             const updateData = {
                 resourceId: listing.resourceId,
                 title: editedListing.title,
@@ -196,6 +210,7 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
             if (selectedImageId && images.length > 0) {
                 await listingService.updatePrimaryImage(listing.resourceId, selectedImageId);
             }
+
 
             onUpdate();
             setIsEditing(false);
@@ -227,10 +242,10 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
     const totalImages = allImages.length;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-            <div className="bg-[#FFF7D7] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-[#FFF7D7] rounded-lg shadow-xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
-                <div className="sticky top-0 z-10 flex items-center justify-between p-4 text-white rounded-t-lg bg-linear-to-r from-red-900 to-red-700">
+                <div className="sticky top-0 bg-gradient-to-r from-red-900 to-red-700 text-white p-4 flex justify-between items-center rounded-t-lg">
                     <h2 className="text-2xl font-bold">
                         {isEditing ? 'Edit Listing' : 'Listing Details'}
                     </h2>
@@ -245,53 +260,52 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
 
                 {/* Content */}
                 <div className="p-6">
-                    {/* Two Column Layout - Images and Details */}
-                    <div className="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-                        {/* Left Column - Images Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Left Side - Images */}
                         <div>
-                            <h3 className="mb-3 text-base font-bold text-gray-800">
+                            <h3 className="text-lg font-bold text-gray-800 mb-4">
                                 {isEditing ? 'Images (Click to set as primary)' : 'Product Images'}
                             </h3>
 
                             {/* Main Image Display */}
-                            <div className="mb-3">
+                            <div className="mb-4">
                                 {allImages.length > 0 ? (
                                     <div className="relative">
                                         <img
                                             src={allImages[primaryImageIndex]?.fullUrl || allImages[primaryImageIndex]?.url}
                                             alt={editedListing.title}
-                                            className="object-cover w-full border-2 rounded-xl border-amber-950/60 h-72"
+                                            className="w-full h-80 object-cover rounded-lg border-2 border-red-900"
                                         />
-                                        <div className="absolute px-2 py-1 text-xs font-bold text-white bg-blue-500 rounded-full top-2 left-2">
-                                            Primary
+                                        <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-bold">
+                                            Primary Image
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center justify-center w-full bg-gray-200 border-2 border-gray-300 rounded-lg h-72">
-                                        <span className="text-sm text-gray-500">No images</span>
+                                    <div className="w-full h-80 bg-gray-200 rounded-lg flex items-center justify-center border-2 border-gray-300">
+                                        <span className="text-gray-500">No images</span>
                                     </div>
                                 )}
                             </div>
 
                             {/* Thumbnail Grid */}
                             {isEditing ? (
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-3">
                                     {allImages.map((image, idx) => (
                                         <div
                                             key={image.imageId || image.id}
                                             onClick={() => setPrimaryImage(idx)}
-                                            className={`relative w-16 h-16 rounded-lg overflow-hidden cursor-pointer group ${
-                                                idx === primaryImageIndex ? 'ring-3 ring-blue-500' : 'ring-2 ring-gray-300'
+                                            className={`relative w-20 h-20 rounded-lg overflow-hidden cursor-pointer group ${
+                                                idx === primaryImageIndex ? 'ring-4 ring-blue-500' : 'ring-2 ring-gray-300'
                                             }`}
                                         >
                                             <img
                                                 src={image.fullUrl || image.url}
                                                 alt={`Thumbnail ${idx + 1}`}
-                                                className="object-cover w-full h-full"
+                                                className="w-full h-full object-cover"
                                             />
                                             {idx === primaryImageIndex && (
-                                                <div className="absolute inset-0 flex items-center justify-center bg-blue-500 bg-opacity-30">
-                                                    <span className="text-xs font-bold text-white">1°</span>
+                                                <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
+                                                    <span className="text-white text-xs font-bold">Primary</span>
                                                 </div>
                                             )}
                                             <button
@@ -304,17 +318,17 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
                                                     }
                                                 }}
                                                 disabled={loading}
-                                                className="absolute p-0.5 text-white transition-opacity bg-red-500 rounded-full opacity-0 top-0.5 right-0.5 group-hover:opacity-100"
+                                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                             >
-                                                <X size={10}/>
+                                                <X size={12}/>
                                             </button>
                                         </div>
                                     ))}
 
                                     {/* Upload Button */}
                                     {totalImages < maxImages && (
-                                        <label className="flex flex-col items-center justify-center w-16 h-16 transition-all border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:border-red-900 hover:bg-red-50">
-                                            <Upload size={16} className="mb-0.5 text-gray-500"/>
+                                        <label className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-red-900 hover:bg-red-50 transition-all">
+                                            <Upload size={20} className="text-gray-500 mb-1"/>
                                             <span className="text-xs text-gray-600">{totalImages}/{maxImages}</span>
                                             <input
                                                 type="file"
@@ -329,15 +343,15 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
                                 </div>
                             ) : (
                                 allImages.length > 1 && (
-                                    <div className="flex gap-2 pb-2 overflow-x-auto">
+                                    <div className="flex gap-2 overflow-x-auto pb-2">
                                         {allImages.map((img, idx) => (
                                             <img
                                                 key={img.imageId || idx}
                                                 src={img.fullUrl || img.url}
                                                 alt={`${editedListing.title} ${idx + 1}`}
                                                 onClick={() => setPrimaryImage(idx)}
-                                                className={`w-16 h-16 object-cover rounded cursor-pointer hover:opacity-75 shrink-0 ${
-                                                    idx === primaryImageIndex ? 'ring-3 ring-blue-500' : 'ring-2 ring-gray-300'
+                                                className={`w-20 h-20 object-cover rounded cursor-pointer hover:opacity-75 ${
+                                                    idx === primaryImageIndex ? 'ring-4 ring-blue-500' : 'ring-2 ring-gray-300'
                                                 }`}
                                             />
                                         ))}
@@ -346,61 +360,66 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
                             )}
 
                             {totalImages === maxImages && isEditing && (
-                                <div className="p-2 mt-2 border rounded-lg bg-rose-50 border-rose-200">
-                                    <p className="text-xs font-medium text-center text-rose-950">
+                                <div className="mt-3 p-2 bg-rose-50 border border-rose-200 rounded-lg">
+                                    <p className="text-rose-950 text-xs font-medium text-center">
                                         Maximum images reached
                                     </p>
                                 </div>
                             )}
                         </div>
 
-                        {/* Right Column - Details Section */}
+                        {/* Right Side - Details */}
                         <div>
-                            <h3 className="mb-3 text-base font-bold text-gray-800">Product Details</h3>
-                            
                             {isEditing ? (
-                                <div className="p-4 space-y-3 bg-[#f3f0df] h-[290px] border-2 border-amber-950/60 rounded-xl flex flex-col">
+                                <div className="space-y-4 bg-white rounded-2xl p-5">
                                     <div>
-                                        <label className="block mb-1 text-xs font-bold text-gray-700">Title *</label>
-                                        <input
-                                            type="text"
-                                            value={editedListing.title}
-                                            onChange={(e) => setEditedListing({...editedListing, title: e.target.value})}
-                                            className="w-full px-3 py-2 text-xs font-semibold text-gray-800 bg-white border rounded-md border-amber-200/50 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                                            disabled={loading}
-                                        />
+                                        <label className="block text-sm font-bold text-gray-700 mb-1">Title *</label>
+                                        <div className="bg-gray-100 rounded-md">
+                                            <input
+                                                type="text"
+                                                value={editedListing.title}
+                                                onChange={(e) => setEditedListing({...editedListing, title: e.target.value})}
+                                                className="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none"
+                                                disabled={loading}
+                                            />
+                                        </div>
                                     </div>
 
-                                    <div className="flex-1">
-                                        <label className="block mb-1 text-xs font-bold text-gray-700">Description *</label>
-                                        <textarea
-                                            value={editedListing.description}
-                                            onChange={(e) => setEditedListing({...editedListing, description: e.target.value})}
-                                            className="w-full h-[calc(100%-24px)] px-3 py-2 text-xs font-medium leading-relaxed text-gray-700 bg-white border border-amber-200/50 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                                            disabled={loading}
-                                        />
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 mb-1">Description *</label>
+                                        <div className="bg-gray-100 rounded-md">
+                                            <textarea
+                                                value={editedListing.description}
+                                                onChange={(e) => setEditedListing({...editedListing, description: e.target.value})}
+                                                rows="4"
+                                                className="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none resize-none"
+                                                disabled={loading}
+                                            />
+                                        </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label className="block mb-1 text-xs font-bold text-gray-700">Price (₱) *</label>
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 mb-1">Price (₱) *</label>
+                                        <div className="bg-gray-100 rounded-md">
                                             <input
                                                 type="number"
                                                 value={editedListing.price}
                                                 onChange={(e) => setEditedListing({...editedListing, price: parseFloat(e.target.value)})}
-                                                className="w-full px-3 py-2 text-xs font-bold text-red-900 border rounded-md bg-white border-amber-200/50 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                className="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none"
                                                 min="0"
                                                 step="0.01"
                                                 disabled={loading}
                                             />
                                         </div>
+                                    </div>
 
-                                        <div>
-                                            <label className="block mb-1 text-xs font-bold text-gray-700">Condition *</label>
+                                    <div>
+                                        <label className="block text-sm font-bold text-gray-700 mb-1">Condition</label>
+                                        <div className="bg-gray-100 rounded-md p-2">
                                             <select
                                                 value={mapEnumToCondition(editedListing.condition)}
                                                 onChange={(e) => setEditedListing({...editedListing, condition: e.target.value})}
-                                                className="w-full px-3 py-2 text-xs font-semibold text-gray-800 bg-white border rounded-md appearance-none border-amber-200/50 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                                                className="w-full bg-gray-100 px-2 rounded-md font-semibold focus:outline-none appearance-none"
                                                 disabled={loading}
                                             >
                                                 <option value='bnew'>Brand New</option>
@@ -413,14 +432,13 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="p-4 space-y-3 bg-[#fffef7] h-[290px] border-2 border-amber-950/50 rounded-xl">
-                                    <div>
-                                        <h3 className="text-xl font-bold text-red-900">{listing.title}</h3>
-                                    </div>
+                                <div className="space-y-4 bg-white rounded-2xl p-5">
+                                    <h3 className="text-2xl font-bold text-red-900">{listing.title}</h3>
+                                    <p className="text-gray-700 whitespace-pre-wrap">{listing.description}</p>
 
-                                    <div className="flex items-center justify-between border-b border-gray-200">
-                                        <span className="text-2xl font-bold text-red-900">{formatPrice(listing.price)}</span>
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                                    <div className="flex items-center justify-between py-3 border-t border-b border-gray-200">
+                                        <span className="text-3xl font-bold text-red-700">{formatPrice(listing.price)}</span>
+                                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                                             listing.status === 'AVAILABLE' ? 'bg-green-100 text-green-800' :
                                                 listing.status === 'SOLD' ? 'bg-blue-100 text-blue-800' :
                                                     'bg-gray-100 text-gray-800'
@@ -429,132 +447,128 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
                                         </span>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3 text-xs">
-                                        <div className="p-2.5 rounded-lg bg-gray-50">
-                                            <span className="block mb-1 font-semibold text-gray-600">Condition</span>
-                                            <span className="font-medium text-gray-800">{getConditionDisplay(listing.condition)}</span>
+                                    <div className="grid grid-cols-2 gap-4 text-sm">
+                                        <div className="bg-gray-50 p-3 rounded-lg">
+                                            <span className="font-semibold text-gray-600 block mb-1">Condition:</span>
+                                            <span className="text-gray-800 font-medium">{getConditionDisplay(listing.condition)}</span>
                                         </div>
-                                        <div className="p-2.5 rounded-lg bg-gray-50">
-                                            <span className="block mb-1 font-semibold text-gray-600">Posted</span>
-                                            <span className="font-medium text-gray-800">
+                                        <div className="bg-gray-50 p-3 rounded-lg">
+                                            <span className="font-semibold text-gray-600 block mb-1">Posted:</span>
+                                            <span className="text-gray-800 font-medium">
                                                 {new Date(listing.datePosted).toLocaleDateString()}
                                             </span>
                                         </div>
                                     </div>
-
-                                    <div>
-                                        <p className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">{listing.description}</p>
-                                    </div>
                                 </div>
                             )}
-                        </div>
-                    </div>
 
-                    {/* Action Buttons */}
-                    <div className="space-y-2">
-                        {!isEditing ? (
-                            <>
-                                {/* Status Change Buttons */}
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleStatusChange('AVAILABLE')}
-                                        disabled={loading || listing.status === 'AVAILABLE'}
-                                        className={`flex-1 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                                            listing.status === 'AVAILABLE'
-                                                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                                : 'bg-green-600 text-white hover:bg-green-700 hover:scale-105'
-                                        }`}
-                                    >
-                                        Mark as Available
-                                    </button>
-                                    <button
-                                        onClick={() => handleStatusChange('SOLD')}
-                                        disabled={loading || listing.status === 'SOLD'}
-                                        className={`flex-1 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                                            listing.status === 'SOLD'
-                                                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                                : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105'
-                                        }`}
-                                    >
-                                        Mark as Sold
-                                    </button>
-                                </div>
+                            {/* Action Buttons */}
+                            <div className="mt-6 space-y-3">
+                                {!isEditing ? (
+                                    <>
+                                        {/* Status Change Buttons */}
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleStatusChange('AVAILABLE')}
+                                                disabled={loading || listing.status === 'AVAILABLE'}
+                                                className={`flex-1 px-4 py-2 rounded-md font-semibold transition-all ${
+                                                    listing.status === 'AVAILABLE'
+                                                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                                        : 'bg-green-600 text-white hover:bg-green-700 hover:scale-105'
+                                                }`}
+                                            >
+                                                Mark as Available
+                                            </button>
+                                            <button
+                                                onClick={() => handleStatusChange('SOLD')}
+                                                disabled={loading || listing.status === 'SOLD'}
+                                                className={`flex-1 px-4 py-2 rounded-md font-semibold transition-all ${
+                                                    listing.status === 'SOLD'
+                                                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                                        : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105'
+                                                }`}
+                                            >
+                                                Mark as Sold
+                                            </button>
+                                        </div>
 
-                                {/* Edit and Delete Buttons */}
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => setIsEditing(true)}
-                                        disabled={loading}
-                                        className="flex-1 px-4 py-2.5 text-sm font-semibold text-white transition-all rounded-md bg-amber-500 hover:bg-amber-600 hover:scale-105"
-                                    >
-                                        Edit Details
-                                    </button>
-                                    <button
-                                        onClick={() => setShowDeleteConfirm(true)}
-                                        disabled={loading}
-                                        className="flex-1 px-4 py-2.5 text-sm font-semibold text-white transition-all bg-red-600 rounded-md hover:bg-red-700 hover:scale-105"
-                                    >
-                                        Delete Listing
-                                    </button>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={handleSave}
-                                    disabled={loading}
-                                    className="flex items-center justify-center flex-1 gap-2 px-4 py-2.5 text-sm font-semibold text-white transition-all bg-green-600 rounded-md hover:bg-green-700 hover:scale-105"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <div className="w-4 h-4 border-b-2 border-white rounded-full animate-spin"></div>
-                                            Saving...
-                                        </>
-                                    ) : (
-                                        'Save Changes'
-                                    )}
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setIsEditing(false);
-                                        setEditedListing({
-                                            title: listing.title,
-                                            description: listing.description,
-                                            price: listing.price,
-                                            condition: mapEnumToCondition(listing.condition),
-                                            status: listing.status
-                                        });
-                                        setImages(listing.images || []);
-                                        setNewImages([]);
-                                        setPrimaryImageIndex(0);
-                                    }}
-                                    disabled={loading}
-                                    className="flex-1 px-4 py-2.5 text-sm font-semibold text-white transition-all bg-gray-500 rounded-md hover:bg-gray-600 hover:scale-105"
-                                >
-                                    Cancel
-                                </button>
+                                        {/* Edit and Delete Buttons */}
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => setIsEditing(true)}
+                                                disabled={loading}
+                                                className="flex-1 px-4 py-2 bg-amber-500 text-white rounded-md font-semibold hover:bg-amber-600 hover:scale-105 transition-all"
+                                            >
+                                                Edit Details
+                                            </button>
+                                            <button
+                                                onClick={() => setShowDeleteConfirm(true)}
+                                                disabled={loading}
+                                                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 hover:scale-105 transition-all"
+                                            >
+                                                Delete Listing
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={handleSave}
+                                            disabled={loading}
+                                            className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-700 hover:scale-105 transition-all flex items-center justify-center gap-2"
+                                        >
+                                            {loading ? (
+                                                <>
+                                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                                    Saving...
+                                                </>
+                                            ) : (
+                                                'Save Changes'
+                                            )}
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setIsEditing(false);
+                                                setEditedListing({
+                                                    title: listing.title,
+                                                    description: listing.description,
+                                                    price: listing.price,
+                                                    condition: mapEnumToCondition(listing.condition),
+                                                    status: listing.status
+                                                });
+                                                setImages(listing.images || []);
+                                                setNewImages([]);
+                                                setPrimaryImageIndex(0);
+                                            }}
+                                            disabled={loading}
+                                            className="flex-1 px-4 py-2 bg-gray-500 text-white rounded-md font-semibold hover:bg-gray-600 hover:scale-105 transition-all"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
 
                 {/* Delete Confirmation Modal */}
                 {showDeleteConfirm && (
-                    <div className="absolute inset-0 flex items-center justify-center p-4 rounded-lg bg-black/50">
-                        <div className="w-full max-w-md p-6 bg-white rounded-lg">
-                            <h3 className="mb-4 text-xl font-bold text-gray-900">Confirm Delete</h3>
-                            <p className="mb-6 text-sm text-gray-700">
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 rounded-lg">
+                        <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                            <h3 className="text-xl font-bold text-gray-900 mb-4">Confirm Delete</h3>
+                            <p className="text-gray-700 mb-6">
                                 Are you sure you want to delete this listing? This action cannot be undone and all images will be removed.
                             </p>
                             <div className="flex gap-2">
                                 <button
                                     onClick={handleDelete}
                                     disabled={loading}
-                                    className="flex items-center justify-center flex-1 gap-2 px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700"
+                                    className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 flex items-center justify-center gap-2"
                                 >
                                     {loading ? (
                                         <>
-                                            <div className="w-4 h-4 border-b-2 border-white rounded-full animate-spin"></div>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                                             Deleting...
                                         </>
                                     ) : (
@@ -564,7 +578,7 @@ const ListingDetailModal = ({ listing, onClose, onUpdate, onDelete }) => {
                                 <button
                                     onClick={() => setShowDeleteConfirm(false)}
                                     disabled={loading}
-                                    className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-gray-500 rounded-md hover:bg-gray-600"
+                                    className="flex-1 px-4 py-2 bg-gray-500 text-white rounded-md font-semibold hover:bg-gray-600"
                                 >
                                     Cancel
                                 </button>
