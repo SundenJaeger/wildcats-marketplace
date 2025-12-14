@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, AlertCircle, Clock, X, Trash2, Eye, UserCheck } from 'lucide-react';
 import assets from '../assets/assets';
 
-// const API_URL = 'http://localhost:8000/reports/api/reports';
+const API_URL = 'http://localhost:8000/reports/api/reports';
 
-const API_URL = 'http://localhost:8080/api/reports';
+// const API_URL = 'http://localhost:8080/api/reports';
 
 const ReportsDashboard = () => {
     const [selectedFilter, setSelectedFilter] = useState('All Reports');
