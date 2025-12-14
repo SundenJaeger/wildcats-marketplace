@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // IMPORTANT: Update this URL to match your backend's base URL if different
-const API_URL = 'http://localhost:8080/api/reports';
-// const API_URL = 'http://localhost:8000/reports';
+// const API_URL = 'http://localhost:8080/api/reports';
+const API_URL = 'http://localhost:8000/reports';
 
 export const reportService = {
     /**
