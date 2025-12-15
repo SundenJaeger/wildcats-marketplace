@@ -24,10 +24,12 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
             if (userData) {
                 try {
                     const parsedData = JSON.parse(userData);
+                    console.log("parsedData:", parsedData);
                     setUsername(parsedData.username || 'Guest');
 
-                    // Fetch unread notification count
-                    fetchUnreadCount(parsedData.studentId);
+                    if (parsedData.student_id) {
+                        fetchUnreadCount(parsedData.student_id);
+                    }
                 } catch (error) {
                     console.error('Error parsing user data:', error);
                 }
@@ -37,6 +39,8 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
 
     // Fetch unread notification count
     const fetchUnreadCount = async (studentId) => {
+        if (!studentId) return;
+
         try {
             const count = await notificationService.getUnreadCount(studentId);
             setUnreadCount(count);
@@ -51,6 +55,7 @@ const Navbar = ({isAdmin, onAdminClick, onSettingsClick, onNotificationsClick, o
             const userData = localStorage.getItem('userData');
             if (userData) {
                 const parsedData = JSON.parse(userData);
+                if (!parsedData.student_id) return;
                 const interval = setInterval(() => {
                     fetchUnreadCount(parsedData.studentId);
                 }, 30000); // 30 seconds

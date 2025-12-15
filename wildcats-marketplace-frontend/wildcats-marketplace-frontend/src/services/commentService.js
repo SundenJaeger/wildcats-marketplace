@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/comments';
+const API_URL = 'http://localhost:8000/api/comments';
 
 export const commentService = {
     addComment: async (studentId, resourceId, commentText, parentCommentId = null) => {

@@ -16,7 +16,7 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
             try {
                 setLoadingCategories(true);
                 // Fetch main categories (parent categories only)
-                const response = await fetch('http://localhost:8080/api/categories/main');
+                const response = await fetch('http://localhost:8000/categories/active/');
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch categories');
@@ -25,9 +25,7 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                 const data = await response.json();
                 console.log('Fetched categories:', data);
 
-                // Filter only active categories
-                const activeCategories = data.filter(cat => cat.isActive);
-                setCategories(activeCategories);
+                setCategories(data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
                 // Set empty array on error
@@ -57,7 +55,7 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                 const selectedCat = categories.find(cat => cat.categoryId === parseInt(chosenCategory));
 
                 if (selectedCat) {
-                    const response = await fetch(`http://localhost:8080/api/categories/${selectedCat.categoryId}/subcategories`);
+                    const response = await fetch(`http://localhost:8000/categories/${selectedCat.categoryId}/subcategories`);
 
                     if (!response.ok) {
                         throw new Error('Failed to fetch subcategories');
@@ -89,11 +87,11 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
 
     const handleApply = () => {
         // Find the selected category name for display
-        const selectedCat = categories.find(cat => cat.categoryId === parseInt(chosenCategory));
+        const selectedCat = categories.find(cat => cat.category_id === parseInt(chosenCategory));
 
         onApplyFilters({
             category: chosenCategory,
-            categoryName: selectedCat?.categoryName || '',
+            categoryName: selectedCat?.category_name || '',
             condition: chosenCondition,
             priceRange: chosenPriceRange,
             subFilters: chosenFilters
@@ -152,8 +150,8 @@ const ProductFilterModal = ({onClose, onApplyFilters, currentFilters}) => {
                                     >
                                         <option value=''>All Categories</option>
                                         {categories.map((category) => (
-                                            <option key={category.categoryId} value={category.categoryId}>
-                                                {category.categoryName}
+                                            <option key={category.category_id} value={category.category_id}>
+                                                {category.category_name}
                                             </option>
                                         ))}
                                     </select>

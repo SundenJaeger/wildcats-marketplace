@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:8000';
 
 export const listingService = {
     getImageUrl(imagePath) {
@@ -8,7 +8,7 @@ export const listingService = {
             return imagePath;
         }
 
-        return `http://localhost:8080/uploads/${imagePath}`;
+        return `http://localhost:8000/uploads/${imagePath}`;
     },
 
 
@@ -48,7 +48,7 @@ export const listingService = {
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/resources`, {
+            const response = await fetch(`${API_BASE_URL}/resources/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -77,78 +77,36 @@ export const listingService = {
         }
 
         try {
-            // Upload each image
-            const uploadPromises = images.map(async (image, index) => {
-                let fileName;
+            // Create FormData with all images
+            const formData = new FormData();
 
-                // Check if we have a base64 image or a file
-                if (image.url.startsWith('data:')) {
-                    // Convert base64 to file and upload
-                    const formData = new FormData();
+            images.forEach((image, index) => {
+                if (image.file) {
+                    formData.append('images', image.file); // matches request.FILES.getlist('images')
+                } else if (image.url.startsWith('data:')) {
                     const blob = dataURLtoBlob(image.url);
-                    const file = new File([blob], `image_${index}.jpg`, {type: 'image/jpeg'});
-                    formData.append('file', file);
-
-                    // Upload file to server
-                    const uploadResponse = await fetch(`${API_BASE_URL}/uploads/image`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                        },
-                        body: formData
-                    });
-
-                    if (!uploadResponse.ok) {
-                        throw new Error(`Failed to upload image file ${index + 1}`);
-                    }
-
-                    fileName = await uploadResponse.text();
-                } else if (image.file) {
-                    // We have a File object
-                    const formData = new FormData();
-                    formData.append('file', image.file);
-
-                    const uploadResponse = await fetch(`${API_BASE_URL}/uploads/image`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                        },
-                        body: formData
-                    });
-
-                    if (!uploadResponse.ok) {
-                        throw new Error(`Failed to upload image file ${index + 1}`);
-                    }
-
-                    fileName = await uploadResponse.text();
-                } else {
-                    throw new Error('Invalid image format');
+                    const file = new File([blob], `image_${index}.jpg`, { type: 'image/jpeg' });
+                    formData.append('images', file);
                 }
-
-                // Save image reference to database
-                const imageData = {
-                    resource: {resourceId: resourceId},
-                    imagePath: fileName,
-                    displayOrder: index
-                };
-
-                const saveResponse = await fetch(`${API_BASE_URL}/resource-images`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(imageData)
-                });
-
-                if (!saveResponse.ok) {
-                    throw new Error(`Failed to save image reference ${index + 1}`);
-                }
-
-                return await saveResponse.json();
             });
 
-            return await Promise.all(uploadPromises);
+            // Upload images to backend
+            const uploadResponse = await fetch(`${API_BASE_URL}/resources/${resourceId}/images/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: formData
+            });
+
+            if (!uploadResponse.ok) {
+                const errorText = await uploadResponse.text();
+                throw new Error(`Failed to upload images: ${errorText}`);
+            }
+
+            // Return the uploaded images info from backend
+            return await uploadResponse.json();
+
         } catch (error) {
             console.error('Error uploading images:', error);
             throw error;

@@ -4,7 +4,7 @@ import {Upload, X} from 'lucide-react';
 import {listingService} from '../services/listingService';
 
 const CreateListingModal = ({onClose, onSuccess}) => {
-    const [chosenCategory, setChosenCategory] = useState('academics');
+    const [chosenCategory, setChosenCategory] = useState('');
     const [chosenCondition, setChosenCondition] = useState('bnew');
     const [price, setPrice] = useState('');
     const [chosenFilters, setChosenFilters] = useState([]);
@@ -27,18 +27,27 @@ const CreateListingModal = ({onClose, onSuccess}) => {
     const fetchCategories = async () => {
         try {
             const categoriesData = await listingService.getActiveCategories();
-            setCategories(categoriesData);
+            console.log('Fetched categories:', categoriesData);
+            if (!categoriesData || categoriesData.length === 0) {
+                setCategories([]);
+                return;
+            }
 
-            if (categoriesData.length > 0) {
-                setChosenCategory(categoriesData[0].categoryId.toString());
+            const mappedCategories = categoriesData
+                .filter(cat => cat && cat.category_id && cat.category_name)
+                .map(cat => ({
+                    categoryId: cat.category_id,
+                    categoryName: cat.category_name
+                }));
+
+            setCategories(mappedCategories);
+
+            if (mappedCategories.length > 0) {
+                setChosenCategory(mappedCategories[0].categoryId.toString());
             }
         } catch (error) {
             console.error('Error fetching categories:', error);
-            setCategories([
-                {categoryId: 1, categoryName: 'Academic Books & Notes'},
-                {categoryId: 2, categoryName: 'School Supplies'},
-                {categoryId: 3, categoryName: 'General Items'}
-            ]);
+            setCategories([]);
         }
     };
 
@@ -132,17 +141,18 @@ const CreateListingModal = ({onClose, onSuccess}) => {
 
         try {
             const userData = JSON.parse(localStorage.getItem('userData'));
-            if (!userData || !userData.studentId) {
+            const studentId = userData?.studentId || userData?.userId;
+            if (!studentId) {
                 throw new Error('User not logged in or student ID not found');
             }
 
             const listingData = {
                 title: formData.title,
                 description: formData.description,
-                price: parseFloat(formData.price).toFixed(2),
+                price: parseFloat(formData.price),
                 condition: mapConditionToEnum(chosenCondition),
                 status: 'AVAILABLE',
-                student: {studentId: userData.studentId},
+                student: { studentId },
                 category: {categoryId: parseInt(chosenCategory)}
             };
 

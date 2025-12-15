@@ -20,8 +20,8 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
         const checkBookmarkStatus = async () => {
             try {
                 const userData = JSON.parse(localStorage.getItem('userData'));
-                if (userData && userData.studentId && product.id) {
-                    const isBookmarked = await bookmarkService.isBookmarked(userData.studentId, product.id);
+                if (userData && userData.userId  && product.id) {
+                    const isBookmarked = await bookmarkService.isBookmarkFed(userData.userId , product.id);
                     setPostSaved(isBookmarked);
                 }
             } catch (error) {
@@ -110,13 +110,14 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
 
     // Handle save/unsave bookmark
     async function handleSave(){
+        
         if (isSaving) return;
 
         try {
             setIsSaving(true);
             const userData = JSON.parse(localStorage.getItem('userData'));
 
-            if (!userData || !userData.studentId) {
+            if (!userData || !userData.userId) {
                 alert('Please log in to save products');
                 return;
             }
@@ -128,11 +129,11 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
 
             if (isPostSaved) {
                 // Remove bookmark
-                await bookmarkService.removeBookmark(userData.studentId, product.id);
+                await bookmarkService.removeBookmark(userData.userId , product.id);
                 setPostSaved(false);
             } else {
                 // Add bookmark
-                await bookmarkService.addBookmark(userData.studentId, product.id);
+                await bookmarkService.addBookmark(userData.userId , product.id);
                 setPostSaved(true);
             }
         } catch (error) {
@@ -159,7 +160,7 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                 description: reportPayload.description,
                 // The backend expects nested objects for student and resource
                 student: {
-                    studentId: userData.studentId // ID of the student making the report
+                    studentId: userData.userId  // ID of the student making the report
                 },
                 resource: {
                     resourceId: product.id        // ID of the product/resource being reported
@@ -190,7 +191,7 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                 }
 
                 await commentService.addComment(
-                    userData.studentId,
+                    userData.userId,
                     product.id,
                     newComment,
                     null
@@ -220,7 +221,7 @@ const ProductPost = ({ product, onBack, onUpdateProduct }) => {
                 }
 
                 await commentService.addComment(
-                    userData.studentId,
+                    userData.userId,
                     product.id,
                     replyText,
                     commentId

@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api/notifications';
+const API_BASE_URL = 'http://localhost:8000/api/notifications';
 
 export const notificationService = {
     // Get all notifications for a student
-    getNotifications: async (studentId) => {
+    getNotifications: async (student_id) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/student/${studentId}`);
+            const response = await axios.get(`${API_BASE_URL}/student/${student_id}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching notifications:', error);
@@ -15,9 +15,9 @@ export const notificationService = {
     },
 
     // Get unread notifications
-    getUnreadNotifications: async (studentId) => {
+    getUnreadNotifications: async (student_id) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/student/${studentId}/unread`);
+            const response = await axios.get(`${API_BASE_URL}/student/${student_id}/unread`);
             return response.data;
         } catch (error) {
             console.error('Error fetching unread notifications:', error);
@@ -26,9 +26,9 @@ export const notificationService = {
     },
 
     // Get unread count
-    getUnreadCount: async (studentId) => {
+    getUnreadCount: async (student_id) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/student/${studentId}/unread/count`);
+            const response = await axios.get(`${API_BASE_URL}/student/${student_id}/unread/count`);
             return response.data.count;
         } catch (error) {
             console.error('Error fetching unread count:', error);
@@ -47,9 +47,9 @@ export const notificationService = {
     },
 
     // Mark all notifications as read
-    markAllAsRead: async (studentId) => {
+    markAllAsRead: async (student_id) => {
         try {
-            await axios.put(`${API_BASE_URL}/student/${studentId}/read-all`);
+            await axios.put(`${API_BASE_URL}/student/${student_id}/read-all`);
         } catch (error) {
             console.error('Error marking all notifications as read:', error);
             throw error;

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 export const bookmarkService = {
     // Get image URL helper
@@ -7,7 +7,7 @@ export const bookmarkService = {
         if (imagePath.startsWith('http') || imagePath.startsWith('data:')) {
             return imagePath;
         }
-        return `http://localhost:8080/uploads/${imagePath}`;
+        return `http://localhost:8000/uploads/${imagePath}`;
     },
 
     // Get all bookmarks for a student
