@@ -4,3 +4,5 @@ CIT-U: Wildcats Marketplace is a web-based application that allows verified univ
 ## Cloning the repository
 `git clone --recurse-submodules https://github.com/SundenJaeger/wildcats-marketplace.git
 `
+##
+This repository is archived because it was created solely for school purposes and is no longer maintained.
